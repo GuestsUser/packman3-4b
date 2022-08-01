@@ -356,3 +356,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+#毎回精製されるLogファイルの追跡を停止
+[Ll]og.txt
