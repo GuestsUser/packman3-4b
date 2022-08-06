@@ -9,13 +9,19 @@
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF); //デバッグ表示を可能にする
 	ChangeWindowMode(true);
-	if (DxLib_Init() == -1) { return -1; }//初期化と異常が認められた場合の終了
+
+	if (DxLib_Init() == -1) { return -1; }		//初期化と異常が認められた場合の終了
+
+	//ウィンドウの初期設定
+	SetWindowText("PAC MAN");			//画面タイトル設定
+	SetGraphMode(1280, 720, 32);		//画面モードの設定
+	SetBackgroundColor(0, 0, 0);		//画面の背景色の設定
 	SetDrawScreen(DX_SCREEN_BACK);
 
 	while (ScreenFlip() == 0 && ProcessMessage() == 0 && ClearDrawScreen() == 0) {
 		//_RPTF1(_CRT_WARN, "%s\n", "test"); //デバッグ表示
 	}
-	DxLib_End();// ＤＸライブラリ使用の終了処理
 
+	DxLib_End();// ＤＸライブラリ使用の終了処理
 	return 0;
 }
