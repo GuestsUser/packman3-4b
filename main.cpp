@@ -5,6 +5,7 @@
 //#define new  ::new( _NORMAL_BLOCK, __FILE__, __LINE__ )
 
 #include "DxLib.h"
+#include "Title.h"
 #include "GetKey.h"
 #include "SceneManager.h"
 //最初に実行したいシーンのヘッダーをインクルードしておく
@@ -26,22 +27,23 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SetDrawScreen(DX_SCREEN_BACK);
 
 	key = new KeySystem(); //キー入力受付用クラスの実体作成
-	//SceneManager* scm = new SceneManager(); //引数に最初に実行したいシーン実体を入れる
+	SceneManager* scm = new SceneManager(new Title()); //引数に最初に実行したいシーン実体を入れる
 
 	while (ProcessMessage() == 0) {
 		//_RPTF1(_CRT_WARN, "%s\n", "test"); //デバッグ表示
 
-		if (now - old > fps) { //前フレームの現在時刻との差が実行タイミングになっていた場合ゲーム処理、描写の実行
-			key->KeyInput(); //キー入力更新
-			old = now - (now - old); //差が実行タイミング以上だった場合そのままoldに現在時刻を入れると切り捨てられてしまうのでoldから実行タイミング超過分を引く事で超過分を加味した形にする
-			ClearDrawScreen(); //画面の初期化
-			//if (!scm->Update()) { break; } //ウィンドウを閉じる指示を出されてたら終了
-			//scm->Draw(); //画面描写
-			ScreenFlip();
-		}
+		//if (now - old > fps) { //前フレームの現在時刻との差が実行タイミングになっていた場合ゲーム処理、描写の実行
+		//}
+
+		key->KeyInput(); //キー入力更新
+		old = now - (now - old); //差が実行タイミング以上だった場合そのままoldに現在時刻を入れると切り捨てられてしまうのでoldから実行タイミング超過分を引く事で超過分を加味した形にする
+		ClearDrawScreen(); //画面の初期化
+		if (!scm->Update()) { break; } //ウィンドウを閉じる指示を出されてたら終了
+		scm->Draw(); //画面描写
+		ScreenFlip();
 	}
 	delete key;
-	//delete scm;
+	delete scm;
 	DxLib_End();// ＤＸライブラリ使用の終了処理
 	return 0;
 }
