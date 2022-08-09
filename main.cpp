@@ -8,6 +8,7 @@
 #include "Title.h"
 #include "GetKey.h"
 #include "SceneManager.h"
+#include "Worldval.h"
 //最初に実行したいシーンのヘッダーをインクルードしておく
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
@@ -26,6 +27,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SetBackgroundColor(0, 0, 0);		//画面の背景色の設定
 	SetDrawScreen(DX_SCREEN_BACK);
 
+	WorldVal::SetUp(); //シーンを跨いだ変数共有クラスの初期化
 	key = new KeySystem(); //キー入力受付用クラスの実体作成
 	SceneManager* scm = new SceneManager(new Title()); //引数に最初に実行したいシーン実体を入れる
 
@@ -42,6 +44,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		scm->Draw(); //画面描写
 		ScreenFlip();
 	}
+	WorldVal::Destruct(); //値共有の実体破棄
 	delete key;
 	delete scm;
 	DxLib_End();// ＤＸライブラリ使用の終了処理
