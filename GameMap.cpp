@@ -3,7 +3,9 @@
 #include "Grid.h"
 
 class GameMap::Staging { //‰‰oŒnA‘¼‚Ìƒtƒ@ƒCƒ‹‚Éæ‚è‚Ü‚È‚¢‚Ì‚ÅƒNƒ‰ƒX“à‚É’¼Úˆ—‚ğ‘‚«‚ñ‚Å‚¢‚¢
-	enum class State; //‘O•ûéŒ¾
+public:
+	enum class State { start, run, end, free }; //‰‰o‚ÌÀsó‹µAstart=ŠJn–½—ß run=Às’† end=I—¹‚µ‚½uŠÔ free=“®‚¢‚Ä‚¢‚È‚¢
+private:
 	using StagingFunc = void (GameMap::Staging::*)(); //ŠÖ”ƒ|ƒCƒ“ƒ^‚ÌusingéŒ¾AˆÈ~StagingƒNƒ‰ƒX‚ÌŠÖ”ƒ|ƒCƒ“ƒ^‚ÍStagingFunc‚Åg—p‰Â”\
 
 	State state; //Às‚ÌƒXƒe[ƒ^ƒX•Û
@@ -11,9 +13,7 @@ class GameMap::Staging { //‰‰oŒnA‘¼‚Ìƒtƒ@ƒCƒ‹‚Éæ‚è‚Ü‚È‚¢‚Ì‚ÅƒNƒ‰ƒX“à‚É’¼Ú
 	StagingFunc func; //ÀsŠÖ”
 	int count; //ÀsŠÔŠÇ—‚Æ‚©‚É
 public:
-	enum class State { start, run, end, free }; //‰‰o‚ÌÀsó‹µAstart=ŠJn–½—ß run=Às’† end=I—¹‚µ‚½uŠÔ free=“®‚¢‚Ä‚¢‚È‚¢
-
-	Staging(GameMap* set) :state(State::free), caller(set), func(Start) {} //ˆø”‚É‚Í‚±‚ÌƒNƒ‰ƒX‚ğg—p‚·‚émap‚ÌƒAƒhƒŒƒX‚ğ“ü‚ê‚é
+	Staging(GameMap* set) :state(State::free), caller(set), func(nullptr), count(0) {} //ˆø”‚É‚Í‚±‚ÌƒNƒ‰ƒX‚ğg—p‚·‚émap‚ÌƒAƒhƒŒƒX‚ğ“ü‚ê‚é
 	void Start() { //ƒQ[ƒ€ŠJn‚ÌREADY!“™‚Ì‰‰oAƒŒƒxƒ‹1‚Ì‚Í‰¹Šy‚à—¬‚·
 
 	}
