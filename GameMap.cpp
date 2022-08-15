@@ -1,6 +1,11 @@
 #include "DxLib.h"
 #include "GameMap.h"
+#include "ConstVal.h"
 #include "Grid.h"
+#include "Worldval.h"
+#include "Food.h"
+#include <unordered_map>
+#include <string>
 
 class GameMap::Staging { //演出系、他のファイルに取り込まないのでクラス内に直接処理を書き込んでいい
 public:
@@ -40,14 +45,17 @@ public:
 	}
 };
 
-GameMap::GameMap() {
-	
+GameMap::GameMap() :staging(new Staging(this)), tile(WorldVal::Get<Grid*>("map")), map(*WorldVal::Get<int>("mapImage")),food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")) {
+	staging->AnimeStartUp(&Staging::Start);
 }
 GameMap::~GameMap() {
-
+	delete staging; //こちらで精製した実体の削除
 }
 void GameMap::Draw() {
-
+	//map画像の描画をここに記入
+	DrawGraph(SHIFT_X, SHIFT_Y, map, true);
+	staging->Update(); //アニメの処理と描写を行う
+	for (auto itr : *food) { itr.second->Draw(); } //食べ物描写
 }
 void GameMap::Update() {
 
