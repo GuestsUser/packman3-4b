@@ -1,5 +1,6 @@
 #include "DxLib.h"
 #include "Food.h"
+#include "ConstVal.h"
 #include <string>
 
 Food::Food(Type set) :type(set), isEnable(true), x(0), y(0) { //set‚Ég—p‚µ‚½‚¢ƒ^ƒCƒv‚ğ“ü‚ê‚éA‰½‚àw’è‚µ‚È‚¢ê‡’ÊíƒGƒT‚É‚È‚é
@@ -29,7 +30,7 @@ void Food::Update() {
 }
 
 void Food::Draw() { //*8‚È‚Ç‚Ìƒ}ƒXƒTƒCƒY‚Í‰½ˆ‚©‚É’è”‚ÅéŒ¾‚µ‚Ä‚¨‚«‚½‚¢
-	if(isEnable){ DrawGraph(x * 8, y * 8, handle[(int)type], true); } //—LŒø‚Èê‡‚¾‚¯•`Ê
+	if(isEnable){ DrawGraph(SHIFT_X + (x * TILE - TILE / 2) * X_RATE, SHIFT_Y + (y * TILE - TILE / 2) * Y_RATE, handle[(int)type], true); } //—LŒø‚Èê‡‚¾‚¯•`Ê
 }
 
 void Food::PosSetUp(const std::string& set) { //unordered_map—p“Y‚¦š‚©‚çÀ•W‚ğæ‚èo‚·ŠÖ”
@@ -37,7 +38,7 @@ void Food::PosSetUp(const std::string& set) { //unordered_map—p“Y‚¦š‚©‚çÀ•W‚ğ
 	for (int i = 0; i < size; ++i) {
 		if (set[i] == *"x") { //‹æØ‚è•¶š‚ªŒ©‚Â‚©‚Á‚½ê‡
 			x = std::stoi(set.substr(0, i)); //‘O”¼‚ªx
-			y = std::stoi(set.substr(i - 1, size)); //Œã”¼‚ªy
+			y = std::stoi(set.substr(i + 1, size)); //Œã”¼‚ªy
 			return;
 		}
 	}

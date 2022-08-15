@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+//エサ、パワーエサを食べた個数はパックマンの方でカウントしていてほしい、ステージクリア条件に用いる
 
 class Food {
 public:
