@@ -9,6 +9,7 @@
 #include "GetKey.h"
 #include "SceneManager.h"
 #include "Worldval.h"
+#include "FoodLoading.h"
 //最初に実行したいシーンのヘッダーをインクルードしておく
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
@@ -30,6 +31,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	WorldVal::SetUp(); //シーンを跨いだ変数共有クラスの初期化
 	key = new KeySystem(); //キー入力受付用クラスの実体作成
 	SceneManager* scm = new SceneManager(new Title()); //引数に最初に実行したいシーン実体を入れる
+	FoodLoading();
 
 	while (ProcessMessage() == 0) {
 		//_RPTF1(_CRT_WARN, "%s\n", "test"); //デバッグ表示

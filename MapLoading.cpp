@@ -10,7 +10,7 @@ void MapLoading() {
 	//ここに1マスずつ移動可能方向を記してゆく……
 	//Gridは初期化段階では全ての状態において四方向移動不能に設定されてるのでパックマンも敵も立ち入れない場所は設定しなくていい
 	//下の関数はマス座標(1,2)のマスを、パックマン、敵、イジケ状態のみが下、右に動ける設定をしている(dequeは可変長引数、vectorのような物)
-	//grid[1][2].Set(Move::block, Move::block, Move::movable, Move::movable, std::deque<Chara>{Chara::p, Chara::e, Chara::c});
+	grid[1][2].Set(Move::block, Move::block, Move::movable, Move::movable, std::deque<Chara>{Chara::p, Chara::e, Chara::c});
 
 
 	WorldVal::Set("map", grid); //精製したグリッドをmapという名前で全体に共有する

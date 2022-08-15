@@ -151,6 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="FoodLoading.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GetKey.cpp" />
     <ClCompile Include="Grid.cpp" />
@@ -160,8 +161,11 @@
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="Worldval.cpp" />
     <ClCompile Include="GameMap.cpp" />
+    <ClCompile Include="Food.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Food.h" />
+    <ClInclude Include="FoodLoading.h" />
     <ClInclude Include="GetKey.h" />
     <ClInclude Include="GameMap.h" />
     <ClInclude Include="Grid.h" />
