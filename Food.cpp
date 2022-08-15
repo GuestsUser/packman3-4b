@@ -1,11 +1,10 @@
 #include "DxLib.h"
 #include "Food.h"
 #include "ConstVal.h"
+#include "Worldval.h"
 #include <string>
 
-Food::Food(Type set) :type(set), isEnable(true), x(0), y(0) { //setに使用したいタイプを入れる、何も指定しない場合通常エサになる
-	LoadDivGraph("Resource/image/item.png", 10, 10, 1, 16, 16, handle); //画像読み込み
-}
+Food::Food(Type set) :type(set), isEnable(true), x(0), y(0), handle(*WorldVal::Get<int[10]>("foodImage")) {} //setに使用したいタイプを入れる、何も指定しない場合通常エサになる
 
 int Food::Eat() {
 	int point = 0;
