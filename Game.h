@@ -9,7 +9,7 @@
 class Game :public Scene {
 	GameMap map;
 public:
-	Game() :map(GameMap()) {}
+	Game() :map(GameMap(this)) {}
 	void Update();
 	void Draw();
 };
