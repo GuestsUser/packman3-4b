@@ -1,4 +1,5 @@
 #include "DxLib.h"
+#include "Scene.h"
 #include "GameMap.h"
 #include "ConstVal.h"
 #include "Grid.h"
@@ -6,6 +7,7 @@
 #include "Food.h"
 #include <unordered_map>
 #include <string>
+#include "Title.h"
 
 class GameMap::Staging { //演出系、他のファイルに取り込まないのでクラス内に直接処理を書き込んでいい
 public:
@@ -45,7 +47,7 @@ public:
 	}
 };
 
-GameMap::GameMap() :staging(new Staging(this)), tile(WorldVal::Get<Grid*>("map")), map(*WorldVal::Get<int>("mapImage")),food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")) {
+GameMap::GameMap(Scene* set) :staging(new Staging(this)), tile(WorldVal::Get<Grid*>("map")), map(*WorldVal::Get<int>("mapImage")),food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")), parent(set) {
 	staging->AnimeStartUp(&Staging::Start);
 }
 GameMap::~GameMap() {
