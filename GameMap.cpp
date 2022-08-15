@@ -1,5 +1,6 @@
 #include "DxLib.h"
 #include "GameMap.h"
+#include "ConstVal.h"
 #include "Grid.h"
 #include "Worldval.h"
 #include "Food.h"
@@ -44,7 +45,7 @@ public:
 	}
 };
 
-GameMap::GameMap() :staging(new Staging(this)), tile(WorldVal::Get<Grid*>("map")), map(0),food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")) { 
+GameMap::GameMap() :staging(new Staging(this)), tile(WorldVal::Get<Grid*>("map")), map(*WorldVal::Get<int>("mapImage")),food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")) {
 	staging->AnimeStartUp(&Staging::Start);
 }
 GameMap::~GameMap() {
@@ -52,6 +53,7 @@ GameMap::~GameMap() {
 }
 void GameMap::Draw() {
 	//mapâÊëúÇÃï`âÊÇÇ±Ç±Ç…ãLì¸
+	DrawGraph(SHIFT_X, SHIFT_Y, map, true);
 	staging->Update(); //ÉAÉjÉÅÇÃèàóùÇ∆ï`é ÇçsÇ§
 	for (auto itr : *food) { itr.second->Draw(); } //êHÇ◊ï®ï`é 
 }

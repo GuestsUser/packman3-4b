@@ -155,6 +155,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GetKey.cpp" />
     <ClCompile Include="Grid.cpp" />
+    <ClCompile Include="ImageLoading.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapLoading.cpp" />
     <ClCompile Include="SceneManager.cpp" />
@@ -164,11 +165,13 @@
     <ClCompile Include="Food.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ConstVal.h" />
     <ClInclude Include="Food.h" />
     <ClInclude Include="FoodLoading.h" />
     <ClInclude Include="GetKey.h" />
     <ClInclude Include="GameMap.h" />
     <ClInclude Include="Grid.h" />
+    <ClInclude Include="ImageLoading.h" />
     <ClInclude Include="MapLoading.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
