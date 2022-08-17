@@ -19,19 +19,58 @@ private:
 	GameMap* caller; //呼び出し元、これを通じてGameMap内の様々な関数にアクセスできる、内部クラスなのでprivateな領域にも直接アクセスできる
 	StagingFunc func; //実行関数
 	int count; //実行時間管理とかに
+	int startImage1;	//Player One画像用
+	int startImage2;	//Ready!画像用
+	int clearImage1;	//クリア画像（白）
+	int clearImage2;	//クリア画像（青）
+	int gameOverImage;	//ゲームオーバー画像
 public:
-	Staging(GameMap* set) :state(State::free), caller(set), func(nullptr), count(0) {} //引数にはこのクラスを使用するmapのアドレスを入れる
+	//引数にはこのクラスを使用するmapのアドレスを入れる
+	Staging(GameMap* set) :state(State::free), caller(set), func(nullptr), count(0), 
+		startImage1(*WorldVal::Get<int>("playerOneImage")), startImage2(*WorldVal::Get<int>("readyImage")),
+		clearImage1(*WorldVal::Get<int>("clearImage1")), clearImage2(*WorldVal::Get<int>("clearImage2")),
+		gameOverImage(*WorldVal::Get<int>("gameOverImage")){}
 	void Start() { //ゲーム開始時のREADY!等の演出、レベル1の時は音楽も流す
-
+		//画像位置はステージ配置後に設定
+		if (count <= 120) {
+			//Player one表示
+			DrawGraph(100, 100, startImage1, TRUE);
+		}
+		if (count <= 240) {
+			//Ready!表示
+			DrawGraph(100, 300, startImage2, TRUE);
+		}
+		count++;
 	}
 	void Clear() { //ゲームクリアの時の演出
-
+		if ((count / 12) % 2 == 0) {
+			//白画像
+			DrawRotaGraph3(SHIFT_X, SHIFT_Y, 0, 0, X_RATE, Y_RATE, 0, clearImage1, TRUE, FALSE);
+		}
+		else {
+			DrawRotaGraph3(SHIFT_X, SHIFT_Y, 0, 0, X_RATE, Y_RATE, 0, clearImage2, TRUE, FALSE);
+		}
+		//4回点滅したら（1回の点滅で24count）
+		//if (count >= 95) {
+		//	//シーンを次のステージにする（次ラウンド）
+		//	//今はタイトルに戻るようにする
+		//	caller->parent->SetNext(new Title());
+		//}
+		count++;
 	}
 	void Miss() {  //パックマンがミスした時の演出
 
 	}
 	void GameOver() {  //残機がなくなった時の演出
-
+		if (count <= 180) {
+			DrawGraph(312, 337, gameOverImage,TRUE);
+		}
+		if (count == 180) {
+			//シーンを次のステージにする（次ラウンド）
+			//今はタイトルに戻るようにする
+			caller->parent->SetNext(new Title());
+		}
+		count++;
 	}
 
 	//GameMap呼び出し関数
@@ -48,14 +87,14 @@ public:
 };
 
 GameMap::GameMap(Scene* set) :staging(new Staging(this)), tile(WorldVal::Get<Grid*>("map")), map(*WorldVal::Get<int>("mapImage")),food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")), parent(set) {
-	staging->AnimeStartUp(&Staging::Start);
+	staging->AnimeStartUp(&Staging::Clear);
 }
 GameMap::~GameMap() {
 	delete staging; //こちらで精製した実体の削除
 }
 void GameMap::Draw() {
 	//map画像の描画をここに記入
-	DrawGraph(SHIFT_X, SHIFT_Y, map, true);
+	//DrawGraph(SHIFT_X, SHIFT_Y, map, true);
 	staging->Update(); //アニメの処理と描写を行う
 	for (auto itr : *food) { itr.second->Draw(); } //食べ物描写
 }
