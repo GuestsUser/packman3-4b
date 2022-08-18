@@ -13,3 +13,5 @@ constexpr int Y_RATE = 2; //yの拡大倍率
 
 constexpr int WARP_AREA_X = 4; //ワープトンネルのサイズx
 constexpr int WARP_AREA_Y = 0; //上記のy版
+
+constexpr int MOVABLE_SPEED = 16; //1ドット進む為に必要な速度
