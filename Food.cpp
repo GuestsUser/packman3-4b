@@ -29,7 +29,7 @@ void Food::Update() {
 }
 
 void Food::Draw() { //*8などのマスサイズは何処かに定数で宣言しておきたい
-	if(isEnable){ DrawGraph(SHIFT_X + (x * TILE - TILE / 2) * X_RATE, SHIFT_Y + (y * TILE - TILE / 2) * Y_RATE, handle[(int)type], true); } //有効な場合だけ描写
+	if (isEnable) { DrawRotaGraph3(SHIFT_X + (x * TILE - TILE / 2 - WARP_AREA_X * TILE) * X_RATE, SHIFT_Y + (y * TILE - TILE / 2 - WARP_AREA_Y * TILE) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, handle[(int)type], true); } //有効な場合だけ描写
 }
 
 void Food::PosSetUp(const std::string& set) { //unordered_map用添え字から座標を取り出す関数
