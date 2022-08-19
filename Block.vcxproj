@@ -159,6 +159,7 @@
     <ClCompile Include="ImageLoading.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapLoading.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="Worldval.cpp" />
@@ -175,6 +176,7 @@
     <ClInclude Include="Grid.h" />
     <ClInclude Include="ImageLoading.h" />
     <ClInclude Include="MapLoading.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Title.h" />

@@ -8,7 +8,7 @@ public:
 private:
 	Type type; //エサの種類
 	bool isEnable; //trueならこのエサはまだ食べられてない
-	int handle[10]; //画像ハンドル
+	int* handle; //画像ハンドル
 	int x; //マス座標x
 	int y; //上記のy
 public:
