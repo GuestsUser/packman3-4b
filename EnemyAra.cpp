@@ -15,8 +15,8 @@ EnemyAra::EnemyAra()
     akaPos_yup = akaPos_y - 16;
     akaPos_ydown = akaPos_y + 16;
     akaSpeed = 1;
-    akaAltPos_x = 0;
-    akaAltPos_y = 0;
+    akaoldPos_x = 0;
+    akaoldPos_y = 0;
 
 
     aoPos_x = 0;
@@ -94,8 +94,8 @@ void EnemyAra::enemyMove()
                     if (akaPos_x == 16 * i + 192 && akaPos_y == 16 * k + 112)
                     {
                         okMove = 1;
-                        akaAltPos_x = akaPos_x;
-                        akaAltPos_y = akaPos_y;
+                        akaoldPos_x = akaPos_x;
+                        akaoldPos_y = akaPos_y;
                         distance[0] = sqrt(pow(fabs(double(targetPos_x) - double(akaPos_x)), 2) + pow(fabs(double(targetPos_y) - double(akaPos_yup)), 2));
                         distance[1] = sqrt(pow(fabs(double(targetPos_x) - double(akaPos_xright)), 2) + pow(fabs(double(targetPos_y) - double(akaPos_y)), 2));
                         distance[2] = sqrt(pow(fabs(double(targetPos_x) - double(akaPos_x)), 2) + pow(fabs(double(targetPos_y) - double(akaPos_ydown)), 2));
@@ -352,29 +352,29 @@ void EnemyAra::enemyIjike()
 
         if (ijikeRandom == 0)
         {
-            if (akaPos_x != akaAltPos_x)
+            if (akaPos_x != akaoldPos_x)
             {
-                if (akaPos_x > akaAltPos_x)
+                if (akaPos_x > akaoldPos_x)
                 {
                     akaPos_x -= akaSpeed;
                 }
-                else if (akaPos_x < akaAltPos_x)
+                else if (akaPos_x < akaoldPos_x)
                 {
                     akaPos_x += akaSpeed;
                 }
             }
-            if (akaPos_y != akaAltPos_y)
+            if (akaPos_y != akaoldPos_y)
             {
-                if (akaPos_y > akaAltPos_y)
+                if (akaPos_y > akaoldPos_y)
                 {
                     akaPos_y -= akaSpeed;
                 }
-                else if (akaPos_y < akaAltPos_y)
+                else if (akaPos_y < akaoldPos_y)
                 {
                     akaPos_y += akaSpeed;
                 }
             }
-            else if (akaPos_x == akaAltPos_x && akaPos_y == akaAltPos_y)
+            else if (akaPos_x == akaoldPos_x && akaPos_y == akaoldPos_y)
             {
                 ijikeRandom = 1;
             }

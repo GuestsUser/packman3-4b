@@ -15,8 +15,8 @@ public:
     int akaPos_xleft;
     int akaPos_ydown;
     int akaSpeed;
-    int akaAltPos_x;
-    int akaAltPos_y;
+    int akaoldPos_x;
+    int akaoldPos_y;
 
 
     //アオスケ用変数
