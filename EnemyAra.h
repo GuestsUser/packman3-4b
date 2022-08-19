@@ -8,11 +8,16 @@ public:
     //アカベイ用変数
     int akaPos_x;
     int akaPos_y;
+    int aka_eye;
+    int aka_img;
     int akaPos_xright;
     int akaPos_yup;
     int akaPos_xleft;
     int akaPos_ydown;
     int akaSpeed;
+    int akaAltPos_x;
+    int akaAltPos_y;
+
 
     //アオスケ用変数
     int aoPos_x;
@@ -39,6 +44,14 @@ public:
 
     int speedLevel;
 
+    int okMove;
+
+    int count;
+    int attack;
+
+    int ijike;
+    int ijikeRandom;
+
     //enemy描画関数
     void enemyDraw();
 
@@ -47,6 +60,10 @@ public:
     void enemyUpdate();
 
     void enemyChangeSpeed();
+
+    void enemyMode();
+
+    void enemyIjike();
 
 private:
 
