@@ -51,11 +51,11 @@ public:
 			DrawRotaGraph3(SHIFT_X, SHIFT_Y, 0, 0, X_RATE, Y_RATE, 0, clearImage2, TRUE, FALSE);
 		}
 		//4回点滅したら（1回の点滅で24count）
-		//if (count >= 95) {
-		//	//シーンを次のステージにする（次ラウンド）
-		//	//今はタイトルに戻るようにする
-		//	caller->parent->SetNext(new Title());
-		//}
+		if (count >= 95) {
+			//シーンを次のステージにする（次ラウンド）
+			//今はタイトルに戻るようにする
+			caller->parent->SetNext(new Title());
+		}
 		count++;
 	}
 	void Miss() {  //パックマンがミスした時の演出

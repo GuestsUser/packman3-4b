@@ -11,6 +11,7 @@ private:
 	int* handle; //画像ハンドル
 	int x; //マス座標x
 	int y; //上記のy
+	int count;
 public:
 	Food(Type set = Type::food); //setに使用したいタイプを入れる、何も指定しない場合通常エサになる
 	int Eat(); //エサの除去、返り値は食べたエサの得点
