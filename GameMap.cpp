@@ -1,4 +1,5 @@
 #include "DxLib.h"
+#include "Game.h"
 #include "Scene.h"
 #include "GameMap.h"
 #include "ConstVal.h"
@@ -40,6 +41,11 @@ public:
 			//Ready!表示
 			DrawGraph(100, 300, startImage2, TRUE);
 		}
+		else {
+			state = State::free; //アニメ状態を終了済みに書き換える
+			Game::SetSceneState(Game::State::run); //演出が終了した時間でゲームシーンの状態をゲーム中に変更する
+		}
+		
 		count++;
 	}
 	void Clear() { //ゲームクリアの時の演出

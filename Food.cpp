@@ -1,4 +1,5 @@
 #include "DxLib.h"
+#include "Game.h"
 #include "Food.h"
 #include "ConstVal.h"
 #include "Worldval.h"
@@ -29,6 +30,9 @@ void Food::Update() {
 }
 
 void Food::Draw() { //*8などのマスサイズは何処かに定数で宣言しておきたい
+	if (Game::GetSceneState() == Game::State::start) { //スタート時の場合
+
+	}
 	//ゲームスタート前
 	if (isEnable) {
 		DrawRotaGraph3(SHIFT_X + (x * TILE - TILE / 2 - WARP_AREA_X * TILE) * X_RATE, SHIFT_Y + (y * TILE - TILE / 2 - WARP_AREA_Y * TILE) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, handle[(int)type], true);
