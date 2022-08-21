@@ -14,6 +14,13 @@ class Grid {
 public:
 	Grid();
 	void Set(Move up, Move left, Move down, Move right, std::deque<Chara> set = {}); //このグリッドに移動可能方向を設定
+
+	//タイルの各状態における移動可能方向を取得
+	const Move* ReadPlayer() const { return player; }
+	const Move* ReadEnemy() const { return enemy; }
+	const Move* ReadCringe() const { return cringe; }
+	const Move* ReadDamage() const { return damage; }
+	const Move* ReadWait() const { return wait; }
 };
 
 

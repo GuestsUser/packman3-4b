@@ -7,7 +7,7 @@
 #include <unordered_map>
 #include <string>
 
-Player::Player() :lastInput(Direction::left), isUpdate(true), isDraw(true), speed(16), subX(17), subY(23), drawX(subX* TILE), drawY(subY* TILE), speedCount(0), foodCount(0), foodCountTotal(0), playerImg(*WorldVal::Get<int[12]>("playerImage")), killImg(*WorldVal::Get<int[11]>("killImage")), food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")), tile(WorldVal::Get<Grid*>("map")) {}
+Player::Player() :nowDirection(Direction::left), lastInput(Direction::left), isUpdate(true), isDraw(true), speed(16), subX(17), subY(23), drawX(subX* TILE), drawY(subY* TILE), speedCount(0), foodCount(0), foodCountTotal(0), playerImg(*WorldVal::Get<int[12]>("playerImage")), killImg(*WorldVal::Get<int[11]>("killImage")), food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")), tile(WorldVal::Get<Grid*>("map")) {}
 
 void Player::Update() {
 	if (isUpdate) { //bool変数に停止命令(false)が入れられている場合実行しない
@@ -21,12 +21,17 @@ void Player::Update() {
 		if (key->GetKeyState(XINPUT_BUTTON_DPAD_UP) <= KEY_HOLD || key->GetKeyState(L_STICK_UP) <= KEY_HOLD) { lastInput = Direction::up; }
 		
 		speedCount += speed;
+		tile[subX][subY].ReadPlayer()[(int)lastInput] == Move::block;
 
+		int* edit = (int)nowDirection % 2 == 0 ? &drawY : &drawX; //余りが0の場合上下(y方向) 1なら左右(x方向)を操作する為のエイリアス
+		*edit += speedCount / MOVABLE_SPEED * (-1 + 2 * (((int)nowDirection) / 2)); //値が2以上の場合xだろうがyだろうか加算方向に動く、それ以下なら減算方向という仕組み
+
+		speedCount -= speedCount / MOVABLE_SPEED * MOVABLE_SPEED; //移動に使った分のドットを取り除く
 	}
 }
 void Player::Draw() {
 	if (isDraw) { //bool変数に停止命令(false)が入れられている場合実行しない
 		//xはそのまま左上原点描写、yはプレイヤー画像サイズとタイルサイズの違いからタイルの半分だけ上にずらして描写を行っている
-		DrawRotaGraph3(SHIFT_X + (drawX - WARP_AREA_X * TILE) * X_RATE, SHIFT_Y + (drawY - WARP_AREA_Y * TILE - TILE / 2) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, playerImg[0], true);
+		DrawRotaGraph3(SHIFT_X + (drawX - WARP_AREA_X * TILE - (TILE - 1) / 2) * X_RATE, SHIFT_Y + (drawY - WARP_AREA_Y * TILE - (TILE - 1) / 2) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, playerImg[0], true);
 	}
 }
