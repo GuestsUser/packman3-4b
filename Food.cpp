@@ -30,28 +30,31 @@ void Food::Update() {
 }
 
 void Food::Draw() { //*8などのマスサイズは何処かに定数で宣言しておきたい
-	if (Game::GetSceneState() == Game::State::start) { //スタート時の場合
-
-	}
 	//ゲームスタート前
-	if (isEnable) {
-		DrawRotaGraph3(SHIFT_X + (x * TILE - TILE / 2 - WARP_AREA_X * TILE) * X_RATE, SHIFT_Y + (y * TILE - TILE / 2 - WARP_AREA_Y * TILE) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, handle[(int)type], true);
+	if (Game::GetSceneState() == Game::State::start) {
+		if (isEnable) {
+			DrawRotaGraph3(SHIFT_X + (x * TILE - TILE / 2 - WARP_AREA_X * TILE) * X_RATE, SHIFT_Y + (y * TILE - TILE / 2 - WARP_AREA_Y * TILE) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, handle[(int)type], true);
+		}
 	}
 
 	//ゲームスタート中（画面が切り替わるまで）
-	if (isEnable) { 
-		if (type != Type::big) {
-			DrawRotaGraph3(SHIFT_X + (x * TILE - TILE / 2 - WARP_AREA_X * TILE) * X_RATE, SHIFT_Y + (y * TILE - TILE / 2 - WARP_AREA_Y * TILE) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, handle[(int)type], true);
-		}
-		else if (type == Type::big && (count / 10) % 2 == 0) {
-			DrawRotaGraph3(SHIFT_X + (x * TILE - TILE / 2 - WARP_AREA_X * TILE) * X_RATE, SHIFT_Y + (y * TILE - TILE / 2 - WARP_AREA_Y * TILE) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, handle[(int)type], true);
+	if (Game::GetSceneState() == Game::State::run) {
+		if (isEnable) {
+			if (type != Type::big) {
+				DrawRotaGraph3(SHIFT_X + (x * TILE - TILE / 2 - WARP_AREA_X * TILE) * X_RATE, SHIFT_Y + (y * TILE - TILE / 2 - WARP_AREA_Y * TILE) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, handle[(int)type], true);
+			}
+			else if (type == Type::big && (count / 10) % 2 == 0) {
+				DrawRotaGraph3(SHIFT_X + (x * TILE - TILE / 2 - WARP_AREA_X * TILE) * X_RATE, SHIFT_Y + (y * TILE - TILE / 2 - WARP_AREA_Y * TILE) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, handle[(int)type], true);
+			}
 		}
 	}
 
 	//ゲームオーバー中（タイトルに戻るまで）（パワーエサを消す）
-	if (isEnable) {
-		if (type != Type::big) {
-			DrawRotaGraph3(SHIFT_X + (x * TILE - TILE / 2 - WARP_AREA_X * TILE) * X_RATE, SHIFT_Y + (y * TILE - TILE / 2 - WARP_AREA_Y * TILE) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, handle[(int)type], true);
+	if (Game::GetSceneState() == Game::State::gameover) {
+		if (isEnable) {
+			if (type != Type::big) {
+				DrawRotaGraph3(SHIFT_X + (x * TILE - TILE / 2 - WARP_AREA_X * TILE) * X_RATE, SHIFT_Y + (y * TILE - TILE / 2 - WARP_AREA_Y * TILE) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, handle[(int)type], true);
+			}
 		}
 	}
 	count++;

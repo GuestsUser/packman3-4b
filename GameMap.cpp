@@ -31,23 +31,23 @@ public:
 		startImage1(*WorldVal::Get<int>("playerOneImage")), startImage2(*WorldVal::Get<int>("readyImage")),
 		clearImage1(*WorldVal::Get<int>("clearImage1")), clearImage2(*WorldVal::Get<int>("clearImage2")),
 		gameOverImage(*WorldVal::Get<int>("gameOverImage")){}
+
 	void Start() { //ゲーム開始時のREADY!等の演出、レベル1の時は音楽も流す
-		//画像位置はステージ配置後に設定
 		if (count <= 120) {
 			//Player one表示
-			DrawGraph(100, 100, startImage1, TRUE);
+			DrawRotaGraph3(SHIFT_X + 149, SHIFT_Y + 176, 0, 0, X_RATE, Y_RATE, 0, startImage1, TRUE, FALSE);
 		}
 		if (count <= 240) {
 			//Ready!表示
-			DrawGraph(100, 300, startImage2, TRUE);
+			DrawRotaGraph3(SHIFT_X + 176, SHIFT_Y + 272, 0, 0, X_RATE, Y_RATE, 0, startImage2, TRUE, FALSE);
 		}
 		else {
 			state = State::free; //アニメ状態を終了済みに書き換える
 			Game::SetSceneState(Game::State::run); //演出が終了した時間でゲームシーンの状態をゲーム中に変更する
 		}
-		
 		count++;
 	}
+
 	void Clear() { //ゲームクリアの時の演出
 		if ((count / 12) % 2 == 0) {
 			//白画像
@@ -58,18 +58,19 @@ public:
 		}
 		//4回点滅したら（1回の点滅で24count）
 		if (count >= 95) {
-			//シーンを次のステージにする（次ラウンド）
-			//今はタイトルに戻るようにする
+			state = State::free;	//アニメ状態を終了済みに書き換える
 			caller->parent->SetNext(new Title());
 		}
 		count++;
 	}
+
 	void Miss() {  //パックマンがミスした時の演出
 
 	}
+
 	void GameOver() {  //残機がなくなった時の演出
 		if (count <= 180) {
-			DrawGraph(312, 337, gameOverImage,TRUE);
+			DrawRotaGraph3(SHIFT_X + 145, SHIFT_Y + 273, 0, 0, X_RATE, Y_RATE, 0, gameOverImage, TRUE, FALSE);
 		}
 		if (count == 180) {
 			//シーンを次のステージにする（次ラウンド）
@@ -93,14 +94,14 @@ public:
 };
 
 GameMap::GameMap(Scene* set) :staging(new Staging(this)), tile(WorldVal::Get<Grid*>("map")), map(*WorldVal::Get<int>("mapImage")),food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")), parent(set) {
-	staging->AnimeStartUp(&Staging::Clear);
+	staging->AnimeStartUp(&Staging::GameOver);
 }
 GameMap::~GameMap() {
 	delete staging; //こちらで精製した実体の削除
 }
 void GameMap::Draw() {
 	//map画像の描画をここに記入
-	//DrawGraph(SHIFT_X, SHIFT_Y, map, true);
+	DrawRotaGraph3(SHIFT_X, SHIFT_Y, 0, 0, X_RATE, Y_RATE, 0, map, TRUE, FALSE);
 	staging->Update(); //アニメの処理と描写を行う
 	for (auto itr : *food) { itr.second->Draw(); } //食べ物描写
 }
