@@ -37,9 +37,7 @@ public:
     int targetPos_x;
     int targetPos_y;
 
-    int distance[3];
-    int stagemas;
-
+    int distance[4];
     int minDistance;
     int enemyVec;
 
@@ -54,6 +52,11 @@ public:
     int ijikeRandom;
 
     int enemyoldVec;
+
+    int distanceUP;
+    int distanceLeft;
+    int distanceDown;
+    int distanceRight;
 
     //enemy•`‰æŠÖ”
     void enemyDraw();
