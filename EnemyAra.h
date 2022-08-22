@@ -5,16 +5,20 @@ public:
     EnemyAra();
     ~EnemyAra();
 
-    //アカベイ用変数
+    //アカベイのポジション変数
     int akaPos_x;
     int akaPos_y;
+    //画像番号格納変数
     int aka_eye;
     int aka_img;
+    //現在マスの上下左右のマスのポジション変数
     int akaPos_xright;
     int akaPos_yup;
     int akaPos_xleft;
     int akaPos_ydown;
+    //アカベイの移動量変数
     int akaSpeed;
+    //アカベイの1マス前のポジション変数
     int akaoldPos_x;
     int akaoldPos_y;
 
@@ -34,25 +38,38 @@ public:
     int pinkPos_y;
     int pinkSpeed;
 
+    //目標マスのポジション変数
     int targetPos_x;
     int targetPos_y;
-
+    
+    //目標マスとの距離格納変数
     int distance[4];
-    int minDistance;
-    int enemyVec;
 
+    //目標マスとの最短距離格納変数
+    int minDistance;
+
+    //敵の移動方向変数
+    int enemyVec;
+    
+    //スピードレベル格納変数
     int speedLevel;
 
+    //敵が動いていいかの変数
     int okMove;
 
+    //時間経過変数
     int count;
+    //攻撃状態切り替え変数
     int attack;
 
+    //イジケ状態切り替え変数
     int ijike;
     int ijikeRandom;
 
+    //敵の移動する前の向き格納変数
     int enemyoldVec;
 
+    // 目標マスとの距離を入れる変数
     int distanceUP;
     int distanceLeft;
     int distanceDown;

@@ -85,8 +85,9 @@ EnemyAra::~EnemyAra()
 
 void EnemyAra::enemyDraw()
 {
+    //“G‚Æ“G‚Ì–Ú‚ğ•\¦
     DrawRotaGraph3(akaPos_x, akaPos_y, 0, 0,1,1,0, enemyImage[aka_img], TRUE, FALSE);
-    if (ijike == 0)
+    if (ijike == 0)//ƒCƒWƒP‚¶‚á‚È‚¢‚È‚ç
     {
         DrawRotaGraph3(akaPos_x, akaPos_y, 0, 0, 1, 1, 0, enemyImage_eye[aka_eye], TRUE, FALSE);
     }
@@ -94,7 +95,7 @@ void EnemyAra::enemyDraw()
 
 void EnemyAra::enemyMove()
 {
-    if (ijike == 0)
+    if (ijike == 0)//ƒCƒWƒP‚¶‚á‚È‚¢‚È‚ç
     {
         if (okMove == 0)
         {
@@ -102,52 +103,59 @@ void EnemyAra::enemyMove()
             {
                 for (int k = 0; k < 31 * Y_RATE; k++)
                 {
-                    if (akaPos_x == TILE * i + SHIFT_X && akaPos_y == TILE * k + SHIFT_Y)
+                    if (akaPos_x == TILE * i + SHIFT_X && akaPos_y == TILE * k + SHIFT_Y)//ƒ}ƒX‚É‚Â‚¢‚½‚Æ‚«
                     {
+                        //Œ»İƒ}ƒX‚ğŠo‚¦‚é
                         akaoldPos_x = akaPos_x;
                         akaoldPos_y = akaPos_y;
 
+                        //–Ú•Wƒ}ƒX‚Æ‚Ì‹——£ŒvZ
                         distanceUP = sqrt(pow(fabs(double(targetPos_x) - double(akaPos_x)), 2) + pow(fabs(double(targetPos_y) - double(akaPos_yup)), 2));
                         distanceLeft = sqrt(pow(fabs(double(targetPos_x) - double(akaPos_xleft)), 2) + pow(fabs(double(targetPos_y) - double(akaPos_y)), 2));
                         distanceDown = sqrt(pow(fabs(double(targetPos_x) - double(akaPos_x)), 2) + pow(fabs(double(targetPos_y) - double(akaPos_ydown)), 2));
                         distanceRight = sqrt(pow(fabs(double(targetPos_x) - double(akaPos_xright)), 2) + pow(fabs(double(targetPos_y) - double(akaPos_y)), 2));
 
-                        if (enemyoldVec == 0)
+                        if (enemyoldVec == 0)//Œü‚¢‚Ä‚½•ûŒü‚ªã‚È‚ç
                         {
+                            //‹——£‚ğ”z—ñ‚ÉŠi”[
                             distance[0] = distanceUP;
                             distance[1] = distanceLeft;
                             distance[2] = 9999;
                             distance[3] = distanceRight;
                         }
-                        else if (enemyoldVec == 1)
+                        else if (enemyoldVec == 1)//Œü‚¢‚Ä‚½•ûŒü‚ª¶‚È‚ç
                         {
+                            //‹——£‚ğ”z—ñ‚ÉŠi”[
                             distance[0] = distanceUP;
                             distance[1] = distanceLeft;
                             distance[2] = distanceDown;
                             distance[3] = 9999;
                         }
-                        else if (enemyoldVec == 2)
+                        else if (enemyoldVec == 2)//Œü‚¢‚Ä‚½•ûŒü‚ª‰º‚È‚ç
                         {
+                            //‹——£‚ğ”z—ñ‚ÉŠi”[
                             distance[0] = 9999;
                             distance[1] = distanceLeft;
                             distance[2] = distanceDown;
                             distance[3] = distanceRight;
                         }
-                        else if (enemyoldVec == 3)
+                        else if (enemyoldVec == 3)//Œü‚¢‚Ä‚½•ûŒü‚ª‰E‚È‚ç
                         {
+                            //‹——£‚ğ”z—ñ‚ÉŠi”[
                             distance[0] = distanceUP;
                             distance[1] = 9999;
                             distance[2] = distanceDown;
                             distance[3] = distanceRight;
                         }
 
-                        okMove = 1;
+                        okMove = 1;//“G‚ğ“®‚¢‚Ä—Ç‚¢‚æ‚¤‚É‚·‚é
                     }
                 }
             }
         }
-        else if (okMove == 1)
+        else if (okMove == 1)//“®‚¢‚Ä‚¢‚¢ó‘Ô‚È‚ç
         {
+            //–Ú•Wƒ}ƒX‚Æ‚ÌÅ’Z‹——£‚ğ’²‚×‚ÄenemyVec‚ÉÅ’Z•ûŒü‚Ì‚à‚Ì‚ğŠi”[
             for (int i = 0; i < 4; i++)
             {
                 if (minDistance > distance[i])
@@ -158,13 +166,15 @@ void EnemyAra::enemyMove()
                 }
             }
 
+            //Å’Z•ûŒü‚ªã‚È‚ç
             if (enemyVec == 0)
             {
                 if (enemyoldVec != 0)
                 {
-                    enemyoldVec = 0;
+                    enemyoldVec = 0;//ã•ûŒüó‘Ô‚É‚·‚é
                 }
 
+                //Ÿ‚Ìƒ}ƒX‚Ü‚ÅˆÚ“®‚·‚é
                 if (akaPos_y != akaPos_yup)
                 {
                     akaPos_y -= akaSpeed;
@@ -182,21 +192,25 @@ void EnemyAra::enemyMove()
                         }
                     }
                 }
+
+                //Ÿ‚Ìƒ}ƒX‚É‚Â‚¢‚½‚ç
                 if (akaPos_y == akaPos_yup)
                 {
-                    minDistance = 9999;
-                    enemyVec = -1;
-                    okMove = 0;
-                    akaPos_yup = akaPos_y - TILE;
+                    minDistance = 9999;//Å’Z‹——£‰Šú‰»
+                    enemyVec = -1;//ˆÚ“®•ûŒü‚ğˆêu–³‚­‚·
+                    okMove = 0;//ˆêu“®‚¯‚È‚¢ó‘Ô‚É‚·‚é
+                    akaPos_yup = akaPos_y - TILE;//“®‚¢‚½Œã‚Ìƒ}ƒX‚ÌŸ‚Ìƒ}ƒX‚Ìî•ñæ“¾
                 }
             }
+            //Å’Z•ûŒü‚ª¶‚È‚ç
             else if (enemyVec == 1)
             {
                 if (enemyoldVec != 1)
                 {
-                    enemyoldVec = 1;
+                    enemyoldVec = 1;//¶•ûŒüó‘Ô‚É‚·‚é
                 }
 
+                //Ÿ‚Ìƒ}ƒX‚Ü‚ÅˆÚ“®‚·‚é
                 if (akaPos_x != akaPos_xleft)
                 {
 
@@ -215,21 +229,25 @@ void EnemyAra::enemyMove()
                         }
                     }
                 }
+
+                //Ÿ‚Ìƒ}ƒX‚É‚Â‚¢‚½‚ç
                 if (akaPos_x == akaPos_xleft)
                 {
-                    minDistance = 9999;
-                    enemyVec = -1;
-                    okMove = 0;
-                    akaPos_xleft = akaPos_x - TILE;
+                    minDistance = 9999;//Å’Z‹——£‰Šú‰»
+                    enemyVec = -1;//ˆÚ“®•ûŒü‚ğˆêu–³‚­‚·
+                    okMove = 0;//ˆêu“®‚¯‚È‚¢ó‘Ô‚É‚·‚é
+                    akaPos_xleft = akaPos_x - TILE;//“®‚¢‚½Œã‚Ìƒ}ƒX‚ÌŸ‚Ìƒ}ƒX‚Ìî•ñæ“¾
                 }
             }
+            //Å’Z•ûŒü‚ª‰º‚È‚ç
             else if (enemyVec == 2)
             {
                 if (enemyoldVec != 2)
                 {
-                    enemyoldVec = 2;
+                    enemyoldVec = 2;//‰º•ûŒüó‘Ô‚É‚·‚é
                 }
 
+                //Ÿ‚Ìƒ}ƒX‚Ü‚ÅˆÚ“®‚·‚é
                 if (akaPos_y != akaPos_ydown)
                 {
                     akaPos_y += akaSpeed;
@@ -247,22 +265,26 @@ void EnemyAra::enemyMove()
                         }
                     }
                 }
+
+                //Ÿ‚Ìƒ}ƒX‚É‚Â‚¢‚½‚ç
                 if (akaPos_y == akaPos_ydown)
                 {
-                    minDistance = 9999;
-                    enemyVec = -1;
-                    okMove = 0;
-                    akaPos_ydown = akaPos_y + TILE;
+                    minDistance = 9999;//Å’Z‹——£‰Šú‰»
+                    enemyVec = -1;//ˆÚ“®•ûŒü‚ğˆêu–³‚­‚·
+                    okMove = 0;//ˆêu“®‚¯‚È‚¢ó‘Ô‚É‚·‚é
+                    akaPos_ydown = akaPos_y + TILE;//“®‚¢‚½Œã‚Ìƒ}ƒX‚ÌŸ‚Ìƒ}ƒX‚Ìî•ñæ“¾
 
                 }
             }
+            //Å’Z•ûŒü‚ª‰E‚È‚ç
             else if (enemyVec == 3)
             {
                 if (enemyoldVec != 3)
                 {
-                    enemyoldVec = 3;
+                    enemyoldVec = 3;//‰E•ûŒüó‘Ô‚É‚·‚é
                 }
 
+                //Ÿ‚Ìƒ}ƒX‚Ü‚ÅˆÚ“®‚·‚é
                 if (akaPos_x != akaPos_xright)
                 {
                     akaPos_x += akaSpeed;
@@ -280,12 +302,14 @@ void EnemyAra::enemyMove()
                         }
                     }
                 }
+
+                //Ÿ‚Ìƒ}ƒX‚É‚Â‚¢‚½‚ç
                 if (akaPos_x == akaPos_xright)
                 {
-                    minDistance = 9999;
-                    enemyVec = -1;
-                    okMove = 0;
-                    akaPos_xright = akaPos_x + TILE;
+                    minDistance = 9999;//Å’Z‹——£‰Šú‰»
+                    enemyVec = -1;//ˆÚ“®•ûŒü‚ğˆêu–³‚­‚·
+                    okMove = 0;//ˆêu“®‚¯‚È‚¢ó‘Ô‚É‚·‚é
+                    akaPos_xright = akaPos_x + TILE;//“®‚¢‚½Œã‚Ìƒ}ƒX‚ÌŸ‚Ìƒ}ƒX‚Ìî•ñæ“¾
                 }
             }
         }
@@ -302,7 +326,7 @@ void EnemyAra::enemyMove()
 
 
 }
-
+//ƒXƒs[ƒhƒŒƒxƒ‹‚É‚æ‚Á‚ÄƒXƒs[ƒh‚ğ•Ï‚¦‚é
 void EnemyAra::enemyChangeSpeed()
 {
     switch (speedLevel)
@@ -334,49 +358,50 @@ void EnemyAra::enemyChangeSpeed()
     }
 }
 
+//UŒ‚ó‘ÔA‹xŒeó‘Ô‚ÌØ‚è‘Ö‚¦
 void EnemyAra::enemyMode()
 {
-    count++;
-    int flame = 60;
+    count++;//ŠÔŒo‰ß
+    int flame = 60;//ƒtƒŒ[ƒ€ƒŒ[ƒg
 
     switch (speedLevel)
     {
     case 1:
-        if (count >= 0 && count < 7 * flame)
+        if (count >= 0 && count < 7 * flame)//0`7•b‚Ì‹xŒe
         {
-            attack = 0;
+            attack = 0;//‹xŒeó‘Ô
         }
-        else if (count >= 7 * flame && count < 27 * flame)
+        else if (count >= 7 * flame && count < 27 * flame)//7`27•b‚ÌUŒ‚
         {
-            attack = 1;
+            attack = 1;//UŒ‚ó‘Ô
         }
-        else if (count >= 27 * flame && count < 34 * flame)
+        else if (count >= 27 * flame && count < 34 * flame)//27`34•b‚Ì‹xŒe
         {
-            attack = 0;
+            attack = 0;//‹xŒeó‘Ô
 
         }
-        else if (count >= 34 * flame && count < 54 * flame)
+        else if (count >= 34 * flame && count < 54 * flame)//34`54•b‚ÌUŒ‚
         {
-            attack = 1;
+            attack = 1;//UŒ‚ó‘Ô
 
         }
-        else if (count >= 54 * flame && count < 59 * flame)
+        else if (count >= 54 * flame && count < 59 * flame)//54`59•b‚Ì‹xŒe
         {
-            attack = 0;
+            attack = 0;//‹xŒeó‘Ô
         }
-        else if (count >= 59 * flame && count < 79 * flame)
+        else if (count >= 59 * flame && count < 79 * flame)//59`79•b‚ÌUŒ‚
         {
-            attack = 1;
+            attack = 1;//UŒ‚ó‘Ô
 
         }
-        else if (count >= 79 * flame && count < 84 * flame)
+        else if (count >= 79 * flame && count < 84 * flame)//79`84•b‚Ì‹xŒe
         {
-            attack = 0;
+            attack = 0;//‹xŒeó‘Ô
 
         }
-        else if (count >= 84 * flame)
+        else if (count >= 84 * flame)//84•bˆÈ~‚ÍUŒ‚
         {
-            attack = 1;
+            attack = 1;//UŒ‚ó‘Ô
 
         }
         break;
@@ -387,15 +412,17 @@ void EnemyAra::enemyMode()
     case 4:
         break;
     }
-    if (ijike == 0)
+    if (ijike == 0)//ƒCƒWƒP‚¶‚á‚È‚¢‚È‚ç
     {
-        if (attack == 1)
+        if (attack == 1)//UŒ‚ó‘Ô‚È‚ç
         {
+            //–Ú•Wƒ}ƒX‚ğƒpƒbƒNƒ}ƒ“‚Ì‚¢‚éƒ}ƒX
             targetPos_x = 192;
             targetPos_y = 608;
         }
-        else if (attack == 0)
+        else if (attack == 0)//‹xŒeó‘Ô‚È‚ç
         {
+            //–Ú•Wƒ}ƒX‚ğ‰Eã
             targetPos_x = 640;
             targetPos_y = 112;
         }
@@ -403,6 +430,7 @@ void EnemyAra::enemyMode()
 
 }
 
+//ƒCƒWƒPó‘Ôˆ—
 void EnemyAra::enemyIjike()
 {
     if (ijike == 1)
