@@ -7,7 +7,7 @@
 #include <unordered_map>
 #include <string>
 
-Player::Player() :nowDirection(Direction::left), lastInput(Direction::left), isUpdate(true), isDraw(true), speed(16), subX(17), subY(23), drawX(subX* TILE), drawY(subY* TILE), speedCount(0), foodCount(0), foodCountTotal(0), playerImg(*WorldVal::Get<int[12]>("playerImage")), killImg(*WorldVal::Get<int[11]>("killImage")), food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")), tile(WorldVal::Get<Grid*>("map")) {}
+Player::Player() :nowDirection(Direction::left), lastInput(Direction::left), isUpdate(true), isDraw(true), speed(16), subX(17), subY(23), drawX(subX* TILE + (TILE - 1) / 2), drawY(subY* TILE), speedCount(0), foodCount(0), foodCountTotal(0), playerImg(*WorldVal::Get<int[12]>("playerImage")), killImg(*WorldVal::Get<int[11]>("killImage")), food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")), tile(WorldVal::Get<Grid*>("map")) {}
 
 void Player::Update() {
 	if (isUpdate) { //bool•Ï”‚É’â~–½—ß(false)‚ª“ü‚ê‚ç‚ê‚Ä‚¢‚éê‡Às‚µ‚È‚¢
