@@ -6,14 +6,11 @@
 //èâä˙âª
 EnemyAra::EnemyAra()
 {
-    akaPos_x = 416;
-    akaPos_y = 288;
-    aka_eye = 0;
+    akaPos_x = 400;//416
+    akaPos_y = 280;//296
+    aka_eye = 3;
     aka_img = 0;
-    akaPos_xright = akaPos_x + 16;
-    akaPos_xleft = akaPos_x - 16;
-    akaPos_yup = akaPos_y - 16;
-    akaPos_ydown = akaPos_y + 16;
+
     akaSpeed = 1;
     akaoldPos_x = 0;
     akaoldPos_y = 0;
@@ -34,24 +31,34 @@ EnemyAra::EnemyAra()
     targetPos_x = 0;
     targetPos_y = 0;
 
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 3; i++)
     {
         distance[i] = 0;
     }
+
+    stagemas = 16;
 
     minDistance = 9999;
     enemyVec = 3;
 
 
+    akaPos_xright = akaPos_x + stagemas;
+    akaPos_xleft = akaPos_x - stagemas;
+    akaPos_yup = akaPos_y - stagemas;
+    akaPos_ydown = akaPos_y + stagemas;
+
+
     speedLevel = 1;
 
-    okMove = 1;
+    okMove = 0;
 
     count = 0;
     attack = 0;
 
     ijike = 0;
     ijikeRandom = 0;
+
+    enemyoldVec = 3;
 
     LoadDivGraph("Resource/image/monster.png", 20, 20, 1, 32, 32, enemyImage);
     LoadDivGraph("Resource/image/eyes.png", 4, 4, 1, 32, 32, enemyImage_eye);
@@ -74,10 +81,10 @@ EnemyAra::~EnemyAra()
 
 void EnemyAra::enemyDraw()
 {
-    DrawRotaGraph(akaPos_x, akaPos_y, 1.0f, 0, enemyImage[aka_img], TRUE, FALSE);
+    DrawRotaGraph3(akaPos_x, akaPos_y, 0, 0,1,1,0, enemyImage[aka_img], TRUE, FALSE);
     if (ijike == 0)
     {
-        DrawRotaGraph(akaPos_x, akaPos_y, 1.0f, 0, enemyImage_eye[aka_eye], TRUE, FALSE);
+        DrawRotaGraph3(akaPos_x, akaPos_y, 0, 0, 1, 1, 0, enemyImage_eye[aka_eye], TRUE, FALSE);
     }
 }
 
@@ -91,34 +98,60 @@ void EnemyAra::enemyMove()
             {
                 for (int k = 0; k < 31; k++)
                 {
-                    if (akaPos_x == 16 * i + 192 && akaPos_y == 16 * k + 112)
+                    if (akaPos_x == stagemas * i + 192 && akaPos_y == stagemas * k + 112)
                     {
-                        okMove = 1;
                         akaoldPos_x = akaPos_x;
                         akaoldPos_y = akaPos_y;
-                        distance[0] = sqrt(pow(fabs(double(targetPos_x) - double(akaPos_x)), 2) + pow(fabs(double(targetPos_y) - double(akaPos_yup)), 2));
-                        distance[1] = sqrt(pow(fabs(double(targetPos_x) - double(akaPos_xright)), 2) + pow(fabs(double(targetPos_y) - double(akaPos_y)), 2));
-                        distance[2] = sqrt(pow(fabs(double(targetPos_x) - double(akaPos_x)), 2) + pow(fabs(double(targetPos_y) - double(akaPos_ydown)), 2));
-                        distance[3] = sqrt(pow(fabs(double(targetPos_x) - double(akaPos_xleft)), 2) + pow(fabs(double(targetPos_y) - double(akaPos_y)), 2));
+
+                        if (enemyoldVec == 0)
+                        {
+                            distance[0] = sqrt(pow(fabs(double(targetPos_x) - double(akaPos_x)), 2) + pow(fabs(double(targetPos_y) - double(akaPos_yup)), 2));
+                            distance[1] = sqrt(pow(fabs(double(targetPos_x) - double(akaPos_xright)), 2) + pow(fabs(double(targetPos_y) - double(akaPos_y)), 2));
+                            distance[2] = sqrt(pow(fabs(double(targetPos_x) - double(akaPos_xleft)), 2) + pow(fabs(double(targetPos_y) - double(akaPos_y)), 2));
+                        }
+                        if (enemyoldVec == 1)
+                        {
+                            distance[0] = sqrt(pow(fabs(double(targetPos_x) - double(akaPos_x)), 2) + pow(fabs(double(targetPos_y) - double(akaPos_yup)), 2));
+                            distance[1] = sqrt(pow(fabs(double(targetPos_x) - double(akaPos_xright)), 2) + pow(fabs(double(targetPos_y) - double(akaPos_y)), 2));
+                            distance[2] = sqrt(pow(fabs(double(targetPos_x) - double(akaPos_x)), 2) + pow(fabs(double(targetPos_y) - double(akaPos_ydown)), 2));
+                        }
+                        if (enemyoldVec == 2)
+                        {
+                            distance[0] = sqrt(pow(fabs(double(targetPos_x) - double(akaPos_xright)), 2) + pow(fabs(double(targetPos_y) - double(akaPos_y)), 2));
+                            distance[1] = sqrt(pow(fabs(double(targetPos_x) - double(akaPos_x)), 2) + pow(fabs(double(targetPos_y) - double(akaPos_ydown)), 2));
+                            distance[2] = sqrt(pow(fabs(double(targetPos_x) - double(akaPos_xleft)), 2) + pow(fabs(double(targetPos_y) - double(akaPos_y)), 2));
+                        }
+                        if (enemyoldVec == 3)
+                        {
+                            distance[0] = sqrt(pow(fabs(double(targetPos_x) - double(akaPos_x)), 2) + pow(fabs(double(targetPos_y) - double(akaPos_yup)), 2));
+                            distance[1] = sqrt(pow(fabs(double(targetPos_x) - double(akaPos_x)), 2) + pow(fabs(double(targetPos_y) - double(akaPos_ydown)), 2));
+                            distance[2] = sqrt(pow(fabs(double(targetPos_x) - double(akaPos_xleft)), 2) + pow(fabs(double(targetPos_y) - double(akaPos_y)), 2));
+                        }
+
+                        okMove = 1;
                     }
                 }
             }
         }
         else if (okMove == 1)
         {
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 3; i++)
             {
                 if (minDistance > distance[i])
                 {
                     minDistance = distance[i];
 
                     enemyVec = i;
-
                 }
             }
 
             if (enemyVec == 0)
             {
+                if (enemyoldVec != 0)
+                {
+                    enemyoldVec = 0;
+                }
+
                 if (akaPos_y != akaPos_yup)
                 {
                     akaPos_y -= akaSpeed;
@@ -141,12 +174,16 @@ void EnemyAra::enemyMove()
                     minDistance = 9999;
                     enemyVec = -1;
                     okMove = 0;
-                    akaPos_yup = akaPos_y - 16;
-                    akaPos_ydown = akaPos_y + 16;
+                    akaPos_yup = akaPos_y - stagemas;
                 }
             }
             else if (enemyVec == 1)
             {
+                if (enemyoldVec != 1)
+                {
+                    enemyoldVec = 1;
+                }
+
                 if (akaPos_x != akaPos_xright)
                 {
                     akaPos_x += akaSpeed;
@@ -169,12 +206,15 @@ void EnemyAra::enemyMove()
                     minDistance = 9999;
                     enemyVec = -1;
                     okMove = 0;
-                    akaPos_xright = akaPos_x + 16;
-                    akaPos_xleft = akaPos_x - 16;
+                    akaPos_xright = akaPos_x + stagemas;
                 }
             }
             else if (enemyVec == 2)
             {
+                if (enemyoldVec != 2)
+                {
+                    enemyoldVec = 2;
+                }
 
                 if (akaPos_y != akaPos_ydown)
                 {
@@ -198,15 +238,20 @@ void EnemyAra::enemyMove()
                     minDistance = 9999;
                     enemyVec = -1;
                     okMove = 0;
-                    akaPos_yup = akaPos_y - 16;
-                    akaPos_ydown = akaPos_y + 16;
+                    akaPos_ydown = akaPos_y + stagemas;
 
                 }
             }
             else if (enemyVec == 3)
             {
+                if (enemyoldVec != 3)
+                {
+                    enemyoldVec = 3;
+                }
+
                 if (akaPos_x != akaPos_xleft)
                 {
+
                     akaPos_x -= akaSpeed;
                     if (ijike == 0)
                     {
@@ -227,19 +272,18 @@ void EnemyAra::enemyMove()
                     minDistance = 9999;
                     enemyVec = -1;
                     okMove = 0;
-                    akaPos_xright = akaPos_x + 16;
-                    akaPos_xleft = akaPos_x - 16;
+                    akaPos_xleft = akaPos_x - stagemas;
                 }
             }
         }
     }
 
     DrawFormatString(0, 0, GetColor(255, 255, 255), "%d", count);
-    DrawFormatString(0, 50, GetColor(255, 255, 255), "%d", attack);
-    DrawFormatString(0, 100, GetColor(255, 0, 0), "%d", targetPos_x);
-    DrawFormatString(0, 150, GetColor(0, 0, 255), "%d", targetPos_y);
+    DrawFormatString(0, 50, GetColor(255, 255, 255), "%d", okMove);
+    DrawFormatString(0, 100, GetColor(255, 0, 0), "%d", akaPos_x);
+    DrawFormatString(0, 150, GetColor(0, 0, 255), "%d", akaPos_y);
     DrawFormatString(0, 200, GetColor(0, 255, 255), "%d", enemyVec);
-    DrawFormatString(0, 250, GetColor(0, 255, 255), "%d", minDistance);
+    DrawFormatString(0, 250, GetColor(0, 255, 255), "%d", enemyoldVec);
 
 
 }
@@ -457,5 +501,5 @@ void EnemyAra::enemyUpdate()
     enemyMode();
     enemyMove();
     enemyChangeSpeed();
-    enemyIjike();
+    //enemyIjike();
 }
