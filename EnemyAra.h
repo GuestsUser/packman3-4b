@@ -1,4 +1,5 @@
 #pragma once
+#include "Grid.h"
 class EnemyAra
 {
 public:
@@ -74,6 +75,11 @@ public:
     int distanceLeft;
     int distanceDown;
     int distanceRight;
+
+
+    Direction nowDirection;
+
+    Grid** tile;
 
     //enemyï`âÊä÷êî
     void enemyDraw();

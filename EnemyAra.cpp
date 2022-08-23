@@ -66,6 +66,8 @@ EnemyAra::EnemyAra()
     distanceDown = 0;
     distanceRight = 0;
 
+    nowDirection = Direction::left;
+
     LoadDivGraph("Resource/image/monster.png", 20, 20, 1, 32, 32, enemyImage);
     LoadDivGraph("Resource/image/eyes.png", 4, 4, 1, 32, 32, enemyImage_eye);
 }
@@ -101,14 +103,13 @@ void EnemyAra::enemyMove()
     {
         if (okMove == 0)
         {
-
             for (int i = 0; i < 28 * X_RATE; i++)
             {
                 for (int k = 0; k < 31 * Y_RATE; k++)
                 {
                     if (akaPos_x == TILE * i + SHIFT_X && akaPos_y == TILE * k + SHIFT_Y)//ƒ}ƒX‚É‚Â‚¢‚½‚Æ‚«
                     {
-
+                        
                     }
                 }
             }
