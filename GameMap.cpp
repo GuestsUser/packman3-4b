@@ -1,4 +1,5 @@
 #include "DxLib.h"
+#include "Game.h"
 #include "Scene.h"
 #include "GameMap.h"
 #include "ConstVal.h"
@@ -40,6 +41,11 @@ public:
 			//Ready!表示
 			DrawGraph(100, 300, startImage2, TRUE);
 		}
+		else {
+			state = State::free; //アニメ状態を終了済みに書き換える
+			Game::SetSceneState(Game::State::run); //演出が終了した時間でゲームシーンの状態をゲーム中に変更する
+		}
+		
 		count++;
 	}
 	void Clear() { //ゲームクリアの時の演出
@@ -51,11 +57,11 @@ public:
 			DrawRotaGraph3(SHIFT_X, SHIFT_Y, 0, 0, X_RATE, Y_RATE, 0, clearImage2, TRUE, FALSE);
 		}
 		//4回点滅したら（1回の点滅で24count）
-		//if (count >= 95) {
-		//	//シーンを次のステージにする（次ラウンド）
-		//	//今はタイトルに戻るようにする
-		//	caller->parent->SetNext(new Title());
-		//}
+		if (count >= 95) {
+			//シーンを次のステージにする（次ラウンド）
+			//今はタイトルに戻るようにする
+			caller->parent->SetNext(new Title());
+		}
 		count++;
 	}
 	void Miss() {  //パックマンがミスした時の演出
