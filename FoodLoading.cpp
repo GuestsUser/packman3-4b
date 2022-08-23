@@ -293,5 +293,5 @@ void FoodLoading() { //エサやフルーツの作成処理
 void FoodDel() { //削除処理
 	auto food = WorldVal::Get<std::unordered_map<std::string, Food*>>("food");
 	for (auto get : *food) { delete get.second; } //food実体の削除
-	delete food; //全体の削除
+	//delete food; //全体の削除
 }

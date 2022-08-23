@@ -6,6 +6,8 @@
 class Food;
 
 class Player {
+	class Moving; //動作用内部クラス
+
 	int* playerImg; //パックマン画像ハンドル
 	int* killImg; //死亡モーション
 	bool isUpdate; //falseでupdate実行禁止
@@ -15,6 +17,8 @@ class Player {
 	int speedCount; //速度の蓄積状況記録、毎フレームこれにspeedを加算し、speedCount/MOVABLE_SPEEDの値分描写座標を動かす
 	Direction nowDirection; //現在の進行方向
 	Direction lastInput; //最後の入力方向保持
+	Moving* xMove; //動作クラス実体、x用
+	Moving* yMove; //y用
 
 	int foodCount; //今回の残機で食べたエサ個数
 	int foodCountTotal; //エサを食べた合計個数
@@ -25,6 +29,7 @@ class Player {
 
 public:
 	Player();
+	~Player();
 
 	void Update();
 	void Draw();
