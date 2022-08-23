@@ -2,6 +2,8 @@
 #include "EnemyAra.h"
 #include "GetKey.h"
 #include "ConstVal.h"
+#include "Grid.h"
+#include "Worldval.h"
 #include <math.h>
 
 //‰Šú‰»
@@ -99,56 +101,14 @@ void EnemyAra::enemyMove()
     {
         if (okMove == 0)
         {
+
             for (int i = 0; i < 28 * X_RATE; i++)
             {
                 for (int k = 0; k < 31 * Y_RATE; k++)
                 {
                     if (akaPos_x == TILE * i + SHIFT_X && akaPos_y == TILE * k + SHIFT_Y)//ƒ}ƒX‚É‚Â‚¢‚½‚Æ‚«
                     {
-                        //Œ»İƒ}ƒX‚ğŠo‚¦‚é
-                        akaoldPos_x = akaPos_x;
-                        akaoldPos_y = akaPos_y;
 
-                        //–Ú•Wƒ}ƒX‚Æ‚Ì‹——£ŒvZ
-                        distanceUP = sqrt(pow(fabs(double(targetPos_x) - double(akaPos_x)), 2) + pow(fabs(double(targetPos_y) - double(akaPos_yup)), 2));
-                        distanceLeft = sqrt(pow(fabs(double(targetPos_x) - double(akaPos_xleft)), 2) + pow(fabs(double(targetPos_y) - double(akaPos_y)), 2));
-                        distanceDown = sqrt(pow(fabs(double(targetPos_x) - double(akaPos_x)), 2) + pow(fabs(double(targetPos_y) - double(akaPos_ydown)), 2));
-                        distanceRight = sqrt(pow(fabs(double(targetPos_x) - double(akaPos_xright)), 2) + pow(fabs(double(targetPos_y) - double(akaPos_y)), 2));
-
-                        if (enemyoldVec == 0)//Œü‚¢‚Ä‚½•ûŒü‚ªã‚È‚ç
-                        {
-                            //‹——£‚ğ”z—ñ‚ÉŠi”[
-                            distance[0] = distanceUP;
-                            distance[1] = distanceLeft;
-                            distance[2] = 9999;
-                            distance[3] = distanceRight;
-                        }
-                        else if (enemyoldVec == 1)//Œü‚¢‚Ä‚½•ûŒü‚ª¶‚È‚ç
-                        {
-                            //‹——£‚ğ”z—ñ‚ÉŠi”[
-                            distance[0] = distanceUP;
-                            distance[1] = distanceLeft;
-                            distance[2] = distanceDown;
-                            distance[3] = 9999;
-                        }
-                        else if (enemyoldVec == 2)//Œü‚¢‚Ä‚½•ûŒü‚ª‰º‚È‚ç
-                        {
-                            //‹——£‚ğ”z—ñ‚ÉŠi”[
-                            distance[0] = 9999;
-                            distance[1] = distanceLeft;
-                            distance[2] = distanceDown;
-                            distance[3] = distanceRight;
-                        }
-                        else if (enemyoldVec == 3)//Œü‚¢‚Ä‚½•ûŒü‚ª‰E‚È‚ç
-                        {
-                            //‹——£‚ğ”z—ñ‚ÉŠi”[
-                            distance[0] = distanceUP;
-                            distance[1] = 9999;
-                            distance[2] = distanceDown;
-                            distance[3] = distanceRight;
-                        }
-
-                        okMove = 1;//“G‚ğ“®‚¢‚Ä—Ç‚¢‚æ‚¤‚É‚·‚é
                     }
                 }
             }
