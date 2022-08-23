@@ -7,7 +7,30 @@
 #include <unordered_map>
 #include <string>
 
+class Player::Moving {
+public:
+	enum class Mode { x, y };
+private:
+	Player* caller; //呼び出し元
+	Mode type; //x,yどちらの方向を使用するか
+
+	int speed; //速度、現在は状態によらず一定な仮の物
+	int speedCount; //速度の蓄積状況記録、毎フレームこれにspeedを加算し、speedCount/MOVABLE_SPEEDの値分描写座標を動かす
+	Direction nowDirection; //現在の進行方向
+	//Direction lastInput; //最後の入力方向保持
+public:
+	Moving(Player* player, Mode mode) :caller(player), type(mode), speed(16), speedCount(0), nowDirection(Direction::left) {}
+
+	void Update() {
+
+	}
+};
+
 Player::Player() :nowDirection(Direction::left), lastInput(Direction::left), isUpdate(true), isDraw(true), speed(16), subX(17), subY(23), drawX(subX* TILE + (TILE - 1) / 2), drawY(subY* TILE), speedCount(0), foodCount(0), foodCountTotal(0), playerImg(*WorldVal::Get<int[12]>("playerImage")), killImg(*WorldVal::Get<int[11]>("killImage")), food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")), tile(WorldVal::Get<Grid*>("map")) {}
+Player::~Player() {
+	delete xMove;
+	delete yMove;
+}
 
 void Player::Update() {
 	if (isUpdate) { //bool変数に停止命令(false)が入れられている場合実行しない
