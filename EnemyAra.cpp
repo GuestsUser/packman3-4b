@@ -67,6 +67,7 @@ EnemyAra::EnemyAra()
     distanceRight = 0;
 
     nowDirection = Direction::left;
+    tile = WorldVal::Get<Grid*>("map");
 
     LoadDivGraph("Resource/image/monster.png", 20, 20, 1, 32, 32, enemyImage);
     LoadDivGraph("Resource/image/eyes.png", 4, 4, 1, 32, 32, enemyImage_eye);
