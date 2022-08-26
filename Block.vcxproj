@@ -161,6 +161,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Title.cpp" />
+    <ClCompile Include="Ui.cpp" />
     <ClCompile Include="Worldval.cpp" />
     <ClCompile Include="GameMap.cpp" />
     <ClCompile Include="Food.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Title.h" />
+    <ClInclude Include="Ui.h" />
     <ClInclude Include="Worldval.h" />
     <ClInclude Include="Game.h" />
   </ItemGroup>
