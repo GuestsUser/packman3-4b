@@ -9,8 +9,12 @@
 //初期化
 EnemyAra::EnemyAra()
 {
-    akaPos_x = 400;//400
-    akaPos_y = 280;//280
+    akaPos_x = 17;//17
+    akaPos_y = 11;//11
+
+    akaDraw_x = akaPos_x * TILE + (TILE - 1) / 2;
+    akaDraw_y = akaPos_y * TILE;
+
     aka_eye = 3;
     aka_img = 0;
 
@@ -91,10 +95,10 @@ EnemyAra::~EnemyAra()
 void EnemyAra::enemyDraw()
 {
     //敵と敵の目を表示
-    DrawRotaGraph3(akaPos_x, akaPos_y, 0, 0,1,1,0, enemyImage[aka_img], TRUE, FALSE);
+    DrawRotaGraph3(SHIFT_X + (akaDraw_x - WARP_AREA_X * TILE - (TILE - 1) / 2) * X_RATE, SHIFT_Y + (akaDraw_y - WARP_AREA_Y * TILE - (TILE - 1) / 2) * Y_RATE, 0, 0,1,1,0, enemyImage[aka_img], TRUE, FALSE);
     if (ijike == 0)//イジケじゃないなら
     {
-        DrawRotaGraph3(akaPos_x, akaPos_y, 0, 0, 1, 1, 0, enemyImage_eye[aka_eye], TRUE, FALSE);
+        DrawRotaGraph3(SHIFT_X + (akaDraw_x - WARP_AREA_X * TILE - (TILE - 1) / 2) * X_RATE, SHIFT_Y + (akaDraw_y - WARP_AREA_Y * TILE - (TILE - 1) / 2) * Y_RATE, 0, 0, 1, 1, 0, enemyImage_eye[aka_eye], TRUE, FALSE);
     }
 }
 
@@ -104,15 +108,28 @@ void EnemyAra::enemyMove()
     {
         if (okMove == 0)
         {
-            for (int i = 0; i < 28 * X_RATE; i++)
+            if (enemyoldVec == 0)
             {
-                for (int k = 0; k < 31 * Y_RATE; k++)
-                {
-                    if (akaPos_x == TILE * i + SHIFT_X && akaPos_y == TILE * k + SHIFT_Y)//マスについたとき
-                    {
-                        
-                    }
-                }
+
+            }
+            if (enemyoldVec == 1)
+            {
+                distance[0] = sqrt(pow(fabs(double(akaDraw_x) - double(targetPos_x)), 2) + pow(fabs(double(akaPos_yup) - double(targetPos_y)), 2));
+                distance[1] = sqrt(pow(fabs(double(akaPos_xleft) - double(targetPos_x)), 2) + pow(fabs(double(akaPos_y) - double(targetPos_y)), 2));
+                distance[2] = sqrt(pow(fabs(double(akaPos_x) - double(targetPos_x)), 2) + pow(fabs(double(akaPos_ydown) - double(targetPos_y)), 2));
+            }
+            if (enemyoldVec == 2)
+            {
+
+            }
+            if (enemyoldVec == 3)
+            {
+                distance[1] = sqrt(pow(fabs(double(akaPos_xright) - double(targetPos_x)), 2) + pow(fabs(double(akaPos_y) - double(targetPos_y)), 2));
+            }
+
+            if (tile[akaPos_x][akaPos_y].ReadEnemy()[(int)nowDirection] == Move::movable)
+            {
+                okMove = 1;
             }
         }
         else if (okMove == 1)//動いていい状態なら
@@ -504,7 +521,7 @@ void EnemyAra::enemyUpdate()
 {
     enemyDraw();
     enemyMode();
-    enemyMove();
+    //enemyMove();
     enemyChangeSpeed();
     //enemyIjike();
 }

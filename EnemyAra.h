@@ -9,6 +9,8 @@ public:
     //アカベイのポジション変数
     int akaPos_x;
     int akaPos_y;
+    int akaDraw_x;
+    int akaDraw_y;
     //画像番号格納変数
     int aka_eye;
     int aka_img;
