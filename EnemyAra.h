@@ -11,6 +11,10 @@ public:
     int akaPos_y;
     int akaDraw_x;
     int akaDraw_y;
+    int akaMas_x;
+    int akaMas_y;
+
+    int center;
     //画像番号格納変数
     int aka_eye;
     int aka_img;
@@ -44,9 +48,11 @@ public:
     //目標マスのポジション変数
     int targetPos_x;
     int targetPos_y;
+    int targetDrow_x;
+    int targetDrow_y;
     
     //目標マスとの距離格納変数
-    int distance[4];
+    float distance[4];
 
     //目標マスとの最短距離格納変数
     int minDistance;
@@ -77,6 +83,8 @@ public:
     int distanceLeft;
     int distanceDown;
     int distanceRight;
+
+    int disCount;
 
 
     Direction nowDirection;
