@@ -20,6 +20,8 @@ EnemyAra::EnemyAra()
     akaMas_x = 0;
     akaMas_y = 0;
 
+    akaMove = 15;
+
     aka_eye = 3;
     aka_img = 0;
     aka_anim = 0;
@@ -79,7 +81,12 @@ EnemyAra::EnemyAra()
 
     disCount = 0;
 
+    attack = 0;
+
     speedCount = 0;
+
+    okRand = 1;
+    enemyRand = 0;
 
     nowDirection = Direction::left;
     tile = WorldVal::Get<Grid*>("map");
@@ -169,25 +176,25 @@ void EnemyAra::enemyMove()
                 }
             }
 
-            //if (disCount == 0)
-            //{
-            //    if (enemyVec == 0)
-            //    {
-            //        enemyVec = 2;
-            //    }
-            //    if (enemyVec == 1)
-            //    {
-            //        enemyVec = 3;
-            //    }
-            //    if (enemyVec == 2)
-            //    {
-            //        enemyVec = 0;
-            //    }
-            //    if (enemyVec == 3)
-            //    {
-            //        enemyVec = 1;
-            //    }
-            //}
+            if (disCount == 0)
+            {
+                if (enemyVec == 0)
+                {
+                    enemyVec = 2;
+                }
+                if (enemyVec == 1)
+                {
+                    enemyVec = 3;
+                }
+                if (enemyVec == 2)
+                {
+                    enemyVec = 0;
+                }
+                if (enemyVec == 3)
+                {
+                    enemyVec = 1;
+                }
+            }
 
             okMove = 1;
 
@@ -207,7 +214,7 @@ void EnemyAra::enemyMove()
                 //ŽŸ‚Ìƒ}ƒX‚Ü‚ÅˆÚ“®‚·‚é
                 if (akaPos_y != akaPos_yup)
                 {
-                    akaDraw_y -= akaSpeed;
+                    akaDraw_y -= akaMove;
                     if (ijike == 0)
                     {
                         aka_eye = 0;
@@ -239,7 +246,7 @@ void EnemyAra::enemyMove()
                 //ŽŸ‚Ìƒ}ƒX‚Ü‚ÅˆÚ“®‚·‚é
                 if (akaPos_x != akaPos_xleft)
                 {
-                    akaDraw_x -= akaSpeed;
+                    akaDraw_x -= akaMove;
                     if (ijike == 0)
                     {
                         aka_eye = 3;
@@ -268,7 +275,7 @@ void EnemyAra::enemyMove()
                 //ŽŸ‚Ìƒ}ƒX‚Ü‚ÅˆÚ“®‚·‚é
                 if (akaPos_y != akaPos_ydown)
                 {
-                    akaDraw_y += akaSpeed;
+                    akaDraw_y += akaMove;
                     if (ijike == 0)
                     {
                         aka_eye = 2;
@@ -298,7 +305,7 @@ void EnemyAra::enemyMove()
                 //ŽŸ‚Ìƒ}ƒX‚Ü‚ÅˆÚ“®‚·‚é
                 if (akaPos_x != akaPos_xright)
                 {
-                    akaDraw_x += akaSpeed;
+                    akaDraw_x += akaMove;
                     if (ijike == 0)
                     {
                         aka_eye = 1;
@@ -324,10 +331,7 @@ void EnemyAra::enemyMove()
     DrawFormatString(0, 100, GetColor(255, 0, 0), "%d", akaPos_x);
     DrawFormatString(0, 150, GetColor(0, 0, 255), "%d", akaPos_y);
     DrawFormatString(0, 200, GetColor(0, 255, 255), "%d", enemyVec);
-    DrawFormatString(0, 250, GetColor(0, 255, 255), "%d", distance[0]);//143//136
-    DrawFormatString(0, 300, GetColor(0, 255, 255), "%d", distance[1]);//91//84
-    DrawFormatString(0, 350, GetColor(0, 255, 255), "%d", distance[2]);//143//136
-    DrawFormatString(0, 400, GetColor(0, 255, 255), "%d", distance[3]);//91//84
+
 
 
 
@@ -338,7 +342,19 @@ void EnemyAra::enemyChangeSpeed()
     switch (speedLevel)
     {
     case 1:
-        akaSpeed = 1;
+        if (ijike == 0)
+        {
+            akaSpeed = 15;
+        }
+        if (ijike == 1)
+        {
+            akaSpeed = 10;
+        }
+
+        speedCount += akaSpeed;
+        akaMove = speedCount / MOVABLE_SPEED;
+        speedCount -= akaMove * MOVABLE_SPEED;
+
         aoSpeed = 15;
         orangeSpeed = 15;
         pinkSpeed = 15;
@@ -376,38 +392,49 @@ void EnemyAra::enemyMode()
         if (count >= 0 && count < 7 * flame)//0`7•b‚ÌŽž‹xŒe
         {
             attack = 0;//‹xŒeó‘Ô
+            DrawFormatString(0, 250, GetColor(0, 255, 255), "‹x‘§", attack);//143//136
         }
         else if (count >= 7 * flame && count < 27 * flame)//7`27•b‚ÌŽžUŒ‚
         {
             attack = 1;//UŒ‚ó‘Ô
+            DrawFormatString(0, 250, GetColor(0, 255, 255), "UŒ‚", attack);//143//136
         }
         else if (count >= 27 * flame && count < 34 * flame)//27`34•b‚ÌŽž‹xŒe
         {
             attack = 0;//‹xŒeó‘Ô
-
+            DrawFormatString(0, 250, GetColor(0, 255, 255), "‹x‘§", attack);//143//136
         }
         else if (count >= 34 * flame && count < 54 * flame)//34`54•b‚ÌŽžUŒ‚
         {
             attack = 1;//UŒ‚ó‘Ô
+            DrawFormatString(0, 250, GetColor(0, 255, 255), "UŒ‚", attack);//143//136
 
         }
         else if (count >= 54 * flame && count < 59 * flame)//54`59•b‚ÌŽž‹xŒe
         {
             attack = 0;//‹xŒeó‘Ô
+            DrawFormatString(0, 250, GetColor(0, 255, 255), "‹x‘§", attack);//143//136
+
         }
         else if (count >= 59 * flame && count < 79 * flame)//59`79•b‚ÌŽžUŒ‚
         {
             attack = 1;//UŒ‚ó‘Ô
+            DrawFormatString(0, 250, GetColor(0, 255, 255), "UŒ‚", attack);//143//136
+
 
         }
         else if (count >= 79 * flame && count < 84 * flame)//79`84•b‚ÌŽž‹xŒe
         {
             attack = 0;//‹xŒeó‘Ô
+            DrawFormatString(0, 250, GetColor(0, 255, 255), "‹x‘§", attack);//143//136
+
 
         }
         else if (count >= 84 * flame)//84•bˆÈ~‚ÍUŒ‚
         {
             attack = 1;//UŒ‚ó‘Ô
+            DrawFormatString(0, 250, GetColor(0, 255, 255), "UŒ‚", attack);//143//136
+
 
         }
         break;
@@ -449,22 +476,22 @@ void EnemyAra::enemyIjike()
             {
                 if (akaPos_x > akaoldPos_x)
                 {
-                    akaPos_x -= akaSpeed;
+                    akaDraw_x -= akaMove;
                 }
                 else if (akaPos_x < akaoldPos_x)
                 {
-                    akaPos_x += akaSpeed;
+                    akaDraw_x += akaMove;
                 }
             }
             if (akaPos_y != akaoldPos_y)
             {
                 if (akaPos_y > akaoldPos_y)
                 {
-                    akaPos_y -= akaSpeed;
+                    akaDraw_y -= akaMove;
                 }
                 else if (akaPos_y < akaoldPos_y)
                 {
-                    akaPos_y += akaSpeed;
+                    akaDraw_y += akaMove;
                 }
             }
             else if (akaPos_x == akaoldPos_x && akaPos_y == akaoldPos_y)
@@ -474,70 +501,106 @@ void EnemyAra::enemyIjike()
         }
         else if (ijikeRandom == 1)
         {
-            for (int i = 0; i < 28; i++)
+            if (okRand == 1)
             {
-                for (int k = 0; k < 31; k++)
+                enemyRand = GetRand(3);
+                okRand = 0;
+
+            }
+            if (okRand == 0)
+            {
+
+
+                if (tile[akaPos_x][akaPos_y].ReadEnemy()[enemyRand] == Move::movable)
                 {
-                    if (akaPos_x == 16 * i + 192 && akaPos_y == 16 * k + 112)
+                    enemyVec = enemyRand;
+                }
+
+
+                //Å’Z•ûŒü‚ªã‚È‚ç
+                if (enemyVec == 0)
+                {
+                    if (enemyoldVec != 0)
                     {
-                        int a = GetRand(3);
-                        enemyVec = a;
+                        enemyoldVec = 0;//ã•ûŒüó‘Ô‚É‚·‚é
+                    }
+
+                    //ŽŸ‚Ìƒ}ƒX‚Ü‚ÅˆÚ“®‚·‚é
+                    if (akaPos_y != akaPos_yup)
+                    {
+                        akaDraw_y -= akaMove;
+                    }
+
+                    //ŽŸ‚Ìƒ}ƒX‚É‚Â‚¢‚½‚ç
+                    if (akaPos_y == akaPos_yup)
+                    {
+                        enemyVec = -1;//ˆÚ“®•ûŒü‚ðˆêu–³‚­‚·
+                        okRand = 1;
                     }
                 }
-            }
+                //Å’Z•ûŒü‚ª¶‚È‚ç
+                else if (enemyVec == 1)
+                {
+                    if (enemyoldVec != 1)
+                    {
+                        enemyoldVec = 1;//¶•ûŒüó‘Ô‚É‚·‚é
+                    }
 
-            if (enemyVec == 0)
-            {
-                aka_eye = 0;
-                if (akaPos_y != akaPos_yup)
-                {
-                    akaPos_y -= akaSpeed;
-                }
-                if (akaPos_y == akaPos_yup)
-                {
-                    akaPos_yup = akaPos_y - 32;
-                    akaPos_ydown = akaPos_y + 32;
-                }
-            }
-            else if (enemyVec == 1)
-            {
-                aka_eye = 1;
-                if (akaPos_x != akaPos_xright)
-                {
-                    akaPos_x += akaSpeed;
-                }
-                if (akaPos_x == akaPos_xright)
-                {
-                    akaPos_xright = akaPos_x + 32;
-                    akaPos_xleft = akaPos_x - 32;
-                }
-            }
-            else if (enemyVec == 2)
-            {
-                aka_eye = 2;
+                    //ŽŸ‚Ìƒ}ƒX‚Ü‚ÅˆÚ“®‚·‚é
+                    if (akaPos_x != akaPos_xleft)
+                    {
+                        akaDraw_x -= akaMove;
+                    }
 
-                if (akaPos_y != akaPos_ydown)
-                {
-                    akaPos_y += akaSpeed;
+                    //ŽŸ‚Ìƒ}ƒX‚É‚Â‚¢‚½‚ç
+                    if (akaPos_x == akaPos_xleft)
+                    {
+                        enemyVec = -1;//ˆÚ“®•ûŒü‚ðˆêu–³‚­‚·
+                        okRand = 1;
+                    }
                 }
-                if (akaPos_y == akaPos_ydown)
+                //Å’Z•ûŒü‚ª‰º‚È‚ç
+                else if (enemyVec == 2)
                 {
-                    akaPos_yup = akaPos_y - 32;
-                    akaPos_ydown = akaPos_y + 32;
-                }
-            }
-            else if (enemyVec == 3)
-            {
-                aka_eye = 3;
+                    if (enemyoldVec != 2)
+                    {
+                        enemyoldVec = 2;//‰º•ûŒüó‘Ô‚É‚·‚é
+                    }
 
-                if (akaPos_x != akaPos_xleft)
-                {
-                    akaPos_x -= akaSpeed;
+                    //ŽŸ‚Ìƒ}ƒX‚Ü‚ÅˆÚ“®‚·‚é
+                    if (akaPos_y != akaPos_ydown)
+                    {
+                        akaDraw_y += akaMove;
+                    }
+
+                    //ŽŸ‚Ìƒ}ƒX‚É‚Â‚¢‚½‚ç
+                    if (akaPos_y == akaPos_ydown)
+                    {
+                        enemyVec = -1;//ˆÚ“®•ûŒü‚ðˆêu–³‚­‚·
+                        okRand = 1;
+
+                    }
                 }
-                if (akaPos_x == akaPos_xleft)
+                //Å’Z•ûŒü‚ª‰E‚È‚ç
+                else if (enemyVec == 3)
                 {
-                    akaPos_xright = akaPos_x + 32;
-                    akaPos_xleft = akaPos_x - 32;
+                    if (enemyoldVec != 3)
+                    {
+                        enemyoldVec = 3;//‰E•ûŒüó‘Ô‚É‚·‚é
+                    }
+
+                    //ŽŸ‚Ìƒ}ƒX‚Ü‚ÅˆÚ“®‚·‚é
+                    if (akaPos_x != akaPos_xright)
+                    {
+                        akaDraw_x += akaMove;
+                    }
+
+                    //ŽŸ‚Ìƒ}ƒX‚É‚Â‚¢‚½‚ç
+                    if (akaPos_x == akaPos_xright)
+                    {
+                        enemyVec = -1;//ˆÚ“®•ûŒü‚ðˆêu–³‚­‚·
+                        okRand = 1;
+                    }
                 }
             }
         }

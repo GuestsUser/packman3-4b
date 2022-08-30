@@ -13,6 +13,7 @@ public:
     int akaDraw_y;
     int akaMas_x;
     int akaMas_y;
+    int akaMove;
 
     int aka_anim;
 
@@ -89,6 +90,13 @@ public:
     int disCount;
 
     int speedCount;
+
+    int enemyRand;
+    int okRand;
+
+    int attackTime;
+
+
 
 
     Direction nowDirection;
