@@ -14,6 +14,8 @@ public:
     int akaMas_x;
     int akaMas_y;
 
+    int aka_anim;
+
     int center;
     //‰æ‘œ”Ô†Ši”[•Ï”
     int aka_eye;
@@ -85,6 +87,8 @@ public:
     int distanceRight;
 
     int disCount;
+
+    int speedCount;
 
 
     Direction nowDirection;

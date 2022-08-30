@@ -22,8 +22,9 @@ EnemyAra::EnemyAra()
 
     aka_eye = 3;
     aka_img = 0;
+    aka_anim = 0;
 
-    akaSpeed = 1;
+    akaSpeed = 15;
     akaoldPos_x = 0;
     akaoldPos_y = 0;
 
@@ -77,6 +78,8 @@ EnemyAra::EnemyAra()
     distanceRight = 0;
 
     disCount = 0;
+
+    speedCount = 0;
 
     nowDirection = Direction::left;
     tile = WorldVal::Get<Grid*>("map");
@@ -194,6 +197,8 @@ void EnemyAra::enemyMove()
             //最短方向が上なら
             if (enemyVec == 0)
             {
+
+
                 if (enemyoldVec != 0)
                 {
                     enemyoldVec = 0;//上方向状態にする
@@ -203,6 +208,15 @@ void EnemyAra::enemyMove()
                 if (akaPos_y != akaPos_yup)
                 {
                     akaDraw_y -= akaSpeed;
+                    if (ijike == 0)
+                    {
+                        aka_eye = 0;
+
+                        aka_anim++;
+                        aka_img = aka_anim / 4 % 2;
+
+                    }
+                    
                 }
 
                 //次のマスについたら
@@ -215,6 +229,8 @@ void EnemyAra::enemyMove()
             //最短方向が左なら
             else if (enemyVec == 1)
             {
+
+
                 if (enemyoldVec != 1)
                 {
                     enemyoldVec = 1;//左方向状態にする
@@ -224,6 +240,14 @@ void EnemyAra::enemyMove()
                 if (akaPos_x != akaPos_xleft)
                 {
                     akaDraw_x -= akaSpeed;
+                    if (ijike == 0)
+                    {
+                        aka_eye = 3;
+
+                        aka_anim++;
+                        aka_img = aka_anim / 4 % 2;
+
+                    }
                 }
 
                 //次のマスについたら
@@ -245,6 +269,14 @@ void EnemyAra::enemyMove()
                 if (akaPos_y != akaPos_ydown)
                 {
                     akaDraw_y += akaSpeed;
+                    if (ijike == 0)
+                    {
+                        aka_eye = 2;
+
+                        aka_anim++;
+                        aka_img = aka_anim / 4 % 2;
+
+                    }
                 }
 
                 //次のマスについたら
@@ -267,6 +299,14 @@ void EnemyAra::enemyMove()
                 if (akaPos_x != akaPos_xright)
                 {
                     akaDraw_x += akaSpeed;
+                    if (ijike == 0)
+                    {
+                        aka_eye = 1;
+
+                        aka_anim++;
+                        aka_img = aka_anim / 4 % 2;
+
+                    }
                 }
 
                 //次のマスについたら
@@ -389,7 +429,7 @@ void EnemyAra::enemyMode()
         else if (attack == 0)//休憩状態なら
         {
             //目標マスを右上
-            targetPos_x = 30;
+            targetPos_x = 5;
             targetPos_y = 0;
         }
     }
