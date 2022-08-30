@@ -25,6 +25,7 @@ void CoffeeBreak::Update() {
 	}
 	if (key->GetKeyState(B_KEY) == KEY_PUSH) { //Aボタン(緑ボタン)が押された瞬間
 		SetNext(new Title()); //ゲームシーンへ遷移
+		StopSoundFile();
 		
 	}
 	
