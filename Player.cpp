@@ -29,12 +29,19 @@ public:
 
 	int GetMoveSub() { return -1 + 2 * (int)((int)direction / 2); } //移動方向に対応した符号返し、上、左はマイナス方向への移動、下、右がプラス方向への移動なので/2を利用した
 	void Moving(int speed) { *posEdit += speed * GetMoveSub(); }
+	bool IsMovable(int localPos)const { //現在進行方向にマス内座標中心を越えた時、進行可能かどうか判定する
+		bool minus = localPos >= 0 && localPos <= 3; //判定範囲に入っていた場合true
+		bool plus = localPos >= 3 && localPos < 8;
+		bool isMovable = player->GetTileMovable(player->ClculatTileX(direction), player->ClculatTileY(direction), direction) == Move::movable; //移動可能だった場合true
+		return (int)((int)direction / 2) > 0 ? !(plus && (!isMovable)) : !(minus && (!isMovable));
+	}
 
 	int GetCenter() const { return center; }
 	State GetState() const { return state; }
 	Direction GetDirection() const { return direction; }
 	const int* ReadPos() const { return posEdit; }
 	const Player* const ReadPlayer() { return player; }
+
 
 	void SetState(State set) { state = set; }
 	void SetDirection(Direction set) { direction = set; }
@@ -52,18 +59,25 @@ public:
 
 			break;
 		case Movable::State::run:
+			if (!IsMovable(ReadPlayer()->ClculatLocalX(GetDirection()))) {
+				SetState(State::free);
+				break;
+			}
 			Moving(speed);
 			break;
 		case Movable::State::curve:
+			if (!IsCurveInRange(ReadPlayer()->ClculatLocalX(GetDirection()))) { 
+				SetState(State::free);
+				break;
+			}
 			Moving(speed);
-			if (!IsCurveInRange(ReadPlayer()->ClculatLocalX(GetDirection()))) { SetState(State::free); }
 			break;
 		case Movable::State::stop:
 			break;
 		}
 	}
 	bool IsCurveInRange(int localPos) {
-		bool left = localPos <= 6 && localPos > 3;
+		bool left = localPos < 6 && localPos > 3;
 		bool right = localPos < 3 && localPos >= 1;
 		return (int)((int)GetDirection() / 2) > 0 ? left : right;
 	}
@@ -80,19 +94,26 @@ public:
 
 			break;
 		case Movable::State::run:
+			if (!IsMovable(ReadPlayer()->ClculatLocalY(GetDirection()))) {
+				SetState(State::free);
+				break;
+			}
 			Moving(speed);
 			break;
 		case Movable::State::curve:
+			if (!IsCurveInRange(ReadPlayer()->ClculatLocalY(GetDirection()))) {
+				SetState(State::free);
+				break;
+			}
 			Moving(speed);
-			if (!IsCurveInRange(ReadPlayer()->ClculatLocalY(GetDirection()))) { SetState(State::free); }
 			break;
 		case Movable::State::stop:
 			break;
 		}
 	}
 	bool IsCurveInRange(int localPos) {
-		bool up = localPos <= 6 && localPos > 3;
-		bool down = localPos < 3 && localPos >= 1;
+		bool up = localPos < 6 && localPos > 3;
+		bool down = localPos < 5 && localPos >= 1;
 		return (int)((int)GetDirection() / 2) > 0 ? up : down;
 	}
 };
@@ -124,8 +145,8 @@ public:
 		if (key->GetKeyState(XINPUT_BUTTON_DPAD_LEFT) <= KEY_HOLD || key->GetKeyState(L_STICK_LEFT) <= KEY_HOLD) { lastInput = Direction::left; }
 		if (key->GetKeyState(XINPUT_BUTTON_DPAD_UP) <= KEY_HOLD || key->GetKeyState(L_STICK_UP) <= KEY_HOLD) { lastInput = Direction::up; }
 
-		int subX = caller->ClculatTileX(nowDirection) + WARP_AREA_X; //中心座標も加味した現在の所属マスx
-		int subY = caller->ClculatTileY(nowDirection) + WARP_AREA_Y; //上記のy版
+		int subX = caller->ClculatTileX(nowDirection); //中心座標も加味した現在の所属マスx
+		int subY = caller->ClculatTileY(nowDirection); //上記のy版
 
 		while (nowDirection != lastInput) { //while文を利用したのはbreakを適当な位置に挿入する事でelse文を消せる事が目的、ループさせたい訳ではない
 			bool yCurve = (int)lastInput % 2 == 0; //新しい方向が上下何れかになる場合true
@@ -134,8 +155,8 @@ public:
 
 			if ((Direction)(((int)nowDirection + 2) % 4) == lastInput) { //入力方向が反対方向だった場合
 				nowDirection = lastInput; //方向を入力のあった方向に変更
-				subX = caller->ClculatTileX(nowDirection) + WARP_AREA_X; //方向変更に合わせた現在マスも更新
-				subY = caller->ClculatTileY(nowDirection) + WARP_AREA_Y;
+				subX = caller->ClculatTileX(nowDirection); //方向変更に合わせた現在マスも更新
+				subY = caller->ClculatTileY(nowDirection);
 				start->SetDirection(nowDirection); //新しい方向の設定
 				break; //以降のwhile文内処理は実行しない
 			}
@@ -152,8 +173,8 @@ public:
 
 			//ここまで来れれば、方向転換可能域に入っている且つどの方向もカーブ中ではなく、最後に入力のあった方向が移動可能である
 			nowDirection = lastInput; //方向を入力のあった方向に変更
-			subX = caller->ClculatTileX(nowDirection) + WARP_AREA_X; //方向変更に合わせた現在マスも更新
-			subY = caller->ClculatTileY(nowDirection) + WARP_AREA_Y;
+			subX = caller->ClculatTileX(nowDirection); //方向変更に合わせた現在マスも更新
+			subY = caller->ClculatTileY(nowDirection);
 
 			end->SetState(Movable::State::curve); //現在進む方向を曲がる処理に指定
 			start->SetState(Movable::State::run); //新しい方向へ移動を開始する

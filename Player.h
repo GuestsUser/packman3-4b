@@ -44,4 +44,6 @@ public:
 	int ClculatLocalY(Direction angle)const; //上記のy版
 	int ClculatTileX(Direction angle)const; //現在マスを返してくれる
 	int ClculatTileY(Direction angle)const; //上記のy版
+
+	Move GetTileMovable(int x, int y, Direction get) const { return tile[x][y].ReadPlayer()[(int)get]; } //指定タイルの指定方向の移動可否を返す
 };

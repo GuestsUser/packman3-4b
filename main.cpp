@@ -39,7 +39,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	FoodLoading();
 	MapLoading();
 
-	while (ProcessMessage() == 0) {
+	while (ProcessMessage() == 0 && key->GetKeyState(POUSE_KEY) != KEY_PUSH) {
 		//_RPTF1(_CRT_WARN, "%s\n", "test"); //デバッグ表示
 
 		//if (now - old > fps) { //前フレームの現在時刻との差が実行タイミングになっていた場合ゲーム処理、描写の実行
