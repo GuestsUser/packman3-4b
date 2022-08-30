@@ -151,6 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="EnemyAra.cpp" />
     <ClCompile Include="FoodLoading.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GetKey.cpp" />
@@ -166,6 +167,7 @@
     <ClCompile Include="Food.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="EnemyAra.h" />
     <ClInclude Include="ConstVal.h" />
     <ClInclude Include="Food.h" />
     <ClInclude Include="FoodLoading.h" />

@@ -9,4 +9,5 @@ void Game::Update() {
 void Game::Draw() {
 	map.Draw();
 	player.Draw();
+	akabei.enemyUpdate();
 }
