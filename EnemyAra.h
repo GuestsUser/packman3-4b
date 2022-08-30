@@ -52,7 +52,7 @@ public:
     int targetDrow_y;
     
     //–Ú•Wƒ}ƒX‚Æ‚Ì‹——£Ši”[•Ï”
-    float distance[4];
+    int distance[4];
 
     //–Ú•Wƒ}ƒX‚Æ‚ÌÅ’Z‹——£Ši”[•Ï”
     int minDistance;

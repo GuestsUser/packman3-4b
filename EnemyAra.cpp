@@ -134,11 +134,23 @@ void EnemyAra::enemyMove()
                 distance[i] = 9999;
 
                 if ((enemyoldVec + 2) % 4 == i) { continue; } //今回のiが反対方向だった場合飛ばす
-                if (tile[akaPos_x + WARP_AREA_X][akaPos_y + WARP_AREA_Y].ReadEnemy()[i] == Move::block) { continue; } //移動不可なら飛ばす
+                if (tile[akaPos_x][akaPos_y].ReadEnemy()[i] == Move::block) { continue; } //移動不可なら飛ばす
+                
+                int useY, useX;
 
-                int useY = (int)(i % 2 == 0); //y軸方向への移動なら1、そうでないなら0になる
+                if (i == 0 || i == 2)
+                {
+                    useY = 1;
+                    useX = 0;
+                }//y軸方向への移動なら1、そうでないなら0になる
+
+                if (i == 1 || i == 3)
+                {
+                    useY = 0;
+                    useX = 1;
+                }
                 int sub = -1 + 2 * (int)(i / 2 > 0); //進む方向の符号、上、左ならマイナス、下、右ならプラスを出す
-                int x = akaPos_x + sub * useY; //ここであるposは現在のマス座標を指す
+                int x = akaPos_x + sub * useX; //ここであるposは現在のマス座標を指す
                 int y = akaPos_y + sub * useY;
 
                 distance[i] = pow(double(targetPos_x) - double(x), 2) + pow(double(targetPos_y) - double(y), 2);
@@ -154,25 +166,25 @@ void EnemyAra::enemyMove()
                 }
             }
 
-            if (disCount == 0)
-            {
-                if (enemyVec == 0)
-                {
-                    enemyVec = 2;
-                }
-                if (enemyVec == 1)
-                {
-                    enemyVec = 3;
-                }
-                if (enemyVec == 2)
-                {
-                    enemyVec = 0;
-                }
-                if (enemyVec == 3)
-                {
-                    enemyVec = 1;
-                }
-            }
+            //if (disCount == 0)
+            //{
+            //    if (enemyVec == 0)
+            //    {
+            //        enemyVec = 2;
+            //    }
+            //    if (enemyVec == 1)
+            //    {
+            //        enemyVec = 3;
+            //    }
+            //    if (enemyVec == 2)
+            //    {
+            //        enemyVec = 0;
+            //    }
+            //    if (enemyVec == 3)
+            //    {
+            //        enemyVec = 1;
+            //    }
+            //}
 
             okMove = 1;
 
@@ -191,28 +203,13 @@ void EnemyAra::enemyMove()
                 if (akaPos_y != akaPos_yup)
                 {
                     akaDraw_y -= akaSpeed;
-                    //if (ijike == 0)
-                    //{
-                    //    aka_eye = 0;
-
-                    //    if (aka_img < 2)
-                    //    {
-                    //        aka_img++;
-                    //    }
-                    //    if (aka_img >= 2)
-                    //    {
-                    //        aka_img = 0;
-                    //    }
-                    //}
                 }
 
                 //次のマスについたら
                 if (akaPos_y == akaPos_yup)
                 {
-                    minDistance = 9999;//最短距離初期化
                     enemyVec = -1;//移動方向を一瞬無くす
                     okMove = 0;//一瞬動けない状態にする
-                    akaPos_yup = akaPos_y - 1;//動いた後のマスの次のマスの情報取得
                 }
             }
             //最短方向が左なら
@@ -226,30 +223,14 @@ void EnemyAra::enemyMove()
                 //次のマスまで移動する
                 if (akaPos_x != akaPos_xleft)
                 {
-
                     akaDraw_x -= akaSpeed;
-                    if (ijike == 0)
-                    {
-                        aka_eye = 3;
-
-                        if (aka_img < 2)
-                        {
-                            aka_img++;
-                        }
-                        if (aka_img >= 2)
-                        {
-                            aka_img = 0;
-                        }
-                    }
                 }
 
                 //次のマスについたら
                 if (akaPos_x == akaPos_xleft)
                 {
-                    minDistance = 9999;//最短距離初期化
                     enemyVec = -1;//移動方向を一瞬無くす
                     okMove = 0;//一瞬動けない状態にする
-                    akaPos_xleft = akaPos_x - 1;//動いた後のマスの次のマスの情報取得
                 }
             }
             //最短方向が下なら
@@ -264,28 +245,13 @@ void EnemyAra::enemyMove()
                 if (akaPos_y != akaPos_ydown)
                 {
                     akaDraw_y += akaSpeed;
-                    if (ijike == 0)
-                    {
-                        aka_eye = 2;
-
-                        if (aka_img < 2)
-                        {
-                            aka_img++;
-                        }
-                        if (aka_img >= 2)
-                        {
-                            aka_img = 0;
-                        }
-                    }
                 }
 
                 //次のマスについたら
                 if (akaPos_y == akaPos_ydown)
                 {
-                    minDistance = 9999;//最短距離初期化
                     enemyVec = -1;//移動方向を一瞬無くす
                     okMove = 0;//一瞬動けない状態にする
-                    akaPos_ydown = akaPos_y + 1;//動いた後のマスの次のマスの情報取得
 
                 }
             }
@@ -301,28 +267,13 @@ void EnemyAra::enemyMove()
                 if (akaPos_x != akaPos_xright)
                 {
                     akaDraw_x += akaSpeed;
-                    if (ijike == 0)
-                    {
-                        aka_eye = 1;
-
-                        if (aka_img < 2)
-                        {
-                            aka_img++;
-                        }
-                        if (aka_img >= 2)
-                        {
-                            aka_img = 0;
-                        }
-                    }
                 }
 
                 //次のマスについたら
                 if (akaPos_x == akaPos_xright)
                 {
-                    minDistance = 9999;//最短距離初期化
                     enemyVec = -1;//移動方向を一瞬無くす
                     okMove = 0;//一瞬動けない状態にする
-                    akaPos_xright = akaPos_x + 1;//動いた後のマスの次のマスの情報取得
                 }
             }
         }
@@ -333,8 +284,10 @@ void EnemyAra::enemyMove()
     DrawFormatString(0, 100, GetColor(255, 0, 0), "%d", akaPos_x);
     DrawFormatString(0, 150, GetColor(0, 0, 255), "%d", akaPos_y);
     DrawFormatString(0, 200, GetColor(0, 255, 255), "%d", enemyVec);
-    DrawFormatString(0, 250, GetColor(0, 255, 255), "%d", akaDraw_x);//143//136
-    DrawFormatString(0, 300, GetColor(0, 255, 255), "%d", akaDraw_y);//91//84
+    DrawFormatString(0, 250, GetColor(0, 255, 255), "%d", distance[0]);//143//136
+    DrawFormatString(0, 300, GetColor(0, 255, 255), "%d", distance[1]);//91//84
+    DrawFormatString(0, 350, GetColor(0, 255, 255), "%d", distance[2]);//143//136
+    DrawFormatString(0, 400, GetColor(0, 255, 255), "%d", distance[3]);//91//84
 
 
 
