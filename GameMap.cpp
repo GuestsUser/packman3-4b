@@ -93,7 +93,7 @@ public:
 };
 
 GameMap::GameMap(Scene* set) :staging(new Staging(this)), tile(WorldVal::Get<Grid*>("map")), map(*WorldVal::Get<int>("mapImage")),food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")), parent(set) {
-	staging->AnimeStartUp(&Staging::Clear);
+	staging->AnimeStartUp(&Staging::Start);
 }
 GameMap::~GameMap() {
 	delete staging; //‚±‚¿‚ç‚Å¸»‚µ‚½À‘Ì‚Ìíœ
