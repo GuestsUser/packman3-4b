@@ -16,6 +16,7 @@ class Player {
 	Moving* move; //動作クラス実体
 	int rad; //各種向きにより中心座標を動かす為に加減算する半径の値
 	int center; //xy共通の中心座標
+	int renderCenter; //xy共通中心だがこちらは描写用
 
 	int foodCount; //今回の残機で食べたエサ個数
 	int foodCountTotal; //エサを食べた合計個数
@@ -38,8 +39,9 @@ public:
 
 	int GetPosX() const { return posX; }
 	int GetPosY() const { return posY; }
-	int ClculatCenterX(Direction angle)const; //各種方向における中心x座標を返してくれる
-	int ClculatCenterY(Direction angle)const; //上記のy版
+	int GetCenter() const { return center; }
+	int ClculatCenterRadX(Direction angle)const; //各種方向における中心x座標を返してくれる
+	int ClculatCenterRadY(Direction angle)const; //上記のy版
 	int ClculatLocalX(Direction angle)const; //現在マスの左上を(0,0)としてマス内でどの位置にいるかを返してくれる
 	int ClculatLocalY(Direction angle)const; //上記のy版
 	int ClculatTileX(Direction angle)const; //現在マスを返してくれる
