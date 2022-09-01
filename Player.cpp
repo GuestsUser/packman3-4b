@@ -77,9 +77,9 @@ public:
 		}
 	}
 	bool IsCurveInRange(int localPos) {
-		bool left = localPos < 6 && localPos > 3;
+		bool left = localPos <= 6 && localPos > 3;
 		bool right = localPos < 3 && localPos >= 1;
-		return (int)((int)GetDirection() / 2) > 0 ? left : right;
+		return (int)((int)GetDirection() / 2) > 0 ? right : left;
 	}
 };
 
@@ -112,9 +112,9 @@ public:
 		}
 	}
 	bool IsCurveInRange(int localPos) {
-		bool up = localPos < 6 && localPos > 3;
-		bool down = localPos < 5 && localPos >= 1;
-		return (int)((int)GetDirection() / 2) > 0 ? up : down;
+		bool up = localPos <= 6 && localPos > 3;
+		bool down = localPos < 3 && localPos >= 1;
+		return (int)((int)GetDirection() / 2) > 0 ?  down : up;
 	}
 };
 
@@ -145,23 +145,23 @@ public:
 		if (key->GetKeyState(XINPUT_BUTTON_DPAD_LEFT) <= KEY_HOLD || key->GetKeyState(L_STICK_LEFT) <= KEY_HOLD) { lastInput = Direction::left; }
 		if (key->GetKeyState(XINPUT_BUTTON_DPAD_UP) <= KEY_HOLD || key->GetKeyState(L_STICK_UP) <= KEY_HOLD) { lastInput = Direction::up; }
 
-		int subX = caller->ClculatTileX(nowDirection); //中心座標も加味した現在の所属マスx
-		int subY = caller->ClculatTileY(nowDirection); //上記のy版
+		
 
 		while (nowDirection != lastInput) { //while文を利用したのはbreakを適当な位置に挿入する事でelse文を消せる事が目的、ループさせたい訳ではない
+			int subX = caller->ClculatTileX(nowDirection); //中心座標も加味した現在の所属マスx
+			int subY = caller->ClculatTileY(nowDirection); //上記のy版
 			bool yCurve = (int)lastInput % 2 == 0; //新しい方向が上下何れかになる場合true
 			Movable* end = yCurve ? x : y; //移動を取りやめる軸
 			Movable* start = yCurve ? y : x; //新しく移動を始める軸
 
 			if ((Direction)(((int)nowDirection + 2) % 4) == lastInput) { //入力方向が反対方向だった場合
 				nowDirection = lastInput; //方向を入力のあった方向に変更
-				subX = caller->ClculatTileX(nowDirection); //方向変更に合わせた現在マスも更新
-				subY = caller->ClculatTileY(nowDirection);
 				start->SetDirection(nowDirection); //新しい方向の設定
+				start->SetState(Movable::State::run); //衝突等で移動終了になってる可能性があるのでrunに再設定
 				break; //以降のwhile文内処理は実行しない
 			}
-			int localX = caller->ClculatLocalX(nowDirection); //現在マス内での位置
-			int localY = caller->ClculatLocalY(nowDirection); //上記のy版
+			int localX = caller->ClculatLocalX(lastInput); //現在マス内での位置、新しい方向に合わせた物
+			int localY = caller->ClculatLocalY(lastInput); //上記のy版
 
 			//下記if文はwhileを用いない場合入れ子にするか1つのif文条件にまとめるかになったので多分見やすくなった…かも
 			if ((!yCurve) && (!y->IsCurveInRange(localY))) { break; }
@@ -172,9 +172,8 @@ public:
 			if (caller->tile[subX][subY].ReadPlayer()[(int)lastInput] == Move::block) { break; } //移動したい方向が移動不可だった場合
 
 			//ここまで来れれば、方向転換可能域に入っている且つどの方向もカーブ中ではなく、最後に入力のあった方向が移動可能である
+			end->SetDirection((Direction)(((((int)nowDirection % 2) + 1) % 2) + (int)((int)nowDirection / 2) * 2)); //2で割った時出てくる方向が同じだがxy軸だけ違う方向に変更
 			nowDirection = lastInput; //方向を入力のあった方向に変更
-			subX = caller->ClculatTileX(nowDirection); //方向変更に合わせた現在マスも更新
-			subY = caller->ClculatTileY(nowDirection);
 
 			end->SetState(Movable::State::curve); //現在進む方向を曲がる処理に指定
 			start->SetState(Movable::State::run); //新しい方向へ移動を開始する
@@ -193,7 +192,7 @@ public:
 	Direction GetDirection() { return nowDirection; } //現在の進行方向の取得
 };
 
-Player::Player() :isUpdate(true), isDraw(true), center(7), rad(1), posX(13 * TILE + (TILE - 1)), posY(23 * TILE + (TILE - 1) / 2), move(new Moving(this)), foodCount(0), foodCountTotal(0), playerImg(*WorldVal::Get<int[12]>("playerImage")), killImg(*WorldVal::Get<int[11]>("killImage")), food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")), tile(WorldVal::Get<Grid*>("map")) {}
+Player::Player() :isUpdate(true), isDraw(true), renderCenter(3), center(3), rad(1), posX(13 * TILE + (TILE - 1)), posY(23 * TILE + (TILE - 1) / 2), move(new Moving(this)), foodCount(0), foodCountTotal(0), playerImg(*WorldVal::Get<int[12]>("playerImage")), killImg(*WorldVal::Get<int[11]>("killImage")), food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")), tile(WorldVal::Get<Grid*>("map")) {}
 Player::~Player() { delete move; }
 
 void Player::Update() {
@@ -206,23 +205,23 @@ void Player::Draw() {
 	if (isDraw) { //bool変数に停止命令(false)が入れられている場合実行しない
 		//画像サイズ-1の半分(小数点切り捨て)を引いて描写する事でマスの中心位置にいる場合表示もそのマスの中心位置となる
 		Direction angle = move->GetDirection(); //現在の進行方向
-		DrawRotaGraph3(SHIFT_X + (posX - ClculatCenterX(angle)) * X_RATE, SHIFT_Y + (posY - ClculatCenterY(angle)) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, playerImg[0], true);
+		DrawRotaGraph3(SHIFT_X + (posX - renderCenter + ClculatCenterRadX(angle)) * X_RATE, SHIFT_Y + (posY - renderCenter + ClculatCenterRadY(angle)) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, playerImg[0], true);
 	}
 }
 
-int Player::ClculatCenterX(Direction angle) const { return center + rad * std::sin((360 - 90 * (int)angle) * (PI / 180)); }  //各種方向に合わせてradの符号を変える事で中心座標の精製を行う
-int Player::ClculatCenterY(Direction angle) const { return center + rad * std::sin((360 - 90 * (int)angle + 270) * (PI / 180)); }
+int Player::ClculatCenterRadX(Direction angle) const { return rad * std::sin((360 - 90 * (int)angle) * (PI / 180)); }  //各種方向に合わせてradの符号を変える事で中心座標の精製を行う
+int Player::ClculatCenterRadY(Direction angle) const { return rad * std::sin((360 - 90 * (int)angle + 270) * (PI / 180)); }
 int Player::ClculatLocalX(Direction angle) const {
-	int raw = posX + ClculatCenterX(angle); //xの中心位置を出す
+	int raw = posX + center + ClculatCenterRadX(angle); //xの中心位置を出す
 	int sub = raw / TILE; //マス座標を出す
 	//return raw - sub * TILE; //マス座標を通常座標に戻す事でマスの左上通常座標が求まりx中心位置から引けばマス内の位置を割り出せる
 	return raw % TILE;
 }
 int Player::ClculatLocalY(Direction angle) const {
-	int raw = posY + ClculatCenterY(angle);
+	int raw = posY + center + ClculatCenterRadY(angle);
 	int sub = raw / TILE;
 	//return raw - sub * TILE;
 	return raw % TILE;
 }
-int Player::ClculatTileX(Direction angle) const { return (posX + ClculatCenterX(angle)) / TILE + WARP_AREA_X; }
-int Player::ClculatTileY(Direction angle) const { return (posY + ClculatCenterY(angle)) / TILE + WARP_AREA_Y; }
+int Player::ClculatTileX(Direction angle) const { return (posX + center + ClculatCenterRadX(angle)) / TILE + WARP_AREA_X; }
+int Player::ClculatTileY(Direction angle) const { return (posY + center + ClculatCenterRadY(angle)) / TILE + WARP_AREA_Y; }
