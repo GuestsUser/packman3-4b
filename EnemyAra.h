@@ -75,6 +75,7 @@ public:
 
     //ƒCƒWƒPó‘ÔØ‚è‘Ö‚¦•Ï”
     int ijike;
+    int okIjikeMove;
     int ijikeRandom;
 
     //“G‚ÌˆÚ“®‚·‚é‘O‚ÌŒü‚«Ši”[•Ï”
@@ -87,8 +88,10 @@ public:
     int distanceRight;
 
     int disCount;
-
     int speedCount;
+
+    int hantenMode;
+    int okHanten;
 
 
     Direction nowDirection;
