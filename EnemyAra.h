@@ -76,7 +76,9 @@ public:
 
     //ƒCƒWƒPó‘ÔØ‚è‘Ö‚¦•Ï”
     int ijike;
+    int okIjikeMove;
     int ijikeRandom;
+    int ijikeHanten;
 
     //“G‚ÌˆÚ“®‚·‚é‘O‚ÌŒü‚«Ši”[•Ï”
     int enemyoldVec;
@@ -88,13 +90,13 @@ public:
     int distanceRight;
 
     int disCount;
-
     int speedCount;
 
     int enemyRand;
     int okRand;
 
-    int attackTime;
+    int hantenMode;
+    int okHanten;
 
 
 
