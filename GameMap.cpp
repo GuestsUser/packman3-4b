@@ -70,6 +70,7 @@ public:
 
 	void GameOver() {  //c‹@‚ª‚È‚­‚È‚Á‚½‚Ì‰‰o
 		if (count <= 180) {
+			DrawRotaGraph3(SHIFT_X + 149, SHIFT_Y + 176, 0, 0, X_RATE, Y_RATE, 0, startImage1, TRUE, FALSE);
 			DrawRotaGraph3(SHIFT_X + 145, SHIFT_Y + 273, 0, 0, X_RATE, Y_RATE, 0, gameOverImage, TRUE, FALSE);
 		}
 		if (count == 180) {
