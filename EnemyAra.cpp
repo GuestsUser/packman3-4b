@@ -70,7 +70,9 @@ EnemyAra::EnemyAra()
     attack = 0;
 
     ijike = 0;
-    okIjikeMove = 0;
+
+    okIjikeMove = 1;
+
     ijikeRandom = 0;
     ijikeHanten = 0;
 
@@ -84,10 +86,11 @@ EnemyAra::EnemyAra()
     disCount = 0;
 
 
-    speedCount = 0;
 
     okRand = 1;
     enemyRand = 0;
+
+    speedCount = 0;
 
     hantenMode = 0;
     okHanten = 0;
@@ -231,6 +234,7 @@ void EnemyAra::enemyMove()
                 //éüÇÃÉ}ÉXÇ…Ç¬Ç¢ÇΩÇÁ
                 if (akaPos_y == akaPos_yup)
                 {
+                    //enemyVec = -1;//à⁄ìÆï˚å¸ÇàÍèuñ≥Ç≠Ç∑
                     okMove = 0;//àÍèuìÆÇØÇ»Ç¢èÛë‘Ç…Ç∑ÇÈ
                 }
             }
@@ -257,6 +261,7 @@ void EnemyAra::enemyMove()
                 //éüÇÃÉ}ÉXÇ…Ç¬Ç¢ÇΩÇÁ
                 if (akaPos_x == akaPos_xleft)
                 {
+                    //enemyVec = -1;//à⁄ìÆï˚å¸ÇàÍèuñ≥Ç≠Ç∑
                     okMove = 0;//àÍèuìÆÇØÇ»Ç¢èÛë‘Ç…Ç∑ÇÈ
                 }
             }
@@ -281,6 +286,7 @@ void EnemyAra::enemyMove()
                 //éüÇÃÉ}ÉXÇ…Ç¬Ç¢ÇΩÇÁ
                 if (akaPos_y == akaPos_ydown)
                 {
+                    //enemyVec = -1;//à⁄ìÆï˚å¸ÇàÍèuñ≥Ç≠Ç∑
                     okMove = 0;//àÍèuìÆÇØÇ»Ç¢èÛë‘Ç…Ç∑ÇÈ
                 }
             }
@@ -305,20 +311,20 @@ void EnemyAra::enemyMove()
                 //éüÇÃÉ}ÉXÇ…Ç¬Ç¢ÇΩÇÁ
                 if (akaPos_x == akaPos_xright)
                 {
+                    //enemyVec = -1;//à⁄ìÆï˚å¸ÇàÍèuñ≥Ç≠Ç∑
                     okMove = 0;//àÍèuìÆÇØÇ»Ç¢èÛë‘Ç…Ç∑ÇÈ
                 }
             }
         }
     }
 
-    DrawFormatString(0, 0, GetColor(255, 255, 255), "%d", count);
-    DrawFormatString(0, 50, GetColor(255, 255, 255), "%d", ijikeHanten);
-    DrawFormatString(0, 100, GetColor(255, 0, 0), "%d", akaPos_x);
-    DrawFormatString(0, 150, GetColor(0, 0, 255), "%d", akaPos_y);
-    DrawFormatString(0, 200, GetColor(0, 255, 255), "%d", okIjikeMove);
-    DrawFormatString(0, 250, GetColor(0, 255, 255), "%d", ijikeRandom);
-    DrawFormatString(0, 350, GetColor(0, 255, 255), "%d", akaPos_ydown);
-    DrawFormatString(0, 400, GetColor(0, 255, 255), "%d", akaPos_xright);
+    SetFontSize(30);
+    DrawFormatString(700, 30, GetColor(255, 255, 255), "TimeÅF%.2lf", (double)count / 60);
+    //DrawFormatString(0, 60, GetColor(255, 255, 255), "%d", okMove);
+    DrawFormatString(700, 100, GetColor(255, 255, 255), "ÅZÉGÉlÉ~Å[èÓïÒ");
+    DrawFormatString(700, 150, GetColor(255, 0, 0), "Xà íuÅF%d", akaPos_x);
+    DrawFormatString(700, 200, GetColor(0, 0, 255), "Yà íuÅF%d", akaPos_y);
+    DrawFormatString(700, 250, GetColor(0, 255, 0), "à⁄ìÆï˚å¸ÅF%d", enemyVec);
 }
 //ÉXÉsÅ[ÉhÉåÉxÉãÇ…ÇÊÇ¡ÇƒÉXÉsÅ[ÉhÇïœÇ¶ÇÈ
 void EnemyAra::enemyChangeSpeed()
@@ -375,50 +381,50 @@ void EnemyAra::enemyMode()
         if (count >= 0 && count < 7 * FPS)//0Å`7ïbÇÃéûãxåe
         {
             attack = 0;//ãxåeèÛë‘
-            DrawFormatString(0, 300, GetColor(0, 255, 255), "ãxëß", attack);//143//136
+
+            DrawFormatString(700, 300, GetColor(0, 255, 255), "ãxëßíÜ");
         }
         else if (count >= 7 * FPS && count < 27 * FPS)//7Å`27ïbÇÃéûçUåÇ
         {
             attack = 1;//çUåÇèÛë‘
-            DrawFormatString(0, 300, GetColor(0, 255, 255), "çUåÇ", attack);//143//136
-            //ijike = 1;
+
+            DrawFormatString(700, 300, GetColor(255, 255, 0), "çUåÇíÜ");
         }
         else if (count >= 27 * FPS && count < 34 * FPS)//27Å`34ïbÇÃéûãxåe
         {
             attack = 0;//ãxåeèÛë‘
-            DrawFormatString(0, 300, GetColor(0, 255, 255), "ãxëß", attack);//143//136
-            //ijike = 0;
+
+            DrawFormatString(700, 300, GetColor(0, 255, 255), "ãxëßíÜ");
         }
         else if (count >= 34 * FPS && count < 54 * FPS)//34Å`54ïbÇÃéûçUåÇ
         {
             attack = 1;//çUåÇèÛë‘
-            DrawFormatString(0, 300, GetColor(0, 255, 255), "çUåÇ", attack);//143//136
 
+            DrawFormatString(700, 300, GetColor(255, 255, 0), "çUåÇíÜ");
         }
         else if (count >= 54 * FPS && count < 59 * FPS)//54Å`59ïbÇÃéûãxåe
         {
             attack = 0;//ãxåeèÛë‘
-            DrawFormatString(0, 300, GetColor(0, 255, 255), "ãxëß", attack);//143//136
 
+            DrawFormatString(700, 300, GetColor(0, 255, 255), "ãxëßíÜ");
         }
         else if (count >= 59 * FPS && count < 79 * FPS)//59Å`79ïbÇÃéûçUåÇ
         {
             attack = 1;//çUåÇèÛë‘
-            DrawFormatString(0, 300, GetColor(0, 255, 255), "çUåÇ", attack);//143//136
 
-
+            DrawFormatString(700, 300, GetColor(255, 255, 0), "çUåÇíÜ");
         }
         else if (count >= 79 * FPS && count < 84 * FPS)//79Å`84ïbÇÃéûãxåe
         {
             attack = 0;//ãxåeèÛë‘
-            DrawFormatString(0, 300, GetColor(0, 255, 255), "ãxëß", attack);//143//136
 
-
+            DrawFormatString(700, 300, GetColor(0, 255, 255), "ãxëßíÜ");
         }
         else if (count >= 84 * FPS)//84ïbà»ç~ÇÕçUåÇ
         {
             attack = 1;//çUåÇèÛë‘
-            DrawFormatString(0, 300, GetColor(0, 255, 255), "çUåÇ", attack);//143//136
+
+            DrawFormatString(700, 300, GetColor(255, 255, 0), "çUåÇíÜ");
         }
         break;
     case 2:
@@ -436,30 +442,25 @@ void EnemyAra::enemyMode()
             targetPos_x = 5;
             targetPos_y = 0;
 
-            if (count == 7 * FPS || count == 34 * FPS || count == 59 * FPS || count == 84 * FPS)
-            {
+
+            if (count == 7 * FPS || count == 34 * FPS || count == 59 * FPS || count == 84 * FPS) {
                 hantenMode = 1;
             }
 
-            if (hantenMode == 1)
-            {
-                if (enemyVec == 0)
-                {
+            if (hantenMode == 1) {
+                if (enemyVec == 0) {
                     enemyVec = 2;
                     hantenMode = 0;
                 }
-                else if (enemyVec == 1)
-                {
+                else if (enemyVec == 1) {
                     enemyVec = 3;
                     hantenMode = 0;
                 }
-                else if (enemyVec == 2)
-                {
+                else if (enemyVec == 2) {
                     enemyVec = 0;
                     hantenMode = 0;
                 }
-                else if (enemyVec == 3)
-                {
+                else if (enemyVec == 3) {
                     enemyVec = 1;
                     hantenMode = 0;
                 }
@@ -468,33 +469,28 @@ void EnemyAra::enemyMode()
         else if (attack == 0)//ãxåeèÛë‘Ç»ÇÁ
         {
             //ñ⁄ïWÉ}ÉXÇâEè„
-            targetPos_x = 5;
-            targetPos_y = 0;
 
-            if (count == 27 * FPS || count == 54 * FPS || count == 79 * FPS)
-            {
+            targetPos_x = 30;
+            targetPos_y = 30;
+
+            if (count == 27 * FPS || count == 54 * FPS || count == 79 * FPS) {
                 hantenMode = 1;
             }
 
-            if (hantenMode == 1)
-            {
-                if (enemyVec == 0)
-                {
+            if (hantenMode == 1) {
+                if (enemyVec == 0) {
                     enemyVec = 2;
                     hantenMode = 0;
                 }
-                else if (enemyVec == 1)
-                {
+                else if (enemyVec == 1) {
                     enemyVec = 3;
                     hantenMode = 0;
                 }
-                else if (enemyVec == 2)
-                {
+                else if (enemyVec == 2) {
                     enemyVec = 0;
                     hantenMode = 0;
                 }
-                else if (enemyVec == 3)
-                {
+                else if (enemyVec == 3) {
                     enemyVec = 1;
                     hantenMode = 0;
                 }

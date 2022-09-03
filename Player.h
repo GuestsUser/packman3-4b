@@ -12,13 +12,11 @@ class Player {
 	int* killImg; //死亡モーション
 	bool isUpdate; //falseでupdate実行禁止
 	bool isDraw; //上記のdraw版
-	int subX, subY, drawX, drawY; //グリッドの添え字と描写用座標、描写用座標はグリッド添え字から出した座標と速度によって動いたドットを加えた描写に必要な各種加工を行えばその位置に表示が可能な座標を入れている
-	int speed; //速度、現在は状態によらず一定な仮の物
-	int speedCount; //速度の蓄積状況記録、毎フレームこれにspeedを加算し、speedCount/MOVABLE_SPEEDの値分描写座標を動かす
-	Direction nowDirection; //現在の進行方向
-	Direction lastInput; //最後の入力方向保持
-	Moving* xMove; //動作クラス実体、x用
-	Moving* yMove; //y用
+	int posX, posY; //描写用座標、描写用座標はグリッド添え字から出した座標と速度によって動いたドットを加えた描写に必要な各種加工を行えばその位置に表示が可能な座標を入れている
+	Moving* move; //動作クラス実体
+	int rad; //各種向きにより中心座標を動かす為に加減算する半径の値
+	int center; //xy共通の中心座標
+	int renderCenter; //xy共通中心だがこちらは描写用
 
 	int foodCount; //今回の残機で食べたエサ個数
 	int foodCountTotal; //エサを食べた合計個数
@@ -38,4 +36,16 @@ public:
 	void SetRunDraw(bool set) { isDraw = set; }
 	bool GetRunUpdate() { return isUpdate; }
 	bool GetRunDraw() { return isDraw; }
+
+	int GetPosX() const { return posX; }
+	int GetPosY() const { return posY; }
+	int GetCenter() const { return center; }
+	int ClculatCenterRadX(Direction angle)const; //各種方向における中心x座標を返してくれる
+	int ClculatCenterRadY(Direction angle)const; //上記のy版
+	int ClculatLocalX(Direction angle)const; //現在マスの左上を(0,0)としてマス内でどの位置にいるかを返してくれる
+	int ClculatLocalY(Direction angle)const; //上記のy版
+	int ClculatTileX(Direction angle)const; //現在マスを返してくれる
+	int ClculatTileY(Direction angle)const; //上記のy版
+
+	Move GetTileMovable(int x, int y, Direction get) const { return tile[x][y].ReadPlayer()[(int)get]; } //指定タイルの指定方向の移動可否を返す
 };

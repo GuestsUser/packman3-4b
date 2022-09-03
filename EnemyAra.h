@@ -98,9 +98,6 @@ public:
     int hantenMode;
     int okHanten;
 
-
-
-
     Direction nowDirection;
 
     Grid** tile;
