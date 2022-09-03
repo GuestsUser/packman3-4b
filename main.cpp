@@ -5,9 +5,14 @@
 //#define new  ::new( _NORMAL_BLOCK, __FILE__, __LINE__ )
 
 #include "DxLib.h"
+#include "ConstVal.h"
 #include "Title.h"
 #include "GetKey.h"
 #include "SceneManager.h"
+#include "Worldval.h"
+#include "FoodLoading.h"
+#include "ImageLoading.h"
+#include "MapLoading.h"
 //最初に実行したいシーンのヘッダーをインクルードしておく
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
@@ -16,20 +21,25 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	if (DxLib_Init() == -1) { return -1; }		//初期化と異常が認められた場合の終了
 
-	int fps = 1000000 / 60; //割る値を変えると1秒間に行う処理回数を変更できる
+	int fps = 1000000 / FPS; //割る値を変えると1秒間に行う処理回数を変更できる
 	LONGLONG now = GetNowHiPerformanceCount();
 	LONGLONG old = now;
 
 	//ウィンドウの初期設定
 	SetWindowText("PAC MAN");			//画面タイトル設定
-	SetGraphMode(1280, 720, 32);		//画面モードの設定
+	SetGraphMode(WINDOW_X, WINDOW_Y, 32);		//画面モードの設定
 	SetBackgroundColor(0, 0, 0);		//画面の背景色の設定
 	SetDrawScreen(DX_SCREEN_BACK);
 
+	WorldVal::SetUp(); //シーンを跨いだ変数共有クラスの初期化
 	key = new KeySystem(); //キー入力受付用クラスの実体作成
 	SceneManager* scm = new SceneManager(new Title()); //引数に最初に実行したいシーン実体を入れる
 
-	while (ProcessMessage() == 0) {
+	ImageLoading();
+	FoodLoading();
+	MapLoading();
+
+	while (ProcessMessage() == 0 && (!CheckHitKey(KEY_INPUT_ESCAPE))) {
 		//_RPTF1(_CRT_WARN, "%s\n", "test"); //デバッグ表示
 
 		//if (now - old > fps) { //前フレームの現在時刻との差が実行タイミングになっていた場合ゲーム処理、描写の実行
@@ -42,6 +52,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		scm->Draw(); //画面描写
 		ScreenFlip();
 	}
+	ImageDel();
+	FoodDel();
+	MapDel();
+	WorldVal::Destruct(); //値共有の実体破棄
 	delete key;
 	delete scm;
 	DxLib_End();// ＤＸライブラリ使用の終了処理
