@@ -42,14 +42,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	while (ProcessMessage() == 0 && (!CheckHitKey(KEY_INPUT_ESCAPE))) {
 		//_RPTF1(_CRT_WARN, "%s\n", "test"); //デバッグ表示
 
-		//if (now - old > fps) { //前フレームの現在時刻との差が実行タイミングになっていた場合ゲーム処理、描写の実行
-		//}
-
-		key->KeyInput(); //キー入力更新
-		old = now - (now - old); //差が実行タイミング以上だった場合そのままoldに現在時刻を入れると切り捨てられてしまうのでoldから実行タイミング超過分を引く事で超過分を加味した形にする
-		ClearDrawScreen(); //画面の初期化
-		if (!scm->Update()) { break; } //ウィンドウを閉じる指示を出されてたら終了
-		scm->Draw(); //画面描写
+		now = GetNowHiPerformanceCount(); //現在時刻の取得
+		if (now - old > fps) { //前フレームの現在時刻との差が実行タイミングになっていた場合ゲーム処理、描写の実行
+			key->KeyInput(); //キー入力更新
+			old = now - (now - old); //差が実行タイミング以上だった場合そのままoldに現在時刻を入れると切り捨てられてしまうのでoldから実行タイミング超過分を引く事で超過分を加味した形にする
+			ClearDrawScreen(); //画面の初期化
+			if (!scm->Update()) { break; } //ウィンドウを閉じる指示を出されてたら終了
+			scm->Draw(); //画面描写
+		}
 		ScreenFlip();
 	}
 	ImageDel();
