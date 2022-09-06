@@ -23,6 +23,7 @@ class Player {
 	std::unordered_map<std::string, Food*>* food; //エサやフルーツの配列
 	Grid** tile;
 
+<<<<<<< HEAD
 	int actIndex = 0;			
 	int maxMotion = 4;			//アニメーションの数（4段階）
 	int motionIndex;			//
@@ -31,6 +32,10 @@ class Player {
 
 	int animX;
 	int animY;
+=======
+	int diecount;
+	int killnum;
+>>>>>>> ARASHIRO
 
 	//初期位置 x14+4(ワープトンネル分) y23
 
@@ -57,4 +62,5 @@ public:
 	int ClculatTileY(Direction angle)const; //上記のy版
 
 	Move GetTileMovable(int x, int y, Direction get) const { return tile[x][y].ReadPlayer()[(int)get]; } //指定タイルの指定方向の移動可否を返す
+	void DieAnim();
 };

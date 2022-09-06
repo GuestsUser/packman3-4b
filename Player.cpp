@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <string>
 #include <math.h>
+#include "DxLib.h"
 
 class Movable {
 public:
@@ -192,7 +193,11 @@ public:
 	Direction GetDirection() { return nowDirection; } //現在の進行方向の取得
 };
 
+<<<<<<< HEAD
 Player::Player() :isUpdate(true), isDraw(true), renderCenter(3), center(3), rad(1), posX(13 * TILE + (TILE - 1)), posY(23 * TILE), move(new Moving(this)), foodCount(0), foodCountTotal(0), playerImg(*WorldVal::Get<int[12]>("playerImage")), killImg(*WorldVal::Get<int[11]>("killImage")), food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")), tile(WorldVal::Get<Grid*>("map")) {}
+=======
+Player::Player() :isUpdate(true), isDraw(true), renderCenter(3), center(3), rad(1), posX(13 * TILE + (TILE - 1)), posY(23 * TILE + (TILE - 1) / 2), move(new Moving(this)), foodCount(0), foodCountTotal(0), playerImg(*WorldVal::Get<int[12]>("playerImage")), killImg(*WorldVal::Get<int[11]>("killImage")), food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")), tile(WorldVal::Get<Grid*>("map")),diecount(0),killnum(0) {}
+>>>>>>> ARASHIRO
 Player::~Player() { delete move; }
 
 void Player::Update() {
@@ -283,3 +288,22 @@ int Player::ClculatLocalY(Direction angle) const {
 }
 int Player::ClculatTileX(Direction angle) const { return (posX + center + ClculatCenterRadX(angle)) / TILE + WARP_AREA_X; }
 int Player::ClculatTileY(Direction angle) const { return (posY + center + ClculatCenterRadY(angle)) / TILE + WARP_AREA_Y; }
+
+void Player::DieAnim()
+{
+	isUpdate = false;
+	isDraw = false;
+	diecount++;
+	//Direction angle = move->GetDirection(); //現在の進行方向
+	DrawRotaGraph3(SHIFT_X + (posX - renderCenter/* + ClculatCenterRadX(angle)*/) * X_RATE, SHIFT_Y + (posY - renderCenter/* +*//* ClculatCenterRadY(angle)*/) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, killImg[killnum], true);
+
+	if (diecount % 10 == 0)
+	{
+		killnum++;
+		//if (killnum > 10)
+		//{
+		//	killnum = 0;
+		//}
+
+	}
+}
