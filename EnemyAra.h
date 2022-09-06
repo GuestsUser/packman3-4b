@@ -5,6 +5,8 @@ public:
     enum class Type { red, pink, blue, orange }; //敵の種類
 private:
     bool reversOrder; //trueで次の移動先を強制的に反転方向に設定する
+    bool isUpdate; //falseでupdate実行禁止
+    bool isDraw; //上記のdraw版
 
      //アカベイのポジション変数
     int posX; //現在マス、タイル配列から移動可能方向を取得する添え字にするにはWARP_AREA分足す必要あり
@@ -50,6 +52,12 @@ public:
     void Draw();
     void Update();
     
+    //Update、Drawの実行可否取得と設定用関数
+    void SetRunUpdate(bool set) { isUpdate = set; }
+    void SetRunDraw(bool set) { isDraw = set; }
+    bool GetRunUpdate() { return isUpdate; }
+    bool GetRunDraw() { return isDraw; }
+
     virtual void SetAttackModeTarget() = 0; //追いかけモード中の狙いマス決定関数、オーバーライドして使う
     virtual void SetStandbyModeTarget() = 0; //上記の縄張りモード版
     virtual void SetWaitModeTarget() = 0; //巣の中の待機位置決定関数

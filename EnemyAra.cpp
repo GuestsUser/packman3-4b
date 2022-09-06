@@ -9,6 +9,9 @@
 
 //初期化
 EnemyAra::EnemyAra() {
+    isUpdate = true;
+    isDraw = true;
+
     type = Type::red; //取り敢えずアカベイを代入
     posX = 13;//17
     posY = 11;//11
@@ -41,13 +44,21 @@ EnemyAra::EnemyAra() {
 
 }
 
-void EnemyAra::Draw(){ //敵と敵の目を表示
-    int sub = (int)type * 2 + ((count / 4) % 2); //使用画像ナンバー
-    DrawRotaGraph3(SHIFT_X + (drawX - renderCenter) * X_RATE, SHIFT_Y + (drawY - renderCenter) * Y_RATE , 0, 0, X_RATE, Y_RATE,0, enemyImage[sub], TRUE, FALSE);
-    if (ijike == 0){ //イジケじゃないなら
-        DrawRotaGraph3(SHIFT_X + (drawX - renderCenter) * X_RATE, SHIFT_Y + (drawY - renderCenter) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, enemyImage_eye[(int)enemyVec], TRUE, FALSE);
+void EnemyAra::Update() {
+    if (isUpdate) {
+        ModeChange();
+        Move(ChangeSpeed());
     }
-    
+}
+
+void EnemyAra::Draw(){ //敵と敵の目を表示
+    if (isDraw) {
+        int sub = (int)type * 2 + ((count / 4) % 2); //使用画像ナンバー
+        DrawRotaGraph3(SHIFT_X + (drawX - renderCenter) * X_RATE, SHIFT_Y + (drawY - renderCenter) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, enemyImage[sub], TRUE, FALSE);
+        if (ijike == 0) { //イジケじゃないなら
+            DrawRotaGraph3(SHIFT_X + (drawX - renderCenter) * X_RATE, SHIFT_Y + (drawY - renderCenter) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, enemyImage_eye[(int)enemyVec], TRUE, FALSE);
+        }
+    }
 }
 
 void EnemyAra::Move(int move) {
@@ -149,11 +160,6 @@ void EnemyAra::ModeChange() {
     const char* debugMessage[2] = { "休息中" ,"攻撃中" };
     unsigned int color[2] = { GetColor(0, 255, 255) ,GetColor(255, 255, 0) };
     DrawFormatString(700, 300, color[attack], debugMessage[attack]);
-}
-
-void EnemyAra::Update() {
-    ModeChange();
-    Move(ChangeSpeed());
 }
 
 void EnemyAra::SetCringeMove() {
