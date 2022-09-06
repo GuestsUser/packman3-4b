@@ -9,6 +9,7 @@
 #include <unordered_map>
 #include <string>
 #include "Title.h"
+#include "EnemyAra.h"
 
 class GameMap::Staging { //演出系、他のファイルに取り込まないのでクラス内に直接処理を書き込んでいい
 public:
@@ -33,6 +34,8 @@ public:
 		gameOverImage(*WorldVal::Get<int>("gameOverImage")){}
 
 	void Start() { //ゲーム開始時のREADY!等の演出、レベル1の時は音楽も流す
+
+
 		if (count <= 120) {
 			//Player one表示
 			DrawRotaGraph3(SHIFT_X + 149, SHIFT_Y + 176, 0, 0, X_RATE, Y_RATE, 0, startImage1, TRUE, FALSE);
@@ -64,11 +67,16 @@ public:
 		count++;
 	}
 
-	void Miss() {  //パックマンがミスした時の演出
+	void  Miss() {  //パックマンがミスした時の演出
+		//Enemyの動きを0に
+		//EnemyAra::akaSpeed = 0;
+		//プレイヤーのやられモーション
+		GameMap::Missflg = true;
 
+		DrawString(400, 400, "ミス", GetColor(100, 100, 100));
 	}
 
-	void GameOver() {  //残機がなくなった時の演出
+	void GameOver() {  //残機がなくなった時3の演出
 		if (count <= 180) {
 			DrawRotaGraph3(SHIFT_X + 145, SHIFT_Y + 273, 0, 0, X_RATE, Y_RATE, 0, gameOverImage, TRUE, FALSE);
 		}
@@ -106,5 +114,7 @@ void GameMap::Draw() {
 	for (auto itr : *food) { itr.second->Draw(); } //食べ物描写
 }
 void GameMap::Update() {
-
+	if (key->GetKeyState(X_KEY) == KEY_PUSH||CheckHitKey(KEY_INPUT_SPACE)){
+		//Miss();
+	}
 }
