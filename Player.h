@@ -23,6 +23,15 @@ class Player {
 	std::unordered_map<std::string, Food*>* food; //エサやフルーツの配列
 	Grid** tile;
 
+	int actIndex = 0;			
+	int maxMotion = 4;			//アニメーションの数（4段階）
+	int motionIndex;			//
+	const int actSpeed = 2;		//アニメーションの速さ設定
+	int actWait;				//アニメーションの待ち時間
+
+	int animX;
+	int animY;
+
 	//初期位置 x14+4(ワープトンネル分) y23
 
 public:

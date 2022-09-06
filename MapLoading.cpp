@@ -183,12 +183,18 @@ void MapLoading() {
 	grid[16][8].Set(Move::block, Move::movable, Move::movable, Move::block, std::deque<Chara>{Chara::p, Chara::e, Chara::c});
 	grid[16][9].Set(Move::movable, Move::block, Move::movable, Move::block, std::deque<Chara>{Chara::p, Chara::e, Chara::c});
 	grid[16][10].Set(Move::movable, Move::block, Move::movable, Move::block, std::deque<Chara>{Chara::p, Chara::e, Chara::c});
+
 	grid[16][11].Set(Move::movable, Move::movable, Move::block, Move::movable, std::deque<Chara>{Chara::p, Chara::e, Chara::c});
+	grid[16][11].Set(Move::block, Move::movable, Move::block, Move::movable, std::deque<Chara>{Chara::e});	//左上一方通行
+	
 	grid[16][17].Set(Move::block, Move::movable, Move::block, Move::movable, std::deque<Chara>{Chara::p, Chara::e, Chara::c});
 	grid[16][20].Set(Move::block, Move::movable, Move::movable, Move::block, std::deque<Chara>{Chara::p, Chara::e, Chara::c});
 	grid[16][21].Set(Move::movable, Move::block, Move::movable, Move::block, std::deque<Chara>{Chara::p, Chara::e, Chara::c});
 	grid[16][22].Set(Move::movable, Move::block, Move::movable, Move::block, std::deque<Chara>{Chara::p, Chara::e, Chara::c});
+
 	grid[16][23].Set(Move::movable, Move::movable, Move::block, Move::movable, std::deque<Chara>{Chara::p, Chara::e, Chara::c});
+	grid[16][23].Set(Move::block, Move::movable, Move::block, Move::movable, std::deque<Chara>{Chara::e});  //左下一方通行
+
 	grid[16][26].Set(Move::block, Move::movable, Move::movable, Move::block, std::deque<Chara>{Chara::p, Chara::e, Chara::c});
 	grid[16][27].Set(Move::movable, Move::block, Move::movable, Move::block, std::deque<Chara>{Chara::p, Chara::e, Chara::c});
 	grid[16][28].Set(Move::movable, Move::block, Move::movable, Move::block, std::deque<Chara>{Chara::p, Chara::e, Chara::c});
@@ -217,12 +223,18 @@ void MapLoading() {
 	grid[19][8].Set(Move::block, Move::block, Move::movable, Move::movable, std::deque<Chara>{Chara::p, Chara::e, Chara::c});
 	grid[19][9].Set(Move::movable, Move::block, Move::movable, Move::block, std::deque<Chara>{Chara::p, Chara::e, Chara::c});
 	grid[19][10].Set(Move::movable, Move::block, Move::movable, Move::block, std::deque<Chara>{Chara::p, Chara::e, Chara::c});
+
 	grid[19][11].Set(Move::movable, Move::movable, Move::block, Move::movable, std::deque<Chara>{Chara::p, Chara::e, Chara::c});
+	grid[19][11].Set(Move::block, Move::movable, Move::block, Move::movable, std::deque<Chara>{Chara::e});  //右上一方通行
+
 	grid[19][17].Set(Move::block, Move::movable, Move::block, Move::movable, std::deque<Chara>{Chara::p, Chara::e, Chara::c});
 	grid[19][20].Set(Move::block, Move::block, Move::movable, Move::movable, std::deque<Chara>{Chara::p, Chara::e, Chara::c});
 	grid[19][21].Set(Move::movable, Move::block, Move::movable, Move::block, std::deque<Chara>{Chara::p, Chara::e, Chara::c});
 	grid[19][22].Set(Move::movable, Move::block, Move::movable, Move::block, std::deque<Chara>{Chara::p, Chara::e, Chara::c});
+
 	grid[19][23].Set(Move::movable, Move::movable, Move::block, Move::movable, std::deque<Chara>{Chara::p, Chara::e, Chara::c});
+	grid[19][23].Set(Move::block, Move::movable, Move::block, Move::movable, std::deque<Chara>{Chara::e});  //右下一方通行
+
 	grid[19][26].Set(Move::block, Move::block, Move::movable, Move::movable, std::deque<Chara>{Chara::p, Chara::e, Chara::c});
 	grid[19][27].Set(Move::movable, Move::block, Move::movable, Move::block, std::deque<Chara>{Chara::p, Chara::e, Chara::c});
 	grid[19][28].Set(Move::movable, Move::block, Move::movable, Move::block, std::deque<Chara>{Chara::p, Chara::e, Chara::c});

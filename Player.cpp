@@ -201,11 +201,69 @@ void Player::Update() {
 		
 	}
 }
+//void Player::Draw() {
+//	if (isDraw) { //bool変数に停止命令(false)が入れられている場合実行しない
+//		//画像サイズ-1の半分(小数点切り捨て)を引いて描写する事でマスの中心位置にいる場合表示もそのマスの中心位置となる
+//		Direction angle = move->GetDirection(); //現在の進行方向
+//		DrawRotaGraph3(SHIFT_X + (posX - renderCenter + ClculatCenterRadX(angle)) * X_RATE, SHIFT_Y + (posY - renderCenter + ClculatCenterRadY(angle)) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, playerImg[0], true);
+//	}
+//}
+
+//テスト1
+//void Player::Draw() {
+//	int actMotion[] = {0,1,2,1,};
+//	
+//	if (posX - animX != 0 || posY - animY != 0) {
+//		if (--actWait <= 0) {
+//			actIndex++;
+//			actWait = actSpeed;
+//			actIndex %= maxMotion;
+//		}
+//	}
+//
+//	animX = posX;
+//	animY = posY;
+//
+//	motionIndex = actMotion[actIndex];
+//
+//	if (isDraw) { //bool変数に停止命令(false)が入れられている場合実行しない
+//		//画像サイズ-1の半分(小数点切り捨て)を引いて描写する事でマスの中心位置にいる場合表示もそのマスの中心位置となる
+//		Direction angle = move->GetDirection(); //現在の進行方向
+//		int moveAnim = (int)move->GetDirection() * 3;
+//		DrawRotaGraph3(SHIFT_X + (posX - renderCenter + ClculatCenterRadX(angle)) * X_RATE, SHIFT_Y + (posY - renderCenter + ClculatCenterRadY(angle)) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, playerImg[0 + moveAnim + motionIndex], true);
+//	}
+//}
+
+//テスト2
 void Player::Draw() {
 	if (isDraw) { //bool変数に停止命令(false)が入れられている場合実行しない
 		//画像サイズ-1の半分(小数点切り捨て)を引いて描写する事でマスの中心位置にいる場合表示もそのマスの中心位置となる
+
+		int actMotion[] = { 0,1,2,1, };
 		Direction angle = move->GetDirection(); //現在の進行方向
-		DrawRotaGraph3(SHIFT_X + (posX - renderCenter + ClculatCenterRadX(angle)) * X_RATE, SHIFT_Y + (posY - renderCenter + ClculatCenterRadY(angle)) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, playerImg[0], true);
+		int moveAnim = (int)move->GetDirection() * 3;
+
+		//パックマンが縦または横に移動している時
+		if (posX - animX != 0 || posY - animY != 0) {
+			//移動アニメ処理
+			if (--actWait <= 0) {
+				actIndex++;
+				actWait = actSpeed;
+				actIndex %= maxMotion;
+			}
+		}
+		else {
+			if (actIndex == 0) {
+				actIndex += 2;
+			}
+		}
+
+		animX = posX;
+		animY = posY;
+		motionIndex = actMotion[actIndex] + moveAnim;
+
+		DrawFormatString(0, 10, GetColor(255, 255, 255), "%2d", motionIndex);
+		DrawRotaGraph3(SHIFT_X + (posX - renderCenter + ClculatCenterRadX(angle)) * X_RATE, SHIFT_Y + (posY - renderCenter + ClculatCenterRadY(angle)) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, playerImg[motionIndex], true);
 	}
 }
 
