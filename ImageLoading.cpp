@@ -23,6 +23,14 @@ void ImageLoading() {
 	handle = new int[11];
 	LoadDivGraph("Resource/image/dying.png", 11, 11, 1, 16, 16, handle); //パックマンやられモーション読み込み
 	WorldVal::Set("killImage", handle);
+
+	handle = new int[20];
+	LoadDivGraph("Resource/image/monster.png", 20, 20, 1, 16, 16, handle); //敵画像読み込み
+	WorldVal::Set("enemyImage", handle);
+	
+	handle = new int[4];
+	LoadDivGraph("Resource/image/eyes.png", 4, 4, 1, 16, 16, handle); //敵の目の画像読み込み
+	WorldVal::Set("enemyImageEye", handle);
 }
 
 
@@ -45,4 +53,10 @@ void ImageDel() {
 
 	handle = *WorldVal::Get<int[11]>("killImage");
 	for (int i = 0; i < 11; ++i) { DeleteGraph(handle[i]); }
+
+	handle = *WorldVal::Get<int[20]>("enemyImage");
+	for (int i = 0; i < 20; ++i) { DeleteGraph(handle[i]); }
+
+	handle = *WorldVal::Get<int[4]>("enemyImageEye");
+	for (int i = 0; i < 4; ++i) { DeleteGraph(handle[i]); }
 }
