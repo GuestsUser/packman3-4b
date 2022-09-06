@@ -5,6 +5,7 @@
 #include "GameMap.h"
 #include "Player.h"
 #include "EnemyAra.h"
+#include <deque>
 
 //ゲームシーン、現在は空、動作確認をしたい時こちらのUpdate等に追記していってほしい
 //Updateの定義はcppにある(現在は空)
@@ -14,10 +15,10 @@ public:
 private:
 	GameMap map;
 	Player player;
-	EnemyAra akabei;
+	std::deque<EnemyAra*> enemy;
 	static State state; //Foodに次レベルに移行する度Gameの内容を入れ替えたくなかったのでstatic変数にしてヘッダーさえインクルードしておけばいつでもアクセスできる
 public:
-	Game() :map(GameMap(this)), player() { state = State::start; } //初期化時毎回startを代入する
+	Game();
 	void Update();
 	void Draw();
 

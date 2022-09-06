@@ -1,123 +1,78 @@
 #pragma once
 #include "Grid.h"
-class EnemyAra
-{
+class EnemyAra {
 public:
-    EnemyAra();
-    ~EnemyAra();
+    enum class Type { red, pink, blue, orange }; //敵の種類
+private:
+    bool reversOrder; //trueで次の移動先を強制的に反転方向に設定する
 
-    //アカベイのポジション変数
-    int akaPos_x;
-    int akaPos_y;
-    int akaDraw_x;
-    int akaDraw_y;
-    int akaMas_x;
-    int akaMas_y;
+     //アカベイのポジション変数
+    int posX; //現在マス、タイル配列から移動可能方向を取得する添え字にするにはWARP_AREA分足す必要あり
+    int posY;
+    int drawX; //描写用位置
+    int drawY;
 
-    int aka_anim;
-
-    int center;
-    //画像番号格納変数
-    int aka_eye;
-    int aka_img;
-    //現在マスの上下左右のマスのポジション変数
-    int akaPos_xright;
-    int akaPos_yup;
-    int akaPos_xleft;
-    int akaPos_ydown;
-    //アカベイの移動量変数
-    int akaSpeed;
-    //アカベイの1マス前のポジション変数
-    int akaoldPos_x;
-    int akaoldPos_y;
-
-
-    //アオスケ用変数
-    int aoPos_x;
-    int aoPos_y;
-    int aoSpeed;
-
-    //グズタ用変数
-    int orangePos_x;
-    int orangePos_y;
-    int orangeSpeed;
-
-    //ピンキー用変数
-    int pinkPos_x;
-    int pinkPos_y;
-    int pinkSpeed;
-
-    //目標マスのポジション変数
-    int targetPos_x;
+    int targetPos_x; //目標マスのポジション変数
     int targetPos_y;
-    int targetDrow_x;
-    int targetDrow_y;
-    
-    //目標マスとの距離格納変数
-    int distance[4];
 
-    //目標マスとの最短距離格納変数
-    int minDistance;
-
-    //敵の移動方向変数
-    int enemyVec;
-    
-    //スピードレベル格納変数
-    int speedLevel;
-
-    //敵が動いていいかの変数
-    int okMove;
-
-    //時間経過変数
-    int count;
-    //攻撃状態切り替え変数
-    int attack;
-
-    //イジケ状態切り替え変数
-    int ijike;
-    int okIjikeMove;
-    int ijikeRandom;
-
-    //敵の移動する前の向き格納変数
-    int enemyoldVec;
-
-    // 目標マスとの距離を入れる変数
-    int distanceUP;
-    int distanceLeft;
-    int distanceDown;
-    int distanceRight;
-
-    int disCount;
+    int speedLevel; //スピードレベル格納変数
     int speedCount;
 
-    int hantenMode;
-    int okHanten;
+    int center;
+    int renderCenter;
 
+    int count; //時間経過変数
+    int attack; //攻撃状態切り替え変数
+    int ijike; //イジケ状態切り替え変数
 
-    Direction nowDirection;
+    int* enemyImage; //enemy画像格納用変数
+    int* enemyImage_eye; //enemyの目の画像格納用変数
 
-    Grid** tile;
+    Direction enemyVec; //敵の移動方向変数
+    Type type; //敵の種類記憶
+    Grid** tile; //マップタイル配列
 
-    //enemy描画関数
-    void enemyDraw();
+    int ChangeSpeed();
+    void Move(int move);
+    void ModeChange();
 
-    void enemyMove();
+    void SetCringeMove(); //イジケ状態時位置決定関数、これはオーバーライドする形式ではない
+    void SetReversMove(); //反対方向へ移動方向を向ける関数
 
-    void enemyUpdate();
+    int ClculatSubX(Direction angle) const; //指定方向の時x軸方向への動作に掛ける符号を返す
+    int ClculatSubY(Direction angle) const; //上記のy版
+    int ClculatLocalX(Direction angle)const; //現在マスの左上を(0,0)としてマス内でどの位置にいるかを返してくれる
+    int ClculatLocalY(Direction angle)const; //上記のy版
+protected:
+    
+public:
+    EnemyAra();
+    void Draw();
+    void Update();
+    
+    virtual void SetAttackModeTarget() = 0; //追いかけモード中の狙いマス決定関数、オーバーライドして使う
+    virtual void SetStandbyModeTarget() = 0; //上記の縄張りモード版
+    virtual void SetWaitModeTarget() = 0; //巣の中の待機位置決定関数
 
-    void enemyChangeSpeed();
+    void SetUp(Type setType, Direction setDirection, int setX, int setY) { //継承先コンストラクタ内で必ず呼び出す必要あり、setTypeに敵種類、setDirectionに最初に向いてる方向、setX,Yに現在位置を座標で代入
+        type = setType;
+        drawX = setX;
+        drawY = setY;
+        SetStandbyModeTarget(); //待機状態の目標マスに設定
+    }
+    void SetReversOrder(bool set) { reversOrder = set; } //trueで次の移動先を強制的に反転方向に設定する
 
-    void enemyMode();
+    Direction GetDirection() { return enemyVec; } //現在の移動方向を取得できる
+    int ClculatTileX(Direction angle)const; //現在マスを返してくれる
+    int ClculatTileY(Direction angle)const; //上記のy版
 
-    void enemyIjike();
+    void TargetSet(int setX, int setY) { //ターゲットマス指定、指定はワープエリア込みで考える
+        targetPos_x = setX;
+        targetPos_y = setY;
+    }
 
-private:
-
-    //enemy画像格納用変数
-    int enemyImage[20];
-
-    //enemyの目の画像格納用変数
-    int enemyImage_eye[4];
-
-
+    
+    //void SetAttackModeTarget(); //テスト用実装
+    //void SetStandbyModeTarget();
+    //void SetWaitModeTarget();
 };
