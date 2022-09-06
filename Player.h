@@ -23,7 +23,6 @@ class Player {
 	std::unordered_map<std::string, Food*>* food; //エサやフルーツの配列
 	Grid** tile;
 
-<<<<<<< HEAD
 	int actIndex = 0;			
 	int maxMotion = 4;			//アニメーションの数（4段階）
 	int motionIndex;			//
@@ -32,10 +31,8 @@ class Player {
 
 	int animX;
 	int animY;
-=======
 	int diecount;
 	int killnum;
->>>>>>> ARASHIRO
 
 	//初期位置 x14+4(ワープトンネル分) y23
 
