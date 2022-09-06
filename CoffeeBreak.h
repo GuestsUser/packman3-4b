@@ -20,8 +20,11 @@ public:
     void monstermove3();
 private:
     //“G‰æ‘œŠi”[—p•Ï”
-    int monsterImage[20];
     int monstereyesImage[4];
+    int monsterImage[20];
+    int monsterImage3[2];
+    
+    
     //ƒpƒbƒNƒ}ƒ“‰æ‘œŠi”[—p•Ï”
     int pacmanImage[12];
 

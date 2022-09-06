@@ -12,6 +12,7 @@ class Game :public Scene {
 public:
 	enum class State { start, run, miss, gameover, clear }; //ゲーム状況を表す列挙型、start=ゲーム開始前, run=ゲーム中, miss=プレイヤーミス時, gameover=残機が無い時ミス演出後これにする, clear=全てのエサを食べた時
 private:
+	int readycount;//readyが表示されている間のカウント
 	GameMap map;
 	Player player;
 	EnemyAra akabei;

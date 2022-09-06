@@ -596,7 +596,7 @@ void EnemyAra::enemyIjike()
 
 void EnemyAra::enemyUpdate()
 {
-    enemyDraw();
+    //enemyDraw();
     enemyMode();
     enemyMove();
     enemyChangeSpeed();

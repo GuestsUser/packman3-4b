@@ -35,7 +35,7 @@ public:
 	void Start() { //ゲーム開始時のREADY!等の演出、レベル1の時は音楽も流す
 		if (count <= 120) {
 			//Player one表示
-			DrawRotaGraph3(SHIFT_X + 149, SHIFT_Y + 176, 0, 0, X_RATE, Y_RATE, 0, startImage1, TRUE, FALSE);
+			//DrawRotaGraph3(SHIFT_X + 149, SHIFT_Y + 176, 0, 0, X_RATE, Y_RATE, 0, startImage1, TRUE, FALSE);
 		}
 		if (count <= 240) {
 			//Ready!表示
