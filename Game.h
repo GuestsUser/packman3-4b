@@ -17,7 +17,7 @@ private:
 	EnemyAra akabei;
 	static State state; //Foodに次レベルに移行する度Gameの内容を入れ替えたくなかったのでstatic変数にしてヘッダーさえインクルードしておけばいつでもアクセスできる
 public:
-	Game() :map(GameMap(this)), player() { state = State::start; } //初期化時毎回startを代入する
+	Game() :player(),map(GameMap(this,&player)) { state = State::start; } //初期化時毎回startを代入する
 	void Update();
 	void Draw();
 

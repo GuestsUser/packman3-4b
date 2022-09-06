@@ -9,6 +9,7 @@
 #include <unordered_map>
 #include <string>
 #include "Title.h"
+#include "Player.h"
 
 class GameMap::Staging { //演出系、他のファイルに取り込まないのでクラス内に直接処理を書き込んでいい
 public:
@@ -65,7 +66,7 @@ public:
 	}
 
 	void Miss() {  //パックマンがミスした時の演出
-
+		caller->player->DieAnim();
 	}
 
 	void GameOver() {  //残機がなくなった時の演出
@@ -93,8 +94,8 @@ public:
 	}
 };
 
-GameMap::GameMap(Scene* set) :staging(new Staging(this)), tile(WorldVal::Get<Grid*>("map")), map(*WorldVal::Get<int>("mapImage")),food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")), parent(set) {
-	staging->AnimeStartUp(&Staging::Start);
+GameMap::GameMap(Scene* set,Player* pacman) :staging(new Staging(this)), tile(WorldVal::Get<Grid*>("map")), map(*WorldVal::Get<int>("mapImage")),food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")), parent(set),player(pacman) {
+	staging->AnimeStartUp(&Staging::Miss);
 }
 GameMap::~GameMap() {
 	delete staging; //こちらで精製した実体の削除
