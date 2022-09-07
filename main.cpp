@@ -13,6 +13,7 @@
 #include "FoodLoading.h"
 #include "ImageLoading.h"
 #include "MapLoading.h"
+#include "ScoreLoading.h"
 //最初に実行したいシーンのヘッダーをインクルードしておく
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
@@ -38,6 +39,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	ImageLoading();
 	FoodLoading();
 	MapLoading();
+	ScoreLoading();
 
 	while (ProcessMessage() == 0 && (!CheckHitKey(KEY_INPUT_ESCAPE))) {
 		//_RPTF1(_CRT_WARN, "%s\n", "test"); //デバッグ表示
@@ -55,6 +57,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	ImageDel();
 	FoodDel();
 	MapDel();
+	//ScoreDel();
 	WorldVal::Destruct(); //値共有の実体破棄
 	delete key;
 	delete scm;

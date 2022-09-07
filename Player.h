@@ -10,6 +10,9 @@ class Player {
 
 	int* playerImg; //パックマン画像ハンドル
 	int* killImg; //死亡モーション
+	int* score; //スコアの参照
+	int* highScore; //ハイスコアの参照
+
 	bool isUpdate; //falseでupdate実行禁止
 	bool isDraw; //上記のdraw版
 	int posX, posY; //描写用座標、描写用座標はグリッド添え字から出した座標と速度によって動いたドットを加えた描写に必要な各種加工を行えばその位置に表示が可能な座標を入れている
