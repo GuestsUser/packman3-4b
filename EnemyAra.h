@@ -78,9 +78,4 @@ public:
         targetPos_x = setX;
         targetPos_y = setY;
     }
-
-    
-    //void SetAttackModeTarget(); //テスト用実装
-    //void SetStandbyModeTarget();
-    //void SetWaitModeTarget();
 };

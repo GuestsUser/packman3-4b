@@ -62,9 +62,22 @@ void EnemyAra::Draw(){ //敵と敵の目を表示
 }
 
 void EnemyAra::Move(int move) {
+    int rawX = ClculatTileX(enemyVec) * TILE + ClculatLocalX(enemyVec);
+    int rawY = ClculatTileY(enemyVec) * TILE + ClculatLocalY(enemyVec);
+    int limitX = (ClculatTileX(enemyVec) + ClculatSubX(enemyVec)) * TILE + 3;
+    int limitY = (ClculatTileY(enemyVec) + ClculatSubY(enemyVec)) * TILE + 4;
+
+    bool run = false;
+    switch (enemyVec) {
+    case Direction::up: run = rawY - limitY <= 0; break;
+    case Direction::left: run = rawX - limitX <= 0; break;
+    case Direction::down: run = rawY - limitY >= 0; break;
+    case Direction::right: run = rawX - limitX >= 0; break;
+    }
+
     int currentTileX = (drawX + center) / TILE;
     int currentTileY = (drawY + center) / TILE;
-    while (currentTileX != posX || currentTileY != posY) { //マス移動があった場合(whileを使っているのは下記if文でbreakを用いたかったからでループの意図はない)
+    while (currentTileX!=posX || currentTileY != posY) { //マス移動があった場合(whileを使っているのは下記if文でbreakを用いたかったからでループの意図はない)
         posX = currentTileX; //現在所属マスを新しい物に変更
         posY = currentTileY;
         currentTileX += WARP_AREA_X; //こっちの変数は配列からの取得用に変更
@@ -184,18 +197,5 @@ int EnemyAra::ClculatSubX(Direction angle) const { return std::sin((360 - 90 * (
 int EnemyAra::ClculatSubY(Direction angle) const { return std::sin((360 - 90 * (int)angle + 270) * (PI / 180)); }
 int EnemyAra::ClculatLocalX(Direction angle) const { return (posX + center + ClculatSubX(angle)) % TILE; } //現在マスの左上を(0,0)としてマス内でどの位置にいるかを返してくれる
 int EnemyAra::ClculatLocalY(Direction angle) const { return (posY + center + ClculatSubY(angle)) % TILE; }
-int EnemyAra::ClculatTileX(Direction angle) const { return (posX + center + ClculatSubX(angle)) / TILE + WARP_AREA_X; }
+int EnemyAra::ClculatTileX(Direction angle) const { return (posX + center + ClculatSubX(angle)) / TILE + WARP_AREA_X; } //現在マスを返してくれる
 int EnemyAra::ClculatTileY(Direction angle) const { return (posY + center + ClculatSubY(angle)) / TILE + WARP_AREA_Y; }
-
-//void EnemyAra::SetAttackModeTarget() {
-//    targetPos_x = 30;
-//    targetPos_y = 30;
-//}
-//void EnemyAra::SetStandbyModeTarget() {
-//    targetPos_x = 5;
-//    targetPos_y = 0;
-//}
-//void EnemyAra::SetWaitModeTarget() {
-//    targetPos_x = 16;
-//    targetPos_y = 13;
-//}

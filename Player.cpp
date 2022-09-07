@@ -285,6 +285,8 @@ int Player::ClculatLocalY(Direction angle) const {
 int Player::ClculatTileX(Direction angle) const { return (posX + center + ClculatCenterRadX(angle)) / TILE + WARP_AREA_X; }
 int Player::ClculatTileY(Direction angle) const { return (posY + center + ClculatCenterRadY(angle)) / TILE + WARP_AREA_Y; }
 
+Direction Player::GetDirection()const { return move->GetDirection(); }
+
 void Player::DieAnim()
 {
 	isUpdate = false;
