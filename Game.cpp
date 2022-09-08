@@ -10,17 +10,22 @@ Game::Game() :player(), map(GameMap(this, &player)),enemy(std::deque<EnemyAra*>(
 	enemy.push_back(new EnemyRed(&player)); //Ô‚Ì“G‚ğ’Ç‰Á‚·‚é
 	enemy.push_back(new EnemyPink(&player));
 
-
+	count = 0;
 }
 
 void Game::Update() {
 	map.Update();
-	player.Update();
-	for (int i = 0; i < enemy.size(); ++i) { enemy[i]->Update(); }
+	if (count >= 240) {
+		player.Update();
+		for (int i = 0; i < enemy.size(); ++i) { enemy[i]->Update(); }
+	}
+	count++;
 }
 
 void Game::Draw() {
 	map.Draw();
-	player.Draw();
-	for (int i = 0; i < enemy.size(); ++i) { enemy[i]->Draw(); }
+	if (count >= 120) {
+		player.Draw();
+		for (int i = 0; i < enemy.size(); ++i) { enemy[i]->Draw(); }
+	}
 }

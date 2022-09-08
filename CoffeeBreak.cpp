@@ -5,7 +5,7 @@
 
 CoffeeBreak::CoffeeBreak() {
 	LoadDivGraph("Resource/image/monster.png", 20, 20, 1, 16, 16, monsterImage);
-	LoadDivGraph("Resource/image/eyes.png", 4, 4, 1, 32, 32, monstereyesImage);
+	LoadDivGraph("Resource/image/eyes.png", 4, 4, 1, 16, 16, monstereyesImage);
 
 	LoadDivGraph("Resource/image/pacman.png", 12, 12, 1, 16, 16, pacmanImage);
 
@@ -79,7 +79,7 @@ void CoffeeBreak::monstermove1() {
 		}
 		monstermove = monstermove + 3.6;
 		DrawRotaGraph3(1010 - monstermove, 370, 0, 0, 2, 2, 0, monsterImage[monsteranime], TRUE, FALSE);
-		DrawRotaGraph3(1010 - monstermove, 370, 0, 0, 1, 1, 0, monstereyesImage[3], TRUE, FALSE);
+		DrawRotaGraph3(1010 - monstermove, 370, 0, 0, 2, 2, 0, monstereyesImage[1], TRUE, FALSE);
 	}
 	else if (count > 280) {
 		if ((count / 15) % 2 == 0) {
