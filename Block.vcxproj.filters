@@ -64,10 +64,14 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="EnemyPink.cpp">
+		<Filter>ソース ファイル</Filter>
+	</ClCompile>
     <ClCompile Include="ScoreLoading.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="DebugUtility.cpp">
+		<Filter>ソース ファイル</Filter>
+	</ClCompile>
     <ClCompile Include="EnemyOrange.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -125,10 +129,14 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="EnemyPink.h">
+		<Filter>ヘッダー ファイル</Filter>
+	</ClInclude>
     <ClInclude Include="ScoreLoading.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="DebugUtility.h">
+		<Filter>ヘッダー ファイル</Filter>
+	</ClInclude>
     <ClInclude Include="EnemyOrange.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
