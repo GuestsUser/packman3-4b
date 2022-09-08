@@ -152,6 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CoffeeBreak.cpp" />
+    <ClCompile Include="DebugUtility.cpp" />
     <ClCompile Include="EnemyAra.cpp" />
     <ClCompile Include="EnemyRed.cpp" />
     <ClCompile Include="FoodLoading.cpp" />
@@ -171,6 +172,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CoffeeBreak.h" />
+    <ClInclude Include="DebugUtility.h" />
     <ClInclude Include="EnemyAra.h" />
     <ClInclude Include="ConstVal.h" />
     <ClInclude Include="EnemyRed.h" />

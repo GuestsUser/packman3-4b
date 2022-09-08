@@ -4,6 +4,7 @@
 #include "ConstVal.h"
 #include "Food.h"
 #include "Grid.h"
+#include "DebugUtility.h"
 #include <unordered_map>
 #include <string>
 #include <math.h>
@@ -270,6 +271,8 @@ void Player::Draw() {
 
 		DrawFormatString(0, 10, GetColor(255, 255, 255), "%2d", motionIndex);
 		DrawRotaGraph3(SHIFT_X + (posX - renderCenter + ClculatCenterRadX(angle)) * X_RATE, SHIFT_Y + (posY - renderCenter + ClculatCenterRadY(angle)) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, playerImg[motionIndex], true);
+
+		DrawHitBox(ClculatTileX(angle), ClculatTileY(angle), GetColor(255, 189, 78)); //デバッグ表示
 	}
 }
 

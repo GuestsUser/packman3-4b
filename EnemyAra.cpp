@@ -4,6 +4,7 @@
 #include "ConstVal.h"
 #include "Grid.h"
 #include "Worldval.h"
+#include "DebugUtility.h"
 #include <math.h>
 #include <deque>
 
@@ -66,6 +67,11 @@ void EnemyAra::Draw(){ //敵と敵の目を表示
         int sub = (int)type * 2 + ((count / 4) % 2); //使用画像ナンバー
         DrawRotaGraph3(x, y, 0, 0, X_RATE, Y_RATE, 0, enemyImage[sub], TRUE, FALSE);
         if (ijike == 0) { DrawRotaGraph3(x, y, 0, 0, X_RATE, Y_RATE, 0, enemyImage_eye[(int)enemyVec], TRUE, FALSE); } //イジケじゃないなら
+
+        //デバッグ表示
+        DrawHitBox(ClculatTileX(), ClculatTileY(), GetColor(255, 255, 255));
+        DrawHitBox(targetPos_x, targetPos_y, GetColor(255, 255, 255));
+        DrawTargetLine(ClculatTileX(), ClculatTileY(), targetPos_x, targetPos_y, GetColor(255, 255, 255));
     }
 }
 
@@ -116,17 +122,17 @@ void EnemyAra::Move(int move) {
 
     //以下デバッグ表記
     SetFontSize(30);
-    DrawFormatString(700, 30, GetColor(255, 255, 255), "Time：%.2lf", (double)count / 60);
-    //DrawFormatString(0, 60, GetColor(255, 255, 255), "%d", okMove);
-    DrawFormatString(700, 100, GetColor(255, 255, 255), "〇エネミー情報");
-    DrawFormatString(700, 150, GetColor(255, 0, 0), "X位置：%d", ClculatTileX());
-    DrawFormatString(700, 200, GetColor(0, 0, 255), "Y位置：%d", ClculatTileY());
-    DrawFormatString(700, 250, GetColor(0, 255, 0), "移動方向：%d", enemyVec);
+    //DrawFormatString(700, 30, GetColor(255, 255, 255), "Time：%.2lf", (double)count / 60);
+    ////DrawFormatString(0, 60, GetColor(255, 255, 255), "%d", okMove);
+    //DrawFormatString(700, 100, GetColor(255, 255, 255), "〇エネミー情報");
+    //DrawFormatString(700, 150, GetColor(255, 0, 0), "X位置：%d", ClculatTileX());
+    //DrawFormatString(700, 200, GetColor(0, 0, 255), "Y位置：%d", ClculatTileY());
+    //DrawFormatString(700, 250, GetColor(0, 255, 0), "移動方向：%d", enemyVec);
 }
 //スピードレベルによってスピードを変える
 int EnemyAra::ChangeSpeed() {
     int move = 0; //今回の座標移動量
-    int speed = 23; //今回の動作速
+    int speed = 15; //今回の動作速
     switch (speedLevel)
     {
     case 1:
