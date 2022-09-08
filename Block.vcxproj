@@ -153,6 +153,7 @@
   <ItemGroup>
     <ClCompile Include="CoffeeBreak.cpp" />
     <ClCompile Include="EnemyAra.cpp" />
+    <ClCompile Include="EnemyOrange.cpp" />
     <ClCompile Include="EnemyRed.cpp" />
     <ClCompile Include="FoodLoading.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -172,6 +173,7 @@
     <ClInclude Include="CoffeeBreak.h" />
     <ClInclude Include="EnemyAra.h" />
     <ClInclude Include="ConstVal.h" />
+    <ClInclude Include="EnemyOrange.h" />
     <ClInclude Include="EnemyRed.h" />
     <ClInclude Include="Food.h" />
     <ClInclude Include="FoodLoading.h" />
