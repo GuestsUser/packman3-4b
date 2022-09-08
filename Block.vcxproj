@@ -152,6 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CoffeeBreak.cpp" />
+    <ClCompile Include="DebugUtility.cpp" />
     <ClCompile Include="EnemyAra.cpp" />
     <ClCompile Include="EnemyPink.cpp" />
     <ClCompile Include="EnemyRed.cpp" />
@@ -164,6 +165,7 @@
     <ClCompile Include="MapLoading.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="ScoreLoading.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="Worldval.cpp" />
     <ClCompile Include="GameMap.cpp" />
@@ -171,6 +173,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CoffeeBreak.h" />
+    <ClInclude Include="DebugUtility.h" />
     <ClInclude Include="EnemyAra.h" />
     <ClInclude Include="ConstVal.h" />
     <ClInclude Include="EnemyPink.h" />
@@ -185,6 +188,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="ScoreLoading.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="Worldval.h" />
     <ClInclude Include="Game.h" />

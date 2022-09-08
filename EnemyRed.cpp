@@ -6,7 +6,7 @@
 #include "Grid.h"
 
 EnemyRed::EnemyRed(Player* getPlayer):player(getPlayer) {
-	SetUp(EnemyAra::Type::red, Direction::left, 13 * TILE + (TILE - 1), 11 * TILE + (TILE - 1)); //初期化処理、詳しくはEnemyAraを参照
+	SetUp(EnemyAra::Type::red, Direction::left, 13 * TILE + (TILE - 1), 11 * TILE + 3); //初期化処理、詳しくはEnemyAraを参照
 }
 
 void EnemyRed::SetAttackModeTarget() {  //追いかけモードの時ターゲット指定

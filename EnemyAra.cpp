@@ -4,6 +4,7 @@
 #include "ConstVal.h"
 #include "Grid.h"
 #include "Worldval.h"
+#include "DebugUtility.h"
 #include <math.h>
 #include <deque>
 
@@ -13,19 +14,18 @@ EnemyAra::EnemyAra() {
     isDraw = true;
 
     type = Type::red; //取り敢えずアカベイを代入
-    posX = 13;//17
-    posY = 11;//11
-
     center = 3;
-    renderCenter = 3;
+    renderCenter = 4;
 
-    drawX = posX * TILE + (TILE - 1);
-    drawY = posY * TILE ;
-
-    targetPos_x = 30;
-    targetPos_y = 0;
+    drawX = 0;
+    drawY = 0;
+    limitX = 0;
+    limitY = 0;
 
     enemyVec = Direction::left;
+
+    targetPos_x = 0;
+    targetPos_y = 0;
 
     speedLevel = 1;
 
@@ -44,6 +44,15 @@ EnemyAra::EnemyAra() {
 
 }
 
+void EnemyAra::SetUp(Type setType, Direction setDirection, int setX, int setY) { //継承先コンストラクタ内で必ず呼び出す必要あり、setTypeに敵種類、setDirectionに最初に向いてる方向、setX,Yに現在位置を座標で代入
+    type = setType;
+    drawX = setX;
+    drawY = setY;
+    limitX = ClculatLimitX(enemyVec);
+    limitY = ClculatLimitY(enemyVec);
+    SetStandbyModeTarget(); //待機状態の目標マスに設定
+}
+
 void EnemyAra::Update() {
     if (isUpdate) {
         ModeChange();
@@ -53,36 +62,31 @@ void EnemyAra::Update() {
 
 void EnemyAra::Draw(){ //敵と敵の目を表示
     if (isDraw) {
+        int x = SHIFT_X + (drawX - renderCenter) * X_RATE;
+        int y = SHIFT_Y + (drawY - renderCenter) * Y_RATE;
         int sub = (int)type * 2 + ((count / 4) % 2); //使用画像ナンバー
-        DrawRotaGraph3(SHIFT_X + (drawX - renderCenter) * X_RATE, SHIFT_Y + (drawY - renderCenter) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, enemyImage[sub], TRUE, FALSE);
-        if (ijike == 0) { //イジケじゃないなら
-            DrawRotaGraph3(SHIFT_X + (drawX - renderCenter) * X_RATE, SHIFT_Y + (drawY - renderCenter) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, enemyImage_eye[(int)enemyVec], TRUE, FALSE);
-        }
+        DrawRotaGraph3(x, y, 0, 0, X_RATE, Y_RATE, 0, enemyImage[sub], TRUE, FALSE);
+        if (ijike == 0) { DrawRotaGraph3(x, y, 0, 0, X_RATE, Y_RATE, 0, enemyImage_eye[(int)enemyVec], TRUE, FALSE); } //イジケじゃないなら
+
+        //デバッグ表示
+        DrawHitBox(ClculatTileX(), ClculatTileY(), GetColor(255, 255, 255));
+        DrawHitBox(targetPos_x, targetPos_y, GetColor(255, 255, 255));
+        DrawTargetLine(ClculatTileX(), ClculatTileY(), targetPos_x, targetPos_y, GetColor(255, 255, 255));
     }
 }
 
 void EnemyAra::Move(int move) {
-    int rawX = ClculatTileX(enemyVec) * TILE + ClculatLocalX(enemyVec);
-    int rawY = ClculatTileY(enemyVec) * TILE + ClculatLocalY(enemyVec);
-    int limitX = (ClculatTileX(enemyVec) + ClculatSubX(enemyVec)) * TILE + 3;
-    int limitY = (ClculatTileY(enemyVec) + ClculatSubY(enemyVec)) * TILE + 4;
+    bool useY = (int)enemyVec % 2 == 0; //現在進行方向が上下何れかになる場合true
+    int* edit = useY ? &drawY : &drawX;
+    int limit = useY ? limitY : limitX;
+    int raw = useY ? ClculatTileY() * TILE + ClculatLocalY() : ClculatTileX() * TILE + ClculatLocalX();
+    
+    bool run = (int)((int)enemyVec / 2) == 0 ? raw <= limit : raw >= limit;
 
-    bool run = false;
-    switch (enemyVec) {
-    case Direction::up: run = rawY - limitY <= 0; break;
-    case Direction::left: run = rawX - limitX <= 0; break;
-    case Direction::down: run = rawY - limitY >= 0; break;
-    case Direction::right: run = rawX - limitX >= 0; break;
-    }
-
-    int currentTileX = (drawX + center) / TILE;
-    int currentTileY = (drawY + center) / TILE;
-    while (currentTileX!=posX || currentTileY != posY) { //マス移動があった場合(whileを使っているのは下記if文でbreakを用いたかったからでループの意図はない)
-        posX = currentTileX; //現在所属マスを新しい物に変更
-        posY = currentTileY;
-        currentTileX += WARP_AREA_X; //こっちの変数は配列からの取得用に変更
-        currentTileY += WARP_AREA_Y;
-
+    while (run) { //マス移動があった場合(whileを使っているのは下記if文でbreakを用いたかったからでループの意図はない)
+        int currentTileX = ClculatTileX();
+        int currentTileY = ClculatTileY();
+        
         if (attack) { SetAttackModeTarget(); } //ターゲットマスの設定(追いかけモードの時)
         else { SetStandbyModeTarget(); } //ターゲットマス(縄張りモード)
         if (reversOrder) { SetReversMove(); break; } //反転方向移動は移動先を決定するので以降の移動先決定処理を通る必要がないからbreak
@@ -105,7 +109,12 @@ void EnemyAra::Move(int move) {
                 newDirection = i;
             }
         }
+        if ((int)enemyVec % 2 == newDirection % 2) { *edit = limit - (useY ? WARP_AREA_Y : WARP_AREA_X) * TILE - center; } //曲がる場合今までの軸がリミットを超えていた場合リミット内に納める処理
+
         enemyVec = (Direction)newDirection; //新しい方向に設定
+
+        limitX = ClculatLimitX(enemyVec);
+        limitY = ClculatLimitY(enemyVec);
         break;
     }
     drawX += move * ClculatSubX(enemyVec); //現在の移動方向に合わせて各軸に移動量を加算、減算してくれる
@@ -113,12 +122,12 @@ void EnemyAra::Move(int move) {
 
     //以下デバッグ表記
     SetFontSize(30);
-    DrawFormatString(700, 30, GetColor(255, 255, 255), "Time：%.2lf", (double)count / 60);
-    //DrawFormatString(0, 60, GetColor(255, 255, 255), "%d", okMove);
-    DrawFormatString(700, 100, GetColor(255, 255, 255), "〇エネミー情報");
-    DrawFormatString(700, 150, GetColor(255, 0, 0), "X位置：%d", posX);
-    DrawFormatString(700, 200, GetColor(0, 0, 255), "Y位置：%d", posY);
-    DrawFormatString(700, 250, GetColor(0, 255, 0), "移動方向：%d", enemyVec);
+    //DrawFormatString(700, 30, GetColor(255, 255, 255), "Time：%.2lf", (double)count / 60);
+    ////DrawFormatString(0, 60, GetColor(255, 255, 255), "%d", okMove);
+    //DrawFormatString(700, 100, GetColor(255, 255, 255), "〇エネミー情報");
+    //DrawFormatString(700, 150, GetColor(255, 0, 0), "X位置：%d", ClculatTileX());
+    //DrawFormatString(700, 200, GetColor(0, 0, 255), "Y位置：%d", ClculatTileY());
+    //DrawFormatString(700, 250, GetColor(0, 255, 0), "移動方向：%d", enemyVec);
 }
 //スピードレベルによってスピードを変える
 int EnemyAra::ChangeSpeed() {
@@ -176,8 +185,8 @@ void EnemyAra::ModeChange() {
 }
 
 void EnemyAra::SetCringeMove() {
-    int currentTileX = posX + WARP_AREA_X;
-    int currentTileY = posY + WARP_AREA_Y;
+    int currentTileX = ClculatTileX();
+    int currentTileY = ClculatTileY();
     int revers = ((int)enemyVec + 2) % 4; //進行方向の反対方向
     std::deque<int> subList = std::deque<int>(); //移動可能な方向を保有する動的配列
     for (int i = 0; i < 4; i++){
@@ -195,7 +204,9 @@ void EnemyAra::SetReversMove() {
 
 int EnemyAra::ClculatSubX(Direction angle) const { return std::sin((360 - 90 * (int)angle) * (PI / 180)); }
 int EnemyAra::ClculatSubY(Direction angle) const { return std::sin((360 - 90 * (int)angle + 270) * (PI / 180)); }
-int EnemyAra::ClculatLocalX(Direction angle) const { return (posX + center + ClculatSubX(angle)) % TILE; } //現在マスの左上を(0,0)としてマス内でどの位置にいるかを返してくれる
-int EnemyAra::ClculatLocalY(Direction angle) const { return (posY + center + ClculatSubY(angle)) % TILE; }
-int EnemyAra::ClculatTileX(Direction angle) const { return (posX + center + ClculatSubX(angle)) / TILE + WARP_AREA_X; } //現在マスを返してくれる
-int EnemyAra::ClculatTileY(Direction angle) const { return (posY + center + ClculatSubY(angle)) / TILE + WARP_AREA_Y; }
+int EnemyAra::ClculatLocalX() const { return (drawX + center) % TILE; } //現在マスの左上を(0,0)としてマス内でどの位置にいるかを返してくれる
+int EnemyAra::ClculatLocalY() const { return (drawY + center) % TILE; }
+int EnemyAra::ClculatTileX() const { return (drawX + center) / TILE + WARP_AREA_X; } //現在マスを返してくれる
+int EnemyAra::ClculatTileY() const { return (drawY + center) / TILE + WARP_AREA_Y; }
+int EnemyAra::ClculatLimitX(Direction angle)const { return(ClculatTileX() + ClculatSubX(angle))* TILE + center; } //この位置に着いたら現在マスから移動可能方向を取得し方向転換する位置を返してくれる
+int EnemyAra::ClculatLimitY(Direction angle)const { return (ClculatTileY() + ClculatSubY(angle)) * TILE + center; } //上記のy版

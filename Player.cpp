@@ -4,6 +4,7 @@
 #include "ConstVal.h"
 #include "Food.h"
 #include "Grid.h"
+#include "DebugUtility.h"
 #include <unordered_map>
 #include <string>
 #include <math.h>
@@ -193,13 +194,18 @@ public:
 	Direction GetDirection() { return nowDirection; } //現在の進行方向の取得
 };
 
-Player::Player() :isUpdate(true), isDraw(true), renderCenter(3), center(3), rad(1), posX(13 * TILE + (TILE - 1)), posY(23 * TILE + (TILE - 1) / 2), move(new Moving(this)), foodCount(0), foodCountTotal(0), playerImg(*WorldVal::Get<int[12]>("playerImage")), killImg(*WorldVal::Get<int[11]>("killImage")), food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")), tile(WorldVal::Get<Grid*>("map")),diecount(0),killnum(0) {}
+Player::Player() :isUpdate(true), isDraw(true), renderCenter(3), center(3), rad(1), posX(13 * TILE + (TILE - 1)), posY(23 * TILE), move(new Moving(this)), foodCount(0), foodCountTotal(0), playerImg(*WorldVal::Get<int[12]>("playerImage")), killImg(*WorldVal::Get<int[11]>("killImage")), food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")), tile(WorldVal::Get<Grid*>("map")), score(WorldVal::Get<int>("score")), highScore(WorldVal::Get<int>("highScore")),diecount(0),killnum(0) {}
 Player::~Player() { delete move; }
 
 void Player::Update() {
 	if (isUpdate) { //bool変数に停止命令(false)が入れられている場合実行しない
 		move->Update();
-		
+		std::string sub = std::to_string(ClculatTileX(move->GetDirection())) + "x" + std::to_string(ClculatTileY(move->GetDirection())); //エサ連想配列取得用添え字
+		auto itr = food->find(sub); //エサ配列内に指定添え字をキーに持つエサがあるか調べる
+		if (itr != food->end() && itr->second->GetEnable()) { //指定位置にエサが配置されている且つエサが食べられる状態である場合
+			*score += itr->second->Eat(); //エサを食べる
+			if (*score >= *highScore) { *highScore = *score; } //ハイスコアより値が大きくなった場合ハイスコアの値を更新する
+		}
 	}
 }
 //void Player::Draw() {
@@ -265,6 +271,8 @@ void Player::Draw() {
 
 		DrawFormatString(0, 10, GetColor(255, 255, 255), "%2d", motionIndex);
 		DrawRotaGraph3(SHIFT_X + (posX - renderCenter + ClculatCenterRadX(angle)) * X_RATE, SHIFT_Y + (posY - renderCenter + ClculatCenterRadY(angle)) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, playerImg[motionIndex], true);
+
+		DrawHitBox(ClculatTileX(angle), ClculatTileY(angle), GetColor(255, 189, 78)); //デバッグ表示
 	}
 }
 
