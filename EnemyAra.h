@@ -9,10 +9,11 @@ private:
     bool isDraw; //上記のdraw版
 
      //アカベイのポジション変数
-    int posX; //現在マス、タイル配列から移動可能方向を取得する添え字にするにはWARP_AREA分足す必要あり
-    int posY;
     int drawX; //描写用位置
     int drawY;
+
+    int limitX;
+    int limitY;
 
     int targetPos_x; //目標マスのポジション変数
     int targetPos_y;
@@ -43,10 +44,10 @@ private:
 
     int ClculatSubX(Direction angle) const; //指定方向の時x軸方向への動作に掛ける符号を返す
     int ClculatSubY(Direction angle) const; //上記のy版
-    int ClculatLocalX(Direction angle)const; //現在マスの左上を(0,0)としてマス内でどの位置にいるかを返してくれる
-    int ClculatLocalY(Direction angle)const; //上記のy版
-protected:
-    
+    int ClculatLocalX()const; //現在マスの左上を(0,0)としてマス内でどの位置にいるかを返してくれる
+    int ClculatLocalY()const; //上記のy版
+    int ClculatLimitX(Direction angle)const; //この位置に着いたら現在マスから移動可能方向を取得し方向転換する位置を返してくれる
+    int ClculatLimitY(Direction angle)const; //上記のy版
 public:
     EnemyAra();
     void Draw();
@@ -62,17 +63,12 @@ public:
     virtual void SetStandbyModeTarget() = 0; //上記の縄張りモード版
     virtual void SetWaitModeTarget() = 0; //巣の中の待機位置決定関数
 
-    void SetUp(Type setType, Direction setDirection, int setX, int setY) { //継承先コンストラクタ内で必ず呼び出す必要あり、setTypeに敵種類、setDirectionに最初に向いてる方向、setX,Yに現在位置を座標で代入
-        type = setType;
-        drawX = setX;
-        drawY = setY;
-        SetStandbyModeTarget(); //待機状態の目標マスに設定
-    }
+    void SetUp(Type setType, Direction setDirection, int setX, int setY); //継承先コンストラクタ内で必ず呼び出す必要あり、setTypeに敵種類、setDirectionに最初に向いてる方向、setX,Yに現在位置を座標で代入
     void SetReversOrder(bool set) { reversOrder = set; } //trueで次の移動先を強制的に反転方向に設定する
 
     Direction GetDirection() { return enemyVec; } //現在の移動方向を取得できる
-    int ClculatTileX(Direction angle)const; //現在マスを返してくれる
-    int ClculatTileY(Direction angle)const; //上記のy版
+    int ClculatTileX()const; //現在マスを返してくれる
+    int ClculatTileY()const; //上記のy版
 
     void TargetSet(int setX, int setY) { //ターゲットマス指定、指定はワープエリア込みで考える
         targetPos_x = setX;
