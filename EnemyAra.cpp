@@ -84,6 +84,10 @@ void EnemyAra::Move(int move) {
     bool run = (int)((int)enemyVec / 2) == 0 ? raw <= limit : raw >= limit;
 
     while (run) { //マス移動があった場合(whileを使っているのは下記if文でbreakを用いたかったからでループの意図はない)
+
+        if (enemyVec == Direction::left && ClculatTileX() - 1 < 0) { drawX = (AREA_X + WARP_AREA_X) * TILE - (center + 1); }
+        if (enemyVec == Direction::right && ClculatTileX() + 1 >= AREA_X + WARP_AREA_X * 2) { drawX = -WARP_AREA_X * TILE + (center + 1); }
+
         int currentTileX = ClculatTileX();
         int currentTileY = ClculatTileY();
 
