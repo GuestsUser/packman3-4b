@@ -69,6 +69,11 @@ public:
 	}
 	void Miss() {  //パックマンがミスした時の演出
 		caller->player->DieAnim();
+		/*if () {
+			GameOver();
+		}else if(){
+			caller->player->Retart;
+		}*/
 	}
 
 	void GameOver() {  //残機がなくなった時3の演出
@@ -110,7 +115,12 @@ void GameMap::Draw() {
 	for (auto itr : *food) { itr.second->Draw(); } //食べ物描写
 }
 void GameMap::Update() {
-	if (key->GetKeyState(X_KEY) == KEY_PUSH||CheckHitKey(KEY_INPUT_SPACE)){
-		//Miss();
+	switch (Game::GetSceneState()) {
+	case Game::State::start:
+			break;
+	case Game::State::miss:
+		staging->AnimeStartUp(&Staging::Miss);
+		Game::SetSceneState(Game::State::run);
+		break;
 	}
 }

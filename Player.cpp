@@ -288,3 +288,9 @@ void Player::DieAnim()
 
 	}
 }
+void Player::Restart() {
+	/*Player::posX = 13 * TILE + (TILE - 1);
+	Player::posY = 23 * TILE + (TILE - 1);*/
+	DrawString(100, 100, "Restart", GetColor(255, 255, 255));
+
+}

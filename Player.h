@@ -64,4 +64,5 @@ public:
 
 	Move GetTileMovable(int x, int y, Direction get) const { return tile[x][y].ReadPlayer()[(int)get]; } //指定タイルの指定方向の移動可否を返す
 	void DieAnim();
+	void Restart();
 };
