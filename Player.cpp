@@ -15,6 +15,7 @@ public:
 	enum class State { start, run, curve, stop, free };
 
 private:
+private:
 	Player* player;
 	State state;
 	Direction direction;
@@ -285,12 +286,7 @@ void Player::DieAnim()
 		//{
 		//	killnum = 0;
 		//}
-
 	}
 }
 void Player::Restart() {
-	/*Player::posX = 13 * TILE + (TILE - 1);
-	Player::posY = 23 * TILE + (TILE - 1);*/
-	DrawString(100, 100, "Restart", GetColor(255, 255, 255));
-
 }

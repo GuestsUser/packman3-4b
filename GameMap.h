@@ -22,6 +22,7 @@ public:
 	GameMap(Scene* set,Player* pacman);
 	~GameMap();
 	void Miss();
+	void Restart();
 	void Update();
 	void Draw();
 

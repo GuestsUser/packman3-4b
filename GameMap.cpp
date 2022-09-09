@@ -22,6 +22,8 @@ private:
 	GameMap* caller; //呼び出し元、これを通じてGameMap内の様々な関数にアクセスできる、内部クラスなのでprivateな領域にも直接アクセスできる
 	StagingFunc func; //実行関数
 	int count; //実行時間管理とかに
+	int number;
+	int i;
 	int startImage1;	//Player One画像用
 	int startImage2;	//Ready!画像用
 	int clearImage1;	//クリア画像（白）
@@ -50,6 +52,7 @@ public:
 			Game::SetSceneState(Game::State::run); //演出が終了した時間でゲームシーンの状態をゲーム中に変更する
 		}
 		count++;
+		number = 0;
 	}
 
 	void Clear() { //ゲームクリアの時の演出
@@ -68,13 +71,24 @@ public:
 		count++;
 	}
 	void Miss() {  //パックマンがミスした時の演出
-		caller->player->DieAnim();
-		/*if () {
-			GameOver();
-		}else if(){
-			caller->player->Retart;
+		i = 0;
+		number++;
+		if (i == 0) {
+			caller->player->DieAnim();
+			i++;
+		}
+		
+		if (number >= 120) {
+			caller->parent->SetNext(new Game());
+		}
+	}
+	void Restart() {
+		/*number++;
+		if (number >= 120) {
+			caller->parent->SetNext(new Game());
 		}*/
 	}
+		
 
 	void GameOver() {  //残機がなくなった時3の演出
 		if (count <= 180) {
@@ -120,6 +134,7 @@ void GameMap::Update() {
 			break;
 	case Game::State::miss:
 		staging->AnimeStartUp(&Staging::Miss);
+		//staging->Restart();
 		Game::SetSceneState(Game::State::run);
 		break;
 	}

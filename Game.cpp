@@ -21,7 +21,6 @@ void Game::Update() {
 		for (int i = 0; i < enemy.size(); ++i) { enemy[i]->Update(); }
 	}
 	count++;
-	
 	if (key->GetKeyState(X_KEY) == KEY_PUSH) {	/*Xキーを押したら*/
 		enemy[0]->SetRunUpdate(false);	/*敵の動きを止める（仮）*/
 		enemy[1]->SetRunUpdate(false);	/*敵の動きを止める（仮）*/

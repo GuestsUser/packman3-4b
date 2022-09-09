@@ -30,6 +30,7 @@ void Food::Update() {
 }
 
 void Food::Draw() { //*8などのマスサイズは何処かに定数で宣言しておきたい
+	count++;
 	//ゲームスタート前
 	if (Game::GetSceneState() == Game::State::start) {
 		if (isEnable) {
@@ -39,14 +40,14 @@ void Food::Draw() { //*8などのマスサイズは何処かに定数で宣言しておきたい
 
 	//ゲームスタート中（画面が切り替わるまで）
 	if (Game::GetSceneState() == Game::State::run) {
-		if (isEnable) {
+		/*if (isEnable) {
 			if (type != Type::big) {
 				DrawRotaGraph3(SHIFT_X + (x * TILE - TILE / 2 - WARP_AREA_X * TILE) * X_RATE, SHIFT_Y + (y * TILE - TILE / 2 - WARP_AREA_Y * TILE) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, handle[(int)type], true);
 			}
 			else if (type == Type::big && (count / 10) % 2 == 0) {
 				DrawRotaGraph3(SHIFT_X + (x * TILE - TILE / 2 - WARP_AREA_X * TILE) * X_RATE, SHIFT_Y + (y * TILE - TILE / 2 - WARP_AREA_Y * TILE) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, handle[(int)type], true);
 			}
-		}
+		}*/
 	}
 
 	//ゲームオーバー中（タイトルに戻るまで）（パワーエサを消す）
@@ -57,7 +58,15 @@ void Food::Draw() { //*8などのマスサイズは何処かに定数で宣言しておきたい
 			}
 		}
 	}
-	count++;
+
+	if (isEnable) {
+		if (type != Type::big) {
+			DrawRotaGraph3(SHIFT_X + (x * TILE - TILE / 2 - WARP_AREA_X * TILE) * X_RATE, SHIFT_Y + (y * TILE - TILE / 2 - WARP_AREA_Y * TILE) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, handle[(int)type], true);
+		}
+		else if (type == Type::big && (count / 10) % 2 == 0) {
+			DrawRotaGraph3(SHIFT_X + (x * TILE - TILE / 2 - WARP_AREA_X * TILE) * X_RATE, SHIFT_Y + (y * TILE - TILE / 2 - WARP_AREA_Y * TILE) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, handle[(int)type], true);
+		}
+	}
 }
 
 void Food::PosSetUp(const std::string& set) { //unordered_map用添え字から座標を取り出す関数
