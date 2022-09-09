@@ -5,6 +5,7 @@
 class Grid;
 class Food;
 class Scene;
+class Player;
 
 class GameMap {
 	class Staging; //ステージ用演出クラス
@@ -12,12 +13,13 @@ class GameMap {
 	Scene* parent;
 	Staging* staging; //READY!等の演出を纏めた内部クラス
 	Grid** tile; //マップの二次元配列
+	Player* player;
 	int map; //マップの画像ハンドル
 	std::unordered_map<std::string, Food*>* food; //エサを保持する配列
 	bool push;
 	static bool Missflg;
 public:
-	GameMap(Scene* set);
+	GameMap(Scene* set,Player* pacman);
 	~GameMap();
 	void Miss();
 	void Update();

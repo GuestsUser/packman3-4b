@@ -4,9 +4,11 @@
 #include "ConstVal.h"
 #include "Food.h"
 #include "Grid.h"
+#include "DebugUtility.h"
 #include <unordered_map>
 #include <string>
 #include <math.h>
+#include "DxLib.h"
 
 class Movable {
 public:
@@ -192,20 +194,60 @@ public:
 	Direction GetDirection() { return nowDirection; } //現在の進行方向の取得
 };
 
-Player::Player() :isUpdate(true), isDraw(true), renderCenter(3), center(3), rad(1), posX(13 * TILE + (TILE - 1)), posY(23 * TILE + (TILE - 1) / 2), move(new Moving(this)), foodCount(0), foodCountTotal(0), playerImg(*WorldVal::Get<int[12]>("playerImage")), killImg(*WorldVal::Get<int[11]>("killImage")), food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")), tile(WorldVal::Get<Grid*>("map")) {}
+Player::Player() :isUpdate(true), isDraw(true), renderCenter(3), center(3), rad(1), posX(13 * TILE + (TILE - 1)), posY(23 * TILE), move(new Moving(this)), foodCount(0), foodCountTotal(WorldVal::Get<int>("foodCountTotal")), playerImg(*WorldVal::Get<int[12]>("playerImage")), killImg(*WorldVal::Get<int[11]>("killImage")), food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")), tile(WorldVal::Get<Grid*>("map")), score(WorldVal::Get<int>("score")), highScore(WorldVal::Get<int>("highScore")),diecount(0),killnum(0) {}
 Player::~Player() { delete move; }
 
 void Player::Update() {
 	if (isUpdate) { //bool変数に停止命令(false)が入れられている場合実行しない
 		move->Update();
-		
+		std::string sub = std::to_string(ClculatTileX(move->GetDirection())) + "x" + std::to_string(ClculatTileY(move->GetDirection())); //エサ連想配列取得用添え字
+		auto itr = food->find(sub); //エサ配列内に指定添え字をキーに持つエサがあるか調べる
+		if (itr != food->end() && itr->second->GetEnable()) { //指定位置にエサが配置されている且つエサが食べられる状態である場合
+			*score += itr->second->Eat(); //エサを食べる
+			Food::Type type = itr->second->GetType(); //食べた物の種類
+			if (type == Food::Type::food || type == Food::Type::big) { //種類がエサ、パワーエサの場合食べた個数をカウントする
+				++foodCount;
+				++(*foodCountTotal);
+			}
+			if (*score >= *highScore) { *highScore = *score; } //ハイスコアより値が大きくなった場合ハイスコアの値を更新する
+		}
 	}
 }
+
 void Player::Draw() {
 	if (isDraw) { //bool変数に停止命令(false)が入れられている場合実行しない
 		//画像サイズ-1の半分(小数点切り捨て)を引いて描写する事でマスの中心位置にいる場合表示もそのマスの中心位置となる
+
+		int actMotion[] = { 0,1,2,1, };
 		Direction angle = move->GetDirection(); //現在の進行方向
-		DrawRotaGraph3(SHIFT_X + (posX - renderCenter + ClculatCenterRadX(angle)) * X_RATE, SHIFT_Y + (posY - renderCenter + ClculatCenterRadY(angle)) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, playerImg[0], true);
+		int moveAnim = (int)move->GetDirection() * 3;
+
+		//パックマンが縦または横に移動している時
+		if (posX - animX != 0 || posY - animY != 0) {
+			//移動アニメ処理
+			if (--actWait <= 0) {
+				actIndex++;
+				actWait = actSpeed;
+				actIndex %= maxMotion;
+			}
+		}
+		else {
+			if (actIndex == 0) {
+				actIndex += 2;
+			}
+		}
+
+		animX = posX;
+		animY = posY;
+		motionIndex = actMotion[actIndex] + moveAnim;
+
+
+
+		DrawFormatString(0, 10, GetColor(255, 255, 255), "%2d", motionIndex);
+		//DrawCircle(SHIFT_X + (posX + ClculatCenterRadX(angle)) * X_RATE, SHIFT_Y + (posY+ ClculatCenterRadY(angle)) * Y_RATE,130,GetColor(0,255,0),false);
+		DrawRotaGraph3(SHIFT_X + (posX - renderCenter + ClculatCenterRadX(angle)) * X_RATE, SHIFT_Y + (posY - renderCenter + ClculatCenterRadY(angle)) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, playerImg[motionIndex], true);
+
+		DrawHitBox(ClculatTileX(angle), ClculatTileY(angle), GetColor(255, 189, 78)); //デバッグ表示
 	}
 }
 
@@ -225,3 +267,24 @@ int Player::ClculatLocalY(Direction angle) const {
 }
 int Player::ClculatTileX(Direction angle) const { return (posX + center + ClculatCenterRadX(angle)) / TILE + WARP_AREA_X; }
 int Player::ClculatTileY(Direction angle) const { return (posY + center + ClculatCenterRadY(angle)) / TILE + WARP_AREA_Y; }
+
+Direction Player::GetDirection()const { return move->GetDirection(); }
+
+void Player::DieAnim()
+{
+	isUpdate = false;
+	isDraw = false;
+	diecount++;
+	//Direction angle = move->GetDirection(); //現在の進行方向
+	DrawRotaGraph3(SHIFT_X + (posX - renderCenter/* + ClculatCenterRadX(angle)*/) * X_RATE, SHIFT_Y + (posY - renderCenter/* +*//* ClculatCenterRadY(angle)*/) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, killImg[killnum], true);
+
+	if (diecount % 10 == 0)
+	{
+		killnum++;
+		//if (killnum > 10)
+		//{
+		//	killnum = 0;
+		//}
+
+	}
+}

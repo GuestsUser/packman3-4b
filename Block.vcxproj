@@ -152,16 +152,22 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CoffeeBreak.cpp" />
+    <ClCompile Include="DebugUtility.cpp" />
     <ClCompile Include="EnemyAra.cpp" />
+    <ClCompile Include="EnemyPink.cpp" />
+    <ClCompile Include="EnemyOrange.cpp" />
+    <ClCompile Include="EnemyRed.cpp" />
     <ClCompile Include="FoodLoading.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GetKey.cpp" />
+    <ClCompile Include="GlovalLoading.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="ImageLoading.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapLoading.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="ScoreLoading.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="Worldval.cpp" />
     <ClCompile Include="GameMap.cpp" />
@@ -169,8 +175,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CoffeeBreak.h" />
+    <ClInclude Include="DebugUtility.h" />
     <ClInclude Include="EnemyAra.h" />
     <ClInclude Include="ConstVal.h" />
+    <ClInclude Include="EnemyPink.h" />
+    <ClInclude Include="EnemyOrange.h" />
+    <ClInclude Include="EnemyRed.h" />
     <ClInclude Include="Food.h" />
     <ClInclude Include="FoodLoading.h" />
     <ClInclude Include="GetKey.h" />
@@ -181,9 +191,11 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="ScoreLoading.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="Worldval.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GlovalLoading.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

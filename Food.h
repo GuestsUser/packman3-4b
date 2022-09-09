@@ -20,6 +20,9 @@ public:
 	void Update();
 	void Draw();
 
+	void SetEnable(bool set) { isEnable = set; } //エサの有効状態の設定
+	bool GetEnable() { return isEnable; } //有効状態の取得 
+
 	void PosSetUp(const std::string& set); //unordered_map用添え字から座標を取り出す関数
 	//フルーツが時限で消えるとかパワーエサが点滅するとかはまた後で……
 };
