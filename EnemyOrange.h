@@ -2,9 +2,10 @@
 #include "EnemyAra.h"
 class Player;
 
-class EnemyOrange : EnemyAra {
+class EnemyOrange :public EnemyAra {
 private:
 	Player* player;
+	
 public:
 	EnemyOrange(Player* getPlayer); //追いかけ作成のためにシーンなどから値を引っ張ってくる必要がある場合コンストラクタの引数に自由に変数を追加していい、自由に追加する為の継承でもある
 
