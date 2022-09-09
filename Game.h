@@ -18,6 +18,7 @@ private:
 	std::deque<EnemyAra*> enemy;
 	static State state; //Foodに次レベルに移行する度Gameの内容を入れ替えたくなかったのでstatic変数にしてヘッダーさえインクルードしておけばいつでもアクセスできる
 	int count;
+	int number;
 	int StartTime;
 	bool push;
 public:
