@@ -1,11 +1,12 @@
 #include "MapLoading.h"
 #include "Grid.h"
 #include "Worldval.h"
+#include "ConstVal.h"
 #include <deque>
 
 void MapLoading() {
-	Grid** grid = new Grid * [36]; //横、通常は28マスだが左右端のワープトンネルが画面外に4マスで系36マス
-	for (int i = 0; i < 36; ++i) { grid[i] = new Grid[31]; } //縦
+	Grid** grid = new Grid * [AREA_X + WARP_AREA_X * 2]; //横、通常は28マスだが左右端のワープトンネルが画面外に4マスで系36マス
+	for (int i = 0; i < AREA_X + WARP_AREA_X * 2; ++i) { grid[i] = new Grid[AREA_Y + WARP_AREA_Y]; } //縦
 
 	//ここに1マスずつ移動可能方向を記してゆく……
 	//Gridは初期化段階では全ての状態において四方向移動不能に設定されてるのでパックマンも敵も立ち入れない場所は設定しなくていい

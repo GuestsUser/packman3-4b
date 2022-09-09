@@ -160,6 +160,7 @@
     <ClCompile Include="FoodLoading.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GetKey.cpp" />
+    <ClCompile Include="GlovalLoading.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="ImageLoading.cpp" />
     <ClCompile Include="main.cpp" />
@@ -194,6 +195,7 @@
     <ClInclude Include="Title.h" />
     <ClInclude Include="Worldval.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GlovalLoading.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

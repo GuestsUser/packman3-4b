@@ -13,5 +13,5 @@ void EnemyRed::SetAttackModeTarget() {  //追いかけモードの時ターゲット指定
 	Direction angle = player->GetDirection(); //プレイヤー動作角
 	TargetSet(player->ClculatTileX(angle), player->ClculatTileY(angle)); //目標マスにプレイヤー位置を指定
 }
-void EnemyRed::SetStandbyModeTarget() { TargetSet(WARP_AREA_X + 1, WARP_AREA_Y); } //縄張りモード時のターゲット指定
+void EnemyRed::SetStandbyModeTarget() { TargetSet(WARP_AREA_X + 24, WARP_AREA_Y - 4); } //縄張りモード時のターゲット指定
 void EnemyRed::SetWaitModeTarget() { TargetSet(WARP_AREA_X + 13, WARP_AREA_Y + 11); } //巣の中の位置指定
