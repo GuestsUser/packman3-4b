@@ -12,6 +12,8 @@ constexpr int SHIFT_Y = 112; //上記のy版
 constexpr int X_RATE = 2; //xの拡大倍率
 constexpr int Y_RATE = 2; //yの拡大倍率
 
+constexpr int AREA_X = 28; //xマス数
+constexpr int AREA_Y = 31; //yマス数
 constexpr int WARP_AREA_X = 4; //ワープトンネルのサイズx
 constexpr int WARP_AREA_Y = 0; //上記のy版
 

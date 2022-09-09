@@ -14,6 +14,7 @@
 #include "ImageLoading.h"
 #include "MapLoading.h"
 #include "ScoreLoading.h"
+#include "GlovalLoading.h"
 //最初に実行したいシーンのヘッダーをインクルードしておく
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
@@ -40,6 +41,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	FoodLoading();
 	MapLoading();
 	ScoreLoading();
+	GlovalLoading();
 
 	while (ProcessMessage() == 0 && (!CheckHitKey(KEY_INPUT_ESCAPE))) {
 		//_RPTF1(_CRT_WARN, "%s\n", "test"); //デバッグ表示

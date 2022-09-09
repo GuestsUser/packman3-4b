@@ -22,7 +22,7 @@ class Player {
 	int renderCenter; //xy共通中心だがこちらは描写用
 
 	int foodCount; //今回の残機で食べたエサ個数
-	int foodCountTotal; //エサを食べた合計個数
+	int* foodCountTotal; //エサを食べた合計個数
 	std::unordered_map<std::string, Food*>* food; //エサやフルーツの配列
 	Grid** tile;
 
