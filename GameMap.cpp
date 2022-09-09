@@ -67,15 +67,6 @@ public:
 		}
 		count++;
 	}
-
-	void  Miss() {  //パックマンがミスした時の演出
-		//Enemyの動きを0に
-		//EnemyAra::akaSpeed = 0;
-		//プレイヤーのやられモーション
-		GameMap::Missflg = true;
-
-		DrawString(400, 400, "ミス", GetColor(100, 100, 100));
-	}
 	void Miss() {  //パックマンがミスした時の演出
 		caller->player->DieAnim();
 	}
