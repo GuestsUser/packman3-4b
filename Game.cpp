@@ -31,7 +31,7 @@ void Game::Update() {
 	}
 	if (push == true) {
 		number++;
-		if (number >= 60) {
+		if (number == 60) {
 			enemy[0]->SetRunDraw(false);/*“G‚Ì•`‰æ‚ğÁ‚·*/
 			enemy[1]->SetRunDraw(false);/*“G‚Ì•`‰æ‚ğÁ‚·*/
 			//enemy[2]->SetRunDraw(false);/*“G‚Ì•`‰æ‚ğÁ‚·*/
