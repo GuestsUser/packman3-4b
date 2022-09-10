@@ -5,6 +5,7 @@
 class Food {
 public:
 	enum class Type { food, big, cherry, strawberry, orange, apple, melon, galaxian, bell, key };
+	enum class Quantity{one , two  , no};
 private:
 	Type type; //エサの種類
 	bool isEnable; //trueならこのエサはまだ食べられてない
@@ -12,6 +13,8 @@ private:
 	int x; //マス座標x
 	int y; //上記のy
 	int count;
+	int* foodCount;//エサの取った数取得
+	int fruitsCount;//フルーツの取った数取得
 public:
 	Food(Type set = Type::food); //setに使用したいタイプを入れる、何も指定しない場合通常エサになる
 	int Eat(); //エサの除去、返り値は食べたエサの得点

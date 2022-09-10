@@ -154,6 +154,7 @@
     <ClCompile Include="CoffeeBreak.cpp" />
     <ClCompile Include="DebugUtility.cpp" />
     <ClCompile Include="EnemyAra.cpp" />
+    <ClCompile Include="Enemyblue.cpp" />
     <ClCompile Include="EnemyPink.cpp" />
     <ClCompile Include="EnemyOrange.cpp" />
     <ClCompile Include="EnemyRed.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="DebugUtility.h" />
     <ClInclude Include="EnemyAra.h" />
     <ClInclude Include="ConstVal.h" />
+    <ClInclude Include="Enemyblue.h" />
     <ClInclude Include="EnemyPink.h" />
     <ClInclude Include="EnemyOrange.h" />
     <ClInclude Include="EnemyRed.h" />

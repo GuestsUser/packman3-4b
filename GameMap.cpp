@@ -105,8 +105,9 @@ void GameMap::Draw() {
 	//map画像の描画をここに記入
 	DrawRotaGraph3(SHIFT_X, SHIFT_Y, 0, 0, X_RATE, Y_RATE, 0, map, TRUE, FALSE);
 	staging->Update(); //アニメの処理と描写を行う
+	
 	for (auto itr : *food) { itr.second->Draw(); } //食べ物描写
 }
 void GameMap::Update() {
-
+	for (auto itr : *food) { itr.second->Update(); } //食べ物処理実行
 }
