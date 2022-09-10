@@ -6,15 +6,15 @@
 #include "Grid.h"
 #include "EnemyRed.h"
 
-Enemyblue::Enemyblue(Player* getPlayer) :player(getPlayer) {
+Enemyblue::Enemyblue(Player* getPlayer,EnemyAra* getEnemyRed) :player(getPlayer),enemyred(getEnemyRed) {
 	SetUp(EnemyAra::Type::blue, Direction::left, 13 * TILE + (TILE - 1), 11 * TILE + (TILE - 1)); //初期化処理、詳しくはEnemyAraを参照
 }
 
 void Enemyblue::SetAttackModeTarget() {  //追いかけモードの時ターゲット指定
 	Direction angle = player->GetDirection(); //プレイヤー動作角
 
-	int x = abs(player->ClculatTileX(angle) - ClculatTileX());
-	int y = abs(player->ClculatTileY(angle) - ClculatTileY());
+	int x = abs(player->ClculatTileX(angle) - enemyred->ClculatTileX());
+	int y = abs(player->ClculatTileY(angle) - enemyred->ClculatTileY());
 
 	if (player->ClculatTileX(angle) >= ClculatTileX()) {//パックマンが敵よりX座標が大きい時
 		if (player->ClculatTileY(angle) >= ClculatTileY()) {//パックマンが敵よりY座標が大きい時
