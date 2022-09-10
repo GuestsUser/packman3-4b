@@ -23,6 +23,8 @@ class Player {
 
 	int foodCount; //今回の残機で食べたエサ個数
 	int* foodCountTotal; //エサを食べた合計個数
+	int* life;
+	int* start;
 	std::unordered_map<std::string, Food*>* food; //エサやフルーツの配列
 	Grid** tile;
 

@@ -3,6 +3,7 @@
 #include "EnemyRed.h"
 #include "EnemyPink.h"
 #include <deque>
+#include "GameMap.h"
 Game::State Game::state = Game::State::start; //static•Ï”‚Ì’è‹`
 
 Game::Game() :player(), map(GameMap(this, &player)),enemy(std::deque<EnemyAra*>()) {

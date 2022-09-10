@@ -29,6 +29,7 @@ private:
 	int clearImage1;	//クリア画像（白）
 	int clearImage2;	//クリア画像（青）
 	int gameOverImage;	//ゲームオーバー画像
+
 public:
 	//引数にはこのクラスを使用するmapのアドレスを入れる
 	Staging(GameMap* set) :state(State::free), caller(set), func(nullptr), count(0), 
@@ -38,11 +39,14 @@ public:
 
 	void Start() { //ゲーム開始時のREADY!等の演出、レベル1の時は音楽も流す
 
-
+		int* start;
+		start = WorldVal::Get<int>("start");
+		if (*start >= 1 && count == 0) {
+			count = 121;
+		}
 		if (count <= 120) {
 			//Player one表示
-			DrawRotaGraph3(SHIFT_X + 149, SHIFT_Y + 176, 0, 0, X_RATE, Y_RATE, 0, startImage1, TRUE, FALSE);
-		}
+			DrawRotaGraph3(SHIFT_X + 149, SHIFT_Y + 176, 0, 0, X_RATE, Y_RATE, 0, startImage1, TRUE, FALSE);			}
 		if (count <= 240) {
 			//Ready!表示
 			DrawRotaGraph3(SHIFT_X + 176, SHIFT_Y + 272, 0, 0, X_RATE, Y_RATE, 0, startImage2, TRUE, FALSE);
@@ -52,6 +56,7 @@ public:
 			Game::SetSceneState(Game::State::run); //演出が終了した時間でゲームシーンの状態をゲーム中に変更する
 		}
 		count++;
+		*start += 1;
 		number = 0;
 	}
 
@@ -71,15 +76,21 @@ public:
 		count++;
 	}
 	void Miss() {  //パックマンがミスした時の演出
-		i = 0;
+		int* life;
+		life = WorldVal::Get<int>("Life");
+
 		number++;
-		if (i == 0) {
-			caller->player->DieAnim();
-			i++;
+		caller->player->DieAnim();
+		if (*life >= 1) {
+			if (number >= 120) {
+				*life -= 1;
+				caller->parent->SetNext(new Game());
+			}
 		}
-		
-		if (number >= 120) {
-			caller->parent->SetNext(new Game());
+		else if (*life <= 0) {
+			//GameOver();
+			AnimeStartUp(&Staging::GameOver);
+			//AnimeStartUp(&GameOver);
 		}
 	}
 	void Restart() {
@@ -92,10 +103,18 @@ public:
 
 	void GameOver() {  //残機がなくなった時3の演出
 		if (count <= 180) {
+
 			DrawRotaGraph3(SHIFT_X + 149, SHIFT_Y + 176, 0, 0, X_RATE, Y_RATE, 0, startImage1, TRUE, FALSE);
 			DrawRotaGraph3(SHIFT_X + 145, SHIFT_Y + 273, 0, 0, X_RATE, Y_RATE, 0, gameOverImage, TRUE, FALSE);
 		}
 		if (count == 180) {
+			int* life;
+			life = WorldVal::Get<int>("Life");
+			*life = INI_LIFE;
+
+			int* start;
+			start = WorldVal::Get<int>("start");
+			*start = 0;
 			//シーンを次のステージにする（次ラウンド）
 			//今はタイトルに戻るようにする
 			caller->parent->SetNext(new Title());
