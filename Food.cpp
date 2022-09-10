@@ -5,7 +5,7 @@
 #include "Worldval.h"
 #include <string>
 
-Food::Food(Type set) :type(set), isEnable(true), x(0), y(0), handle(*WorldVal::Get<int[10]>("foodImage")) ,count(0){  } //setに使用したいタイプを入れる、何も指定しない場合通常エサになる
+Food::Food(Type set) :type(set), isEnable(true), x(0), y(0), handle(*WorldVal::Get<int[10]>("foodImage")) ,count(0), foodCount(WorldVal::Get<int>("foodCountTotal")),itemType(Type::cherry) {  } //setに使用したいタイプを入れる、何も指定しない場合通常エサになる
 
 int Food::Eat() {
 	int point = 0;
@@ -26,6 +26,19 @@ int Food::Eat() {
 }
 
 void Food::Update() {
+
+	int* point = WorldVal::Get<int>("foodCountTotal");
+
+	if (isEnable)
+	{
+
+		if (*point >= 70) {
+
+			DrawRotaGraph3(SHIFT_X + (18 * TILE - TILE / 2 - WARP_AREA_X * TILE - 3) * X_RATE, SHIFT_Y + (17 * TILE - TILE / 2 - WARP_AREA_Y * TILE) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, handle[(int)itemType], true);
+		}
+
+		DrawFormatString(700, 250, GetColor(0, 255, 0), "%d", *point);
+	}
 
 }
 
