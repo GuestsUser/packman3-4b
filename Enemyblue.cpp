@@ -16,16 +16,16 @@ void Enemyblue::SetAttackModeTarget() {  //追いかけモードの時ターゲット指定
 	int x = abs(player->ClculatTileX(angle) - enemyred->ClculatTileX());
 	int y = abs(player->ClculatTileY(angle) - enemyred->ClculatTileY());
 
-	if (player->ClculatTileX(angle) >= ClculatTileX()) {//パックマンが敵よりX座標が大きい時
-		if (player->ClculatTileY(angle) >= ClculatTileY()) {//パックマンが敵よりY座標が大きい時
+	if (player->ClculatTileX(angle) >= enemyred->ClculatTileX()) {//パックマンが敵よりX座標が大きい時
+		if (player->ClculatTileY(angle) >= enemyred->ClculatTileY()) {//パックマンが敵よりY座標が大きい時
 			TargetSet(player->ClculatTileX(angle) + x, player->ClculatTileY(angle) + y); //目標マスにプレイヤー位置を指定
 		}
 		else {
 			TargetSet(player->ClculatTileX(angle) + x, player->ClculatTileY(angle) - y);
 		}
 	}
-	if (player->ClculatTileX(angle) <= ClculatTileX()) {//パックマンが敵よりx座標が小さい時
-		if (player->ClculatTileY(angle) >= ClculatTileY()) {//パックマンが敵よりy座標が大きい時
+	if (player->ClculatTileX(angle) <= enemyred->ClculatTileX()) {//パックマンが敵よりx座標が小さい時
+		if (player->ClculatTileY(angle) >= enemyred->ClculatTileY()) {//パックマンが敵よりy座標が大きい時
 			TargetSet(player->ClculatTileX(angle) - x, player->ClculatTileY(angle) + y); //目標マスにプレイヤー位置を指定
 		}
 		else {
