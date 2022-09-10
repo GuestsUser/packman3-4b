@@ -37,11 +37,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	key = new KeySystem(); //キー入力受付用クラスの実体作成
 	SceneManager* scm = new SceneManager(new Title()); //引数に最初に実行したいシーン実体を入れる
 
+	GlovalLoading();
 	ImageLoading();
 	FoodLoading();
 	MapLoading();
 	ScoreLoading();
-	GlovalLoading();
 
 	while (ProcessMessage() == 0 && (!CheckHitKey(KEY_INPUT_ESCAPE))) {
 		//_RPTF1(_CRT_WARN, "%s\n", "test"); //デバッグ表示

@@ -26,18 +26,15 @@ int Food::Eat() {
 }
 
 void Food::Update() {
-
-	int* point = WorldVal::Get<int>("foodCountTotal");
-
 	if (isEnable)
 	{
 
-		if (*point >= 70) {
+		if (*foodCount >= 70) {
 
 			DrawRotaGraph3(SHIFT_X + (18 * TILE - TILE / 2 - WARP_AREA_X * TILE - 3) * X_RATE, SHIFT_Y + (17 * TILE - TILE / 2 - WARP_AREA_Y * TILE) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, handle[(int)itemType], true);
 		}
 
-		DrawFormatString(700, 250, GetColor(0, 255, 0), "%d", *point);
+		DrawFormatString(700, 250, GetColor(0, 255, 0), "%d", *foodCount);
 	}
 
 }
