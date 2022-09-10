@@ -30,5 +30,5 @@ void EnemyPink::SetAttackModeTarget() {  //追いかけモードの時ターゲット指定
 	}
 
 }
-void EnemyPink::SetStandbyModeTarget() { TargetSet(WARP_AREA_X + 1, WARP_AREA_Y); } //縄張りモード時のターゲット指定
+void EnemyPink::SetStandbyModeTarget() { TargetSet(WARP_AREA_X + 3, WARP_AREA_Y - 4); } //縄張りモード時のターゲット指定
 void EnemyPink::SetWaitModeTarget() { TargetSet(WARP_AREA_X + 13, WARP_AREA_Y + 11); } //巣の中の位置指定
