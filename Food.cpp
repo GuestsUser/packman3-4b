@@ -5,7 +5,7 @@
 #include "Worldval.h"
 #include <string>
 
-Food::Food(Type set) :type(set), isEnable(true), x(0), y(0), handle(*WorldVal::Get<int[10]>("foodImage")) ,count(0), foodCount(WorldVal::Get<int>("foodCountTotal")),itemType(Type::cherry) {  } //setに使用したいタイプを入れる、何も指定しない場合通常エサになる
+Food::Food(Type set) :type(set), isEnable(true), x(0), y(0), handle(*WorldVal::Get<int[10]>("foodImage")), count(0), foodCount(WorldVal::Get<int>("foodCountTotal")),fruitsCount(0) { if (type != Type::food && type != Type::big) { isEnable = false; } } //setに使用したいタイプを入れる、何も指定しない場合通常エサになる
 
 int Food::Eat() {
 	int point = 0;
@@ -26,16 +26,35 @@ int Food::Eat() {
 }
 
 void Food::Update() {
-	if (isEnable)
+	if (!(type == Food::Type::food || type == Food::Type::big))
 	{
+		if (fruitsCount == 0)
+		{
+			if (*foodCount == 70) {
 
-		if (*foodCount >= 70) {
+				isEnable = true;
+				count = 0;
+				fruitsCount++;
+			}
+		}
+		else if (fruitsCount == 1)
+		{
+			if (*foodCount == 170) {
 
-			DrawRotaGraph3(SHIFT_X + (18 * TILE - TILE / 2 - WARP_AREA_X * TILE - 3) * X_RATE, SHIFT_Y + (17 * TILE - TILE / 2 - WARP_AREA_Y * TILE) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, handle[(int)itemType], true);
+				isEnable = true;
+				count = 0;
+				fruitsCount++;
+			}
 		}
 
-		DrawFormatString(700, 250, GetColor(0, 255, 0), "%d", *foodCount);
+		if (count == 10 * FPS)
+		{
+			isEnable = false;
+		}
+
 	}
+
+	DrawFormatString(700, 250, GetColor(0, 255, 0), "%d", *foodCount);
 
 }
 

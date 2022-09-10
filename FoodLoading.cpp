@@ -150,6 +150,7 @@ void FoodLoading() { //エサやフルーツの作成処理
 	(*food)["16x29"] = new Food();
 	//17列目
 	(*food)["17x5"] = new Food();
+	(*food)["17x17"] = new Food(Food::Type::cherry);
 	(*food)["17x29"] = new Food();
 	//18列目
 	(*food)["18x5"] = new Food();
