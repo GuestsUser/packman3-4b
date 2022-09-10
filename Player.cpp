@@ -148,7 +148,9 @@ public:
 		if (key->GetKeyState(XINPUT_BUTTON_DPAD_LEFT) <= KEY_HOLD || key->GetKeyState(L_STICK_LEFT) <= KEY_HOLD) { lastInput = Direction::left; }
 		if (key->GetKeyState(XINPUT_BUTTON_DPAD_UP) <= KEY_HOLD || key->GetKeyState(L_STICK_UP) <= KEY_HOLD) { lastInput = Direction::up; }
 
-		
+		//ワープトンネル処理
+		if (caller->ClculatTileX(nowDirection) < 0) { caller->posX = (AREA_X + WARP_AREA_X) * TILE - (caller->center + caller->ClculatCenterRadX(nowDirection) + (8 - caller->ClculatLocalX(nowDirection))); }
+		if (caller->ClculatTileX(nowDirection) >= AREA_X + WARP_AREA_X * 2) { caller->posX = -WARP_AREA_X * TILE + (caller->center + caller->ClculatCenterRadX(nowDirection) + caller->ClculatLocalX(nowDirection) + 1); }
 
 		while (nowDirection != lastInput) { //while文を利用したのはbreakを適当な位置に挿入する事でelse文を消せる事が目的、ループさせたい訳ではない
 			int subX = caller->ClculatTileX(nowDirection); //中心座標も加味した現在の所属マスx

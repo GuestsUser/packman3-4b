@@ -26,6 +26,9 @@ public:
 	void Update();
 	void Draw();
 
+	Player* EditPlayer() { return &player; }
+	std::deque<EnemyAra*>* EditEnemy() { return &enemy; }
+
 	static State GetSceneState() { return state; } //Œ»İ‚ÌƒQ[ƒ€ó‹µ‚Ìæ“¾
 	static void SetSceneState(State set) { state = set; } //ƒQ[ƒ€ó‹µ‚Ì‘‚«Š·‚¦
 };
