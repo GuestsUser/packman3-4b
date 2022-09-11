@@ -11,6 +11,7 @@
 #include "Title.h"
 #include "EnemyAra.h"
 #include "Player.h"
+#include <deque>
 
 class GameMap::Staging { //演出系、他のファイルに取り込まないのでクラス内に直接処理を書き込んでいい
 public:
@@ -38,14 +39,32 @@ public:
 		gameOverImage(*WorldVal::Get<int>("gameOverImage")){}
 
 	void Start() { //ゲーム開始時のREADY!等の演出、レベル1の時は音楽も流す
+		std::deque<EnemyAra*>* enemy = caller->parent->EditEnemy();
 
+		if (state == State::start) {
+			caller->parent->EditPlayer()->SetRunUpdate(false);
+			caller->parent->EditPlayer()->SetRunDraw(false);
+			for (i = 0; i < enemy->size(); ++i) {
+				(*enemy)[i]->SetRunUpdate(false);
+				(*enemy)[i]->SetRunDraw(false);
+
+			}
+			state = State::run;
+		}
 		int* start;
 		start = WorldVal::Get<int>("start");
 		if (*start >= 1 && count == 0) {
 			count = 121;
 		}
+		if (count == 121) {
+			caller->parent->EditPlayer()->SetRunDraw(true);
+			for (i = 0; i < enemy->size(); ++i) {
+				(*enemy)[i]->SetRunDraw(true);
+			}
+		}
 		if (count <= 120) {
 			//Player one表示
+
 			DrawRotaGraph3(SHIFT_X + 149, SHIFT_Y + 176, 0, 0, X_RATE, Y_RATE, 0, startImage1, TRUE, FALSE);			}
 		if (count <= 240) {
 			//Ready!表示
@@ -54,7 +73,12 @@ public:
 		else {
 			state = State::free; //アニメ状態を終了済みに書き換える
 			Game::SetSceneState(Game::State::run); //演出が終了した時間でゲームシーンの状態をゲーム中に変更する
+			caller->parent->EditPlayer()->SetRunUpdate(true);
+			for (i = 0; i < enemy->size(); ++i) {
+				(*enemy)[i]->SetRunUpdate(true);
+			}
 		}
+
 		count++;
 		*start += 1;
 		number = 0;
@@ -82,14 +106,16 @@ public:
 		number++;
 		caller->player->DieAnim();
 		if (*life >= 1) {
-			if (number >= 120) {
+			if (number >= 160) {
 				*life -= 1;
 				caller->parent->SetNext(new Game());
 			}
 		}
 		else if (*life <= 0) {
 			//GameOver();
-			AnimeStartUp(&Staging::GameOver);
+			if (number >= 160) {
+				AnimeStartUp(&Staging::GameOver);
+			}
 			//AnimeStartUp(&GameOver);
 		}
 	}
@@ -135,7 +161,7 @@ public:
 	}
 };
 
-GameMap::GameMap(Scene* set,Player* pacman) :staging(new Staging(this)), tile(WorldVal::Get<Grid*>("map")), map(*WorldVal::Get<int>("mapImage")),food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")), parent(set),player(pacman) {
+GameMap::GameMap(Game* set,Player* pacman) :staging(new Staging(this)), tile(WorldVal::Get<Grid*>("map")), map(*WorldVal::Get<int>("mapImage")),food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")), parent(set),player(pacman) {
 	staging->AnimeStartUp(&Staging::Start);
 }
 GameMap::~GameMap() {

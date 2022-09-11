@@ -4,13 +4,13 @@
 
 class Grid;
 class Food;
-class Scene;
+class Game;
 class Player;
 
 class GameMap {
 	class Staging; //ステージ用演出クラス
 
-	Scene* parent;
+	Game* parent;
 	Staging* staging; //READY!等の演出を纏めた内部クラス
 	Grid** tile; //マップの二次元配列
 	Player* player;
@@ -19,7 +19,7 @@ class GameMap {
 	bool push;
 	static bool Missflg;
 public:
-	GameMap(Scene* set,Player* pacman);
+	GameMap(Game* set,Player* pacman);
 	~GameMap();
 	void Miss();
 	void Restart();

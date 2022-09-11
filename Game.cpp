@@ -17,10 +17,8 @@ Game::Game() :player(), map(GameMap(this, &player)),enemy(std::deque<EnemyAra*>(
 
 void Game::Update() {
 	map.Update();
-	if (count >= 240) {
-		player.Update();
-		for (int i = 0; i < enemy.size(); ++i) { enemy[i]->Update(); }
-	}
+	player.Update();
+	for (int i = 0; i < enemy.size(); ++i) { enemy[i]->Update(); }
 	count++;
 	if (key->GetKeyState(X_KEY) == KEY_PUSH) {	/*Xキーを押したら*/
 		enemy[0]->SetRunUpdate(false);	/*敵の動きを止める（仮）*/
@@ -43,9 +41,10 @@ void Game::Update() {
 }
 
 void Game::Draw() {
+	int* life;
+	life = WorldVal::Get<int>("Life");
 	map.Draw();
-	if (count >= 120) {
-		player.Draw();
-		for (int i = 0; i < enemy.size(); ++i) { enemy[i]->Draw(); }
-	}
+	player.Draw();
+	for (int i = 0; i < enemy.size(); ++i) { enemy[i]->Draw(); }
+	DrawFormatString(50, 50, GetColor(255, 255, 255), "残機：%d", *life);
 }

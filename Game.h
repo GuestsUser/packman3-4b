@@ -9,6 +9,7 @@
 
 //ゲームシーン、現在は空、動作確認をしたい時こちらのUpdate等に追記していってほしい
 //Updateの定義はcppにある(現在は空)
+
 class Game :public Scene {
 public:
 	enum class State { start, run, miss, gameover, clear }; //ゲーム状況を表す列挙型、start=ゲーム開始前, run=ゲーム中, miss=プレイヤーミス時, gameover=残機が無い時ミス演出後これにする, clear=全てのエサを食べた時
