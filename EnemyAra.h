@@ -2,8 +2,14 @@
 #include "Grid.h"
 class EnemyAra {
 public:
+    enum class MoveMode { standby, attack }; //縄張りモードか攻撃モードかの列挙型
+    enum class State { neutral, cringe, damage, wait }; //敵の状態、この状態に応じてマスの移動可能方向取得配列を変える他、移動先決定関数も変更する
     enum class Type { red, pink, blue, orange }; //敵の種類
 private:
+    static MoveMode moveMode; //縄張り、攻撃のモードチェンジは全敵共通なのでstatic
+    State state; //状態は敵によりけりなので通常変数
+    static int enableCount; //画面内のneutral, waitの敵数カウント
+
     bool reversOrder; //trueで次の移動先を強制的に反転方向に設定する
     bool isUpdate; //falseでupdate実行禁止
     bool isDraw; //上記のdraw版
@@ -62,6 +68,11 @@ public:
     virtual void SetAttackModeTarget() = 0; //追いかけモード中の狙いマス決定関数、オーバーライドして使う
     virtual void SetStandbyModeTarget() = 0; //上記の縄張りモード版
     virtual void SetWaitModeTarget() = 0; //巣の中の待機位置決定関数
+
+    virtual void Spurt() {} //通常以外の速度がある敵はこれをオーバーライドして動作をカスタムする
+    void EnebleCheck() {//このクラスのUpdate呼び出し前にシーンの方で呼び出す、neutral, waitの敵をカウントする
+        if (state != State::neutral && state != State::wait) { enableCount++; }
+    } 
 
     void SetUp(Type setType, Direction setDirection, int setX, int setY); //継承先コンストラクタ内で必ず呼び出す必要あり、setTypeに敵種類、setDirectionに最初に向いてる方向、setX,Yに現在位置を座標で代入
     void SetReversOrder(bool set) { reversOrder = set; } //trueで次の移動先を強制的に反転方向に設定する
