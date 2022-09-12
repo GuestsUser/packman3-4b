@@ -186,6 +186,8 @@ void MapLoading() {
 	grid[16][10].Set(Move::movable, Move::block, Move::movable, Move::block, std::deque<Chara>{Chara::p, Chara::e, Chara::c, Chara::d});
 	grid[16][11].Set(Move::movable, Move::movable, Move::block, Move::movable, std::deque<Chara>{Chara::p, Chara::e, Chara::c, Chara::d});
 	grid[16][11].Set(Move::block, Move::movable, Move::block, Move::movable, std::deque<Chara>{Chara::e});	//左上一方通行
+	grid[16][14].Set(Move::block, Move::block, Move::block, Move::movable, std::deque<Chara>{Chara::e});	//移動可能状態
+	grid[16][14].Set(Move::movable, Move::block, Move::movable, Move::block, std::deque<Chara>{Chara::w});	//待機状態
 	grid[16][17].Set(Move::block, Move::movable, Move::block, Move::movable, std::deque<Chara>{Chara::p, Chara::e, Chara::c, Chara::d});
 	grid[16][20].Set(Move::block, Move::movable, Move::movable, Move::block, std::deque<Chara>{Chara::p, Chara::e, Chara::c, Chara::d});
 	grid[16][21].Set(Move::movable, Move::block, Move::movable, Move::block, std::deque<Chara>{Chara::p, Chara::e, Chara::c, Chara::d});
@@ -200,10 +202,15 @@ void MapLoading() {
 	//17列目（完了）
 	grid[17][5].Set(Move::block, Move::movable, Move::block, Move::movable, std::deque<Chara>{Chara::p, Chara::e, Chara::c, Chara::d});
 	grid[17][11].Set(Move::block, Move::movable, Move::block, Move::movable, std::deque<Chara>{Chara::p, Chara::e, Chara::c});
-	grid[17][11].Set(Move::block, Move::movable, Move::movable, Move::movable, std::deque<Chara>{Chara::d});	//やられ状態
-	grid[17][12].Set(Move::movable, Move::block, Move::movable, Move::block, std::deque<Chara>{Chara::d});	//やられ状態
-	grid[17][13].Set(Move::movable, Move::block, Move::movable, Move::block, std::deque<Chara>{Chara::d});	//やられ状態
-	grid[17][14].Set(Move::movable, Move::movable, Move::block, Move::block, std::deque<Chara>{Chara::d});	//やられ状態
+
+	grid[17][11].Set(Move::block, Move::block, Move::movable, Move::movable, std::deque<Chara>{Chara::d});	//やられ状態
+	grid[17][12].Set(Move::block, Move::block, Move::movable, Move::block, std::deque<Chara>{Chara::d});	//やられ状態
+	grid[17][12].Set(Move::movable, Move::block, Move::block, Move::block, std::deque<Chara>{Chara::e});	//移動可能状態
+	grid[17][13].Set(Move::block, Move::block, Move::movable, Move::block, std::deque<Chara>{Chara::d});	//やられ状態
+	grid[17][13].Set(Move::movable, Move::block, Move::block, Move::block, std::deque<Chara>{Chara::e});	//移動可能状態
+	grid[17][14].Set(Move::block, Move::movable, Move::block, Move::block, std::deque<Chara>{Chara::d});	//やられ状態
+	grid[17][14].Set(Move::movable, Move::block, Move::block, Move::block, std::deque<Chara>{Chara::e});	//移動可能状態
+
 	grid[17][17].Set(Move::block, Move::movable, Move::block, Move::movable, std::deque<Chara>{Chara::p, Chara::e, Chara::c, Chara::d});
 	grid[17][23].Set(Move::block, Move::movable, Move::block, Move::movable, std::deque<Chara>{Chara::p, Chara::e, Chara::c, Chara::d});
 	grid[17][29].Set(Move::block, Move::movable, Move::block, Move::movable, std::deque<Chara>{Chara::p, Chara::e, Chara::c, Chara::d});
@@ -211,10 +218,13 @@ void MapLoading() {
 	//18列目（完了）
 	grid[18][5].Set(Move::block, Move::movable, Move::block, Move::movable, std::deque<Chara>{Chara::p, Chara::e, Chara::c, Chara::d});
 	grid[18][11].Set(Move::block, Move::movable, Move::block, Move::movable, std::deque<Chara>{Chara::p, Chara::e, Chara::c});
-	grid[18][11].Set(Move::block, Move::movable, Move::movable, Move::movable, std::deque<Chara>{Chara::d});	//やられ状態
-	grid[18][12].Set(Move::movable, Move::block, Move::movable, Move::block, std::deque<Chara>{Chara::d});	//やられ状態
-	grid[18][13].Set(Move::movable, Move::block, Move::movable, Move::block, std::deque<Chara>{Chara::d});	//やられ状態
-	grid[18][14].Set(Move::movable, Move::block, Move::block, Move::movable, std::deque<Chara>{Chara::d});	//やられ状態
+	grid[18][11].Set(Move::block, Move::movable, Move::movable, Move::block, std::deque<Chara>{Chara::d});	//やられ状態
+	grid[18][12].Set(Move::block, Move::block, Move::movable, Move::block, std::deque<Chara>{Chara::d});	//やられ状態
+	grid[18][12].Set(Move::movable, Move::block, Move::block, Move::block, std::deque<Chara>{Chara::e});	//移動可能状態
+	grid[18][13].Set(Move::block, Move::block, Move::movable, Move::block, std::deque<Chara>{Chara::d});	//やられ状態
+	grid[18][13].Set(Move::movable, Move::block, Move::block, Move::block, std::deque<Chara>{Chara::e});	//移動可能状態
+	grid[18][14].Set(Move::block, Move::block, Move::block, Move::movable, std::deque<Chara>{Chara::d});	//やられ状態
+	grid[18][14].Set(Move::movable, Move::block, Move::block, Move::block, std::deque<Chara>{Chara::e});	//移動可能状態
 	grid[18][17].Set(Move::block, Move::movable, Move::block, Move::movable, std::deque<Chara>{Chara::p, Chara::e, Chara::c, Chara::d});
 	grid[18][23].Set(Move::block, Move::movable, Move::block, Move::movable, std::deque<Chara>{Chara::p, Chara::e, Chara::c, Chara::d});
 	grid[18][29].Set(Move::block, Move::movable, Move::block, Move::movable, std::deque<Chara>{Chara::p, Chara::e, Chara::c, Chara::d});
@@ -230,6 +240,8 @@ void MapLoading() {
 	grid[19][10].Set(Move::movable, Move::block, Move::movable, Move::block, std::deque<Chara>{Chara::p, Chara::e, Chara::c, Chara::d});
 	grid[19][11].Set(Move::movable, Move::movable, Move::block, Move::movable, std::deque<Chara>{Chara::p, Chara::e, Chara::c, Chara::d});
 	grid[19][11].Set(Move::block, Move::movable, Move::block, Move::movable, std::deque<Chara>{Chara::e});  //右上一方通行
+	grid[19][14].Set(Move::block, Move::movable, Move::block, Move::block, std::deque<Chara>{Chara::e});	//移動可能状態
+	grid[19][14].Set(Move::movable, Move::block, Move::movable, Move::block, std::deque<Chara>{Chara::w});	//待機状態
 	grid[19][17].Set(Move::block, Move::movable, Move::block, Move::movable, std::deque<Chara>{Chara::p, Chara::e, Chara::c, Chara::d});
 	grid[19][20].Set(Move::block, Move::block, Move::movable, Move::movable, std::deque<Chara>{Chara::p, Chara::e, Chara::c, Chara::d});
 	grid[19][21].Set(Move::movable, Move::block, Move::movable, Move::block, std::deque<Chara>{Chara::p, Chara::e, Chara::c, Chara::d});
