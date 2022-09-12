@@ -25,7 +25,6 @@ private:
 	StagingFunc func; //ÀsŠÖ”
 	SoundLoading se;//‰¹ŠÖŒW
 	int count; //ÀsŠÔŠÇ—‚Æ‚©‚É
-	int number;
 	int i;
 	int startImage1;	//Player One‰æ‘œ—p
 	int startImage2;	//Ready!‰æ‘œ—p
@@ -85,7 +84,6 @@ public:
 
 		count++;
 		*start += 1;
-		number = 0;
 	}
 
 	void Clear() { //ƒQ[ƒ€ƒNƒŠƒA‚Ì‚Ì‰‰o
@@ -103,27 +101,40 @@ public:
 		}
 		count++;
 	}
+
 	void Miss() {  //ƒpƒbƒNƒ}ƒ“‚ªƒ~ƒX‚µ‚½‚Ì‰‰o
 		int* life;
 		life = WorldVal::Get<int>("Life");
+		(*caller->enemy)[0]->SetRunUpdate(false);	/*“G‚Ì“®‚«‚ğ~‚ß‚éi‰¼j*/
+		(*caller->enemy)[1]->SetRunUpdate(false);	/*“G‚Ì“®‚«‚ğ~‚ß‚éi‰¼j*/
+		(*caller->enemy)[2]->SetRunUpdate(false);	/*“G‚Ì“®‚«‚ğ~‚ß‚éi‰¼j*/
+		(*caller->enemy)[3]->SetRunUpdate(false);	/*“G‚Ì“®‚«‚ğ~‚ß‚éi‰¼j*/
+		caller->player->SetRunUpdate(false);	/*Player‚Ì“®‚«‚ğ~‚ß‚é*/
 
-		number++;
-		caller->player->DieAnim();
+		if (count >= 60) {
+			(*caller->enemy)[0]->SetRunDraw(false);/*“G‚Ì•`‰æ‚ğÁ‚·*/
+			(*caller->enemy)[1]->SetRunDraw(false);/*“G‚Ì•`‰æ‚ğÁ‚·*/
+			(*caller->enemy)[2]->SetRunDraw(false);/*“G‚Ì•`‰æ‚ğÁ‚·*/
+			(*caller->enemy)[3]->SetRunDraw(false);/*“G‚Ì•`‰æ‚ğÁ‚·*/
+		}
+
 		if (*life >= 1) {
-			if (number >= 160) {
+			if (count >= 220) {
 				*life -= 1;
 				(*caller->food)["17x17"]->SetEnable(false);
 				caller->parent->SetNext(new Game());
 			}
 		}
 		else if (*life <= 0) {
-			//GameOver();
-			if (number >= 160) {
-				AnimeStartUp(&Staging::GameOver);
+			GameOver();
+			if (count >= 220) {
+				//AnimeStartUp(&Staging::GameOver);
 			}
 			//AnimeStartUp(&GameOver);
 		}
+		count++;
 	}
+
 	void Restart() {
 		/*number++;
 		if (number >= 120) {
@@ -131,7 +142,6 @@ public:
 		}*/
 	}
 		
-
 	void GameOver() {  //c‹@‚ª‚È‚­‚È‚Á‚½3‚Ì‰‰o
 		if (count <= 180) {
 
@@ -166,7 +176,7 @@ public:
 	}
 };
 
-GameMap::GameMap(Game* set,Player* pacman) :staging(new Staging(this)), tile(WorldVal::Get<Grid*>("map")), map(*WorldVal::Get<int>("mapImage")),food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")), parent(set),player(pacman) {
+GameMap::GameMap(Game* set,Player* pacman, std::deque<EnemyAra*>* getEnemy) :staging(new Staging(this)), tile(WorldVal::Get<Grid*>("map")), map(*WorldVal::Get<int>("mapImage")),food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")), parent(set),player(pacman),enemy(getEnemy) {
 	staging->AnimeStartUp(&Staging::Start);
 }
 GameMap::~GameMap() {
@@ -181,12 +191,13 @@ void GameMap::Draw() {
 }
 void GameMap::Update() {
 	for (auto itr : *food) { itr.second->Update(); } //H‚×•¨ˆ—Às
+
+	if (staging->GetRunState() != Staging::State::free) { return; } //‰‰oŒn‚ª–¢Às‚Ìê‡‚¾‚¯ˆÈ~‚ğÀs
 	switch (Game::GetSceneState()) {
 	case Game::State::start:
 			break;
 	case Game::State::miss:
 		staging->AnimeStartUp(&Staging::Miss);
-		//staging->Restart();
 		Game::SetSceneState(Game::State::run);
 		break;
 	}

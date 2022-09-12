@@ -9,8 +9,13 @@
 #include <deque>
 #include "MapLoading.h"
 
+EnemyAra::MoveMode EnemyAra::moveMode = EnemyAra::MoveMode::standby; //実体定義
+
 //初期化
 EnemyAra::EnemyAra() {
+    moveMode = MoveMode::standby; //最初は待機状態
+    state = State::wait;
+
     isUpdate = true;
     isDraw = true;
 
@@ -57,6 +62,7 @@ void EnemyAra::SetUp(Type setType, Direction setDirection, int setX, int setY) {
 
 void EnemyAra::Update() {
     if (isUpdate) {
+        count++; //時間経過
         ModeChange();
         Move(ChangeSpeed());
     }
@@ -168,8 +174,6 @@ int EnemyAra::ChangeSpeed() {
 
 //攻撃状態、休憩状態の切り替え
 void EnemyAra::ModeChange() {
-    count++;//時間経過
-
     switch (speedLevel) {
     case 1:
         if (count == 0 || count == 27 * FPS || count == 54 * FPS || count == 79 * FPS) {
