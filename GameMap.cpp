@@ -25,7 +25,6 @@ private:
 	StagingFunc func; //実行関数
 	SoundLoading se;//音関係
 	int count; //実行時間管理とかに
-	int number;
 	int i;
 	int startImage1;	//Player One画像用
 	int startImage2;	//Ready!画像用
@@ -85,7 +84,6 @@ public:
 
 		count++;
 		*start += 1;
-		number = 0;
 	}
 
 	void Clear() { //ゲームクリアの時の演出
@@ -103,27 +101,35 @@ public:
 		}
 		count++;
 	}
+
 	void Miss() {  //パックマンがミスした時の演出
 		int* life;
 		life = WorldVal::Get<int>("Life");
-
-		number++;
-		caller->player->DieAnim();
+		enemy[0]->SetRunUpdate(false);	/*敵の動きを止める（仮）*/
+		enemy[1]->SetRunUpdate(false);	/*敵の動きを止める（仮）*/
+		enemy[2]->SetRunUpdate(false);	/*敵の動きを止める（仮）*/
+		enemy[3]->SetRunUpdate(false);	/*敵の動きを止める（仮）*/
+		caller->player->SetRunUpdate(false);	/*Playerの動きを止める*/
+		if (count >= 60) {
+			caller->player->DieAnim();
+		}
 		if (*life >= 1) {
-			if (number >= 160) {
+			if (count >= 220) {
 				*life -= 1;
 				(*caller->food)["17x17"]->SetEnable(false);
 				caller->parent->SetNext(new Game());
 			}
 		}
 		else if (*life <= 0) {
-			//GameOver();
-			if (number >= 160) {
-				AnimeStartUp(&Staging::GameOver);
+			GameOver();
+			if (count >= 220) {
+				//AnimeStartUp(&Staging::GameOver);
 			}
 			//AnimeStartUp(&GameOver);
 		}
+		count++;
 	}
+
 	void Restart() {
 		/*number++;
 		if (number >= 120) {
@@ -131,7 +137,6 @@ public:
 		}*/
 	}
 		
-
 	void GameOver() {  //残機がなくなった時3の演出
 		if (count <= 180) {
 

@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "Player.h"
 #include "EnemyAra.h"
 #include "EnemyRed.h"
 #include "EnemyPink.h"
@@ -25,22 +26,36 @@ void Game::Update() {
 	player.Update();
 	for (int i = 0; i < enemy.size(); ++i) { enemy[i]->Update(); }
 	count++;
-	if (key->GetKeyState(X_KEY) == KEY_PUSH) {	/*XƒL[‚ğ‰Ÿ‚µ‚½‚ç*/
-		enemy[0]->SetRunUpdate(false);	/*“G‚Ì“®‚«‚ğ~‚ß‚éi‰¼j*/
-		enemy[1]->SetRunUpdate(false);	/*“G‚Ì“®‚«‚ğ~‚ß‚éi‰¼j*/
-		enemy[2]->SetRunUpdate(false);	/*“G‚Ì“®‚«‚ğ~‚ß‚éi‰¼j*/
-		enemy[3]->SetRunUpdate(false);	/*“G‚Ì“®‚«‚ğ~‚ß‚éi‰¼j*/
-		player.SetRunUpdate(false);	/*Player‚Ì“®‚«‚ğ~‚ß‚é*/
-		push = true;
-	}
-	if (push == true) {
-		number++;
-		if (number == 60) {
-			enemy[0]->SetRunDraw(false);/*“G‚Ì•`‰æ‚ğÁ‚·*/
-			enemy[1]->SetRunDraw(false);/*“G‚Ì•`‰æ‚ğÁ‚·*/
-			enemy[2]->SetRunDraw(false);/*“G‚Ì•`‰æ‚ğÁ‚·*/
-			enemy[3]->SetRunDraw(false);/*“G‚Ì•`‰æ‚ğÁ‚·*/
+	//if (key->GetKeyState(X_KEY) == KEY_PUSH) {	/*XƒL[‚ğ‰Ÿ‚µ‚½‚ç*/
+	//	enemy[0]->SetRunUpdate(false);	/*“G‚Ì“®‚«‚ğ~‚ß‚éi‰¼j*/
+	//	enemy[1]->SetRunUpdate(false);	/*“G‚Ì“®‚«‚ğ~‚ß‚éi‰¼j*/
+	//	enemy[2]->SetRunUpdate(false);	/*“G‚Ì“®‚«‚ğ~‚ß‚éi‰¼j*/
+	//	enemy[3]->SetRunUpdate(false);	/*“G‚Ì“®‚«‚ğ~‚ß‚éi‰¼j*/
+	//	player.SetRunUpdate(false);	/*Player‚Ì“®‚«‚ğ~‚ß‚é*/
+	//	push = true;
+	//}
+	//if (push == true) {
+	//	number++;
+	//	if (number == 60) {
+	//		enemy[0]->SetRunDraw(false);/*“G‚Ì•`‰æ‚ğÁ‚·*/
+	//		enemy[1]->SetRunDraw(false);/*“G‚Ì•`‰æ‚ğÁ‚·*/
+	//		enemy[2]->SetRunDraw(false);/*“G‚Ì•`‰æ‚ğÁ‚·*/
+	//		enemy[3]->SetRunDraw(false);/*“G‚Ì•`‰æ‚ğÁ‚·*/
+	//		state = State::miss;	/*State‚ğƒ~ƒX‚É*/
+	//	}
+	//}
+
+	//ƒeƒXƒg
+	Direction angle = player.GetDirection(); //ƒvƒŒƒCƒ„[“®ìŠp
+	int px = player.ClculatTileX(angle);
+	int py = player.ClculatTileY(angle);
+	for (int i = 0; i < enemy.size(); ++i) { 
+		int ex = enemy[i]->ClculatTileX();
+		int ey = enemy[i]->ClculatTileY();
+
+		if (px == ex && py == ey) {
 			state = State::miss;	/*State‚ğƒ~ƒX‚É*/
+			break;
 		}
 	}
 }
