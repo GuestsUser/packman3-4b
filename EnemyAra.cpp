@@ -55,6 +55,7 @@ void EnemyAra::SetUp(Type setType, Direction setDirection, int setX, int setY) {
 
 void EnemyAra::Update() {
     if (isUpdate) {
+        count++; //ŠÔŒo‰ß
         ModeChange();
         Move(ChangeSpeed());
     }
@@ -163,8 +164,6 @@ int EnemyAra::ChangeSpeed() {
 
 //UŒ‚ó‘ÔA‹xŒeó‘Ô‚ÌØ‚è‘Ö‚¦
 void EnemyAra::ModeChange() {
-    count++;//ŠÔŒo‰ß
-
     switch (speedLevel) {
     case 1:
         if (count == 0 || count == 27 * FPS || count == 54 * FPS || count == 79 * FPS) {
