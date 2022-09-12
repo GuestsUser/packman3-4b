@@ -8,6 +8,8 @@
 #include <math.h>
 #include <deque>
 
+EnemyAra::MoveMode EnemyAra::moveMode = EnemyAra::MoveMode::standby; //À‘Ì’è‹`
+
 //‰Šú‰»
 EnemyAra::EnemyAra() {
     moveMode = MoveMode::standby; //Å‰‚Í‘Ò‹@ó‘Ô
