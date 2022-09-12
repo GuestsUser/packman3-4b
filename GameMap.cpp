@@ -112,6 +112,7 @@ public:
 		if (*life >= 1) {
 			if (number >= 160) {
 				*life -= 1;
+				(*caller->food)["17x17"]->SetEnable(false);
 				caller->parent->SetNext(new Game());
 			}
 		}
