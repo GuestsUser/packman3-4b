@@ -116,21 +116,20 @@ public:
 			(*caller->enemy)[1]->SetRunDraw(false);/*“G‚Ì•`‰æ‚ðÁ‚·*/
 			(*caller->enemy)[2]->SetRunDraw(false);/*“G‚Ì•`‰æ‚ðÁ‚·*/
 			(*caller->enemy)[3]->SetRunDraw(false);/*“G‚Ì•`‰æ‚ðÁ‚·*/
+			caller->player->DieAnim();
 		}
 
 		if (*life >= 1) {
-			if (count >= 220) {
+			if (count >= 240) {
 				*life -= 1;
 				(*caller->food)["17x17"]->SetEnable(false);
 				caller->parent->SetNext(new Game());
 			}
 		}
 		else if (*life <= 0) {
-			GameOver();
-			if (count >= 220) {
-				//AnimeStartUp(&Staging::GameOver);
+			if (count >= 240) {
+				AnimeStartUp(&Staging::GameOver);
 			}
-			//AnimeStartUp(&GameOver);
 		}
 		count++;
 	}
