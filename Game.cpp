@@ -5,6 +5,7 @@
 #include "EnemyOrange.h"
 #include "Enemyblue.h"
 #include <deque>
+
 Game::State Game::state = Game::State::start; //static•Ï”‚Ì’è‹`
 
 Game::Game() :player(), map(GameMap(this, &player)),enemy(std::deque<EnemyAra*>()) {
@@ -19,6 +20,7 @@ Game::Game() :player(), map(GameMap(this, &player)),enemy(std::deque<EnemyAra*>(
 
 void Game::Update() {
 	map.Update();
+	ui.UiUpdate();
 	if (count >= 240) {
 		player.Update();
 		for (int i = 0; i < enemy.size(); ++i) { enemy[i]->Update(); }
@@ -28,6 +30,7 @@ void Game::Update() {
 
 void Game::Draw() {
 	map.Draw();
+	ui.UiDraw();
 	if (count >= 120) {
 		player.Draw();
 		for (int i = 0; i < enemy.size(); ++i) { enemy[i]->Draw(); }

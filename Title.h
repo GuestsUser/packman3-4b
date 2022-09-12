@@ -18,4 +18,7 @@ private:
 	bool push;
 	//画像スクロール用関数
 	void Move();
+
+	int* score;
+	int* hiscore;
 };

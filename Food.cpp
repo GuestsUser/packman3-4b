@@ -54,7 +54,7 @@ void Food::Update() {
 
 	}
 
-	DrawFormatString(700, 250, GetColor(0, 255, 0), "%d", *foodCount);
+	DrawFormatString(0, 200, GetColor(0, 255, 0), "%d", *foodCount);
 
 }
 

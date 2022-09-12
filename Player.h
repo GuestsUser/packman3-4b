@@ -10,8 +10,7 @@ class Player {
 
 	int* playerImg; //パックマン画像ハンドル
 	int* killImg; //死亡モーション
-	int* score; //スコアの参照
-	int* highScore; //ハイスコアの参照
+	
 
 	bool isUpdate; //falseでupdate実行禁止
 	bool isDraw; //上記のdraw版
@@ -45,6 +44,8 @@ public:
 
 	void Update();
 	void Draw();
+	int* score; //スコアの参照
+	int* highScore; //ハイスコアの参照
 
 	void SetRunUpdate(bool set) { isUpdate = set; }
 	void SetRunDraw(bool set) { isDraw = set; }

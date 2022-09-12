@@ -3,6 +3,7 @@
 #include "Worldval.h"
 #include "GetKey.h"
 #include "GameMap.h"
+#include "Ui.h"
 #include "Player.h"
 #include "EnemyAra.h"
 #include <deque>
@@ -15,6 +16,7 @@ public:
 private:
 	GameMap map;
 	Player player;
+	GameUi ui;
 	std::deque<EnemyAra*> enemy;
 	static State state; //Foodに次レベルに移行する度Gameの内容を入れ替えたくなかったのでstatic変数にしてヘッダーさえインクルードしておけばいつでもアクセスできる
 	int count;

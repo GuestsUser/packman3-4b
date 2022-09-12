@@ -7,7 +7,7 @@
 #include "EnemyRed.h"
 
 Enemyblue::Enemyblue(Player* getPlayer,EnemyAra* getEnemyRed) :player(getPlayer),enemyred(getEnemyRed) {
-	SetUp(EnemyAra::Type::blue, Direction::left, 13 * TILE + (TILE - 1), 11 * TILE + (TILE - 1)); //初期化処理、詳しくはEnemyAraを参照
+	SetUp(EnemyAra::Type::blue, Direction::left, 13 * TILE + (TILE - 1)-19, 11 * TILE + (TILE - 1)+18); //初期化処理、詳しくはEnemyAraを参照
 }
 
 void Enemyblue::SetAttackModeTarget() {  //追いかけモードの時ターゲット指定

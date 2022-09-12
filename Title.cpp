@@ -17,6 +17,8 @@ Title::~Title() {
 }
 
 void Title::Update() {
+	score = WorldVal::Get<int>("score");
+	hiscore = WorldVal::Get<int>("highScore");
 	if (push == true && key->GetKeyState(A_KEY) == KEY_PUSH) { //Aボタン(緑ボタン)が押された瞬間
 		SetNext(new Game()); //ゲームシーンへ遷移
 	}
@@ -30,6 +32,8 @@ void Title::Draw() {
 	DrawGraph(pos_x, pos_y, titleImage, FALSE);
 	SetFontSize(35);
 	//DrawString(530, pos_y + 380, "Push A Start!", GetColor(210, 210, 210));
+	DrawFormatString(350+pos_x, 100+pos_y, GetColor(255, 255, 255), "%7d", *score);
+	DrawFormatString(700+pos_x, 100+pos_y, GetColor(255, 255, 255), "%7d", *hiscore);
 }
 
 void Title::Move() {

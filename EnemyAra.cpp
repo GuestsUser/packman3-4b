@@ -187,7 +187,8 @@ void EnemyAra::ModeChange() {
     //以下デバッグ表記
     const char* debugMessage[2] = { "休息中" ,"攻撃中" };
     unsigned int color[2] = { GetColor(0, 255, 255) ,GetColor(255, 255, 0) };
-    DrawFormatString(700, 300, color[attack], debugMessage[attack]);
+    SetFontSize(35);
+    DrawFormatString(0, 50, color[attack], debugMessage[attack]);
 }
 
 void EnemyAra::SetCringeMove() {
