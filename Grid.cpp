@@ -1,18 +1,18 @@
 #include "Grid.h"
 
-Grid::Grid() :
-	player{ Move::movable,Move::movable ,Move::movable ,Move::movable },
-	enemy{ Move::movable,Move::movable ,Move::movable ,Move::movable },
-	cringe{ Move::movable,Move::movable ,Move::movable ,Move::movable },
-	damage{ Move::movable,Move::movable ,Move::movable ,Move::movable },
-	wait{ Move::movable,Move::movable ,Move::movable ,Move::movable }{ } //初期化、全ての状態の移動可能方向をブロックする
-
 //Grid::Grid() :
-//	player{ Move::block,Move::block ,Move::block ,Move::block },
-//	enemy{ Move::block,Move::block ,Move::block ,Move::block },
-//	cringe{ Move::block,Move::block ,Move::block ,Move::block },
-//	damage{ Move::block,Move::block ,Move::block ,Move::block },
-//	wait{ Move::block,Move::block ,Move::block ,Move::block }{ } //初期化、全ての状態の移動可能方向をブロックする
+//	player{ Move::movable,Move::movable ,Move::movable ,Move::movable },
+//	enemy{ Move::movable,Move::movable ,Move::movable ,Move::movable },
+//	cringe{ Move::movable,Move::movable ,Move::movable ,Move::movable },
+//	damage{ Move::movable,Move::movable ,Move::movable ,Move::movable },
+//	wait{ Move::movable,Move::movable ,Move::movable ,Move::movable }{ } //初期化、全ての状態の移動可能方向をブロックする
+
+Grid::Grid() :
+	player{ Move::block,Move::block ,Move::block ,Move::block },
+	enemy{ Move::block,Move::block ,Move::block ,Move::block },
+	cringe{ Move::block,Move::block ,Move::block ,Move::block },
+	damage{ Move::block,Move::block ,Move::block ,Move::block },
+	wait{ Move::block,Move::block ,Move::block ,Move::block }{ } //初期化、全ての状態の移動可能方向をブロックする
 
 void Grid::Set(Move up, Move left, Move down, Move right, std::deque<Chara> set) {
 	Move moveData[4] = { up,left,down,right }; //新しい移動方向設定

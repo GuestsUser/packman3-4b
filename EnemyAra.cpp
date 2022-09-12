@@ -7,9 +7,15 @@
 #include "DebugUtility.h"
 #include <math.h>
 #include <deque>
+#include "MapLoading.h"
+
+EnemyAra::MoveMode EnemyAra::moveMode = EnemyAra::MoveMode::standby; //実体定義
 
 //初期化
 EnemyAra::EnemyAra() {
+    moveMode = MoveMode::standby; //最初は待機状態
+    state = State::wait;
+
     isUpdate = true;
     isDraw = true;
 
@@ -33,6 +39,7 @@ EnemyAra::EnemyAra() {
     attack = 0;
 
     ijike = 0;
+    warp = 0;   /*ワープ時のエネミーの移動速度*/
 
     speedCount = 0;
 
@@ -55,6 +62,7 @@ void EnemyAra::SetUp(Type setType, Direction setDirection, int setX, int setY) {
 
 void EnemyAra::Update() {
     if (isUpdate) {
+        count++; //時間経過
         ModeChange();
         Move(ChangeSpeed());
     }
@@ -76,6 +84,7 @@ void EnemyAra::Draw(){ //敵と敵の目を表示
 }
 
 void EnemyAra::Move(int move) {
+
     bool useY = (int)enemyVec % 2 == 0; //現在進行方向が上下何れかになる場合true
     int* edit = useY ? &drawY : &drawX;
     int limit = useY ? limitY : limitX;
@@ -84,9 +93,10 @@ void EnemyAra::Move(int move) {
     bool run = (int)((int)enemyVec / 2) == 0 ? raw <= limit : raw >= limit;
 
     while (run) { //マス移動があった場合(whileを使っているのは下記if文でbreakを用いたかったからでループの意図はない)
-
+        warp = 0;
         if (enemyVec == Direction::left && ClculatTileX() - 1 < 0) { drawX = (AREA_X + WARP_AREA_X) * TILE - (center + 1); }
-        if (enemyVec == Direction::right && ClculatTileX() + 1 >= AREA_X + WARP_AREA_X * 2) { drawX = -WARP_AREA_X * TILE + (center + 1); }
+        if (enemyVec == Direction::right && ClculatTileX() + 1 >= AREA_X + WARP_AREA_X * 2) { drawX = -WARP_AREA_X * TILE + (center + 1);}
+        if (ClculatTileX()-1 < 9 && ClculatTileY() ==14 ||ClculatTileX() +1 > 26 && ClculatTileY() == 14) {warp = 1;}   /*ワープの通路に入れば移動速度が8になる*/
 
         int currentTileX = ClculatTileX();
         int currentTileY = ClculatTileY();
@@ -143,6 +153,7 @@ int EnemyAra::ChangeSpeed() {
     {
     case 1:
         if (ijike == 1) { speed = 10; }
+        if (warp == 1) { speed = 8; }
         break;
     case 2:
         speed = 17;
@@ -163,8 +174,6 @@ int EnemyAra::ChangeSpeed() {
 
 //攻撃状態、休憩状態の切り替え
 void EnemyAra::ModeChange() {
-    count++;//時間経過
-
     switch (speedLevel) {
     case 1:
         if (count == 0 || count == 27 * FPS || count == 54 * FPS || count == 79 * FPS) {

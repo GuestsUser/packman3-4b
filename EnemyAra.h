@@ -2,8 +2,13 @@
 #include "Grid.h"
 class EnemyAra {
 public:
+    enum class MoveMode { standby, attack }; //縄張りモードか攻撃モードかの列挙型
+    enum class State { neutral, cringe, damage, wait }; //敵の状態、この状態に応じてマスの移動可能方向取得配列を変える他、移動先決定関数も変更する
     enum class Type { red, pink, blue, orange }; //敵の種類
 private:
+    static MoveMode moveMode; //縄張り、攻撃のモードチェンジは全敵共通なのでstatic
+    State state; //状態は敵によりけりなので通常変数
+
     bool reversOrder; //trueで次の移動先を強制的に反転方向に設定する
     bool isUpdate; //falseでupdate実行禁止
     bool isDraw; //上記のdraw版
@@ -27,6 +32,7 @@ private:
     int count; //時間経過変数
     int attack; //攻撃状態切り替え変数
     int ijike; //イジケ状態切り替え変数
+    int warp;   //ワープ時スピード切り替え
 
     int* enemyImage; //enemy画像格納用変数
     int* enemyImage_eye; //enemyの目の画像格納用変数
@@ -63,6 +69,8 @@ public:
     virtual void SetStandbyModeTarget() = 0; //上記の縄張りモード版
     virtual void SetWaitModeTarget() = 0; //巣の中の待機位置決定関数
 
+    virtual int Spurt() { return -1; } //通常以外の速度がある敵はこれをオーバーライドして動作をカスタムする、返り値-1はスパートを利用しない扱い
+
     void SetUp(Type setType, Direction setDirection, int setX, int setY); //継承先コンストラクタ内で必ず呼び出す必要あり、setTypeに敵種類、setDirectionに最初に向いてる方向、setX,Yに現在位置を座標で代入
     void SetReversOrder(bool set) { reversOrder = set; } //trueで次の移動先を強制的に反転方向に設定する
 
@@ -74,4 +82,10 @@ public:
         targetPos_x = setX;
         targetPos_y = setY;
     }
+
+    void SetState(State set) { state = set; }
+    static void SetMoveMode(MoveMode set) { moveMode = set; }
+
+    State GetState() { return state; }
+    static MoveMode GetMoveMode() { return moveMode; }
 };

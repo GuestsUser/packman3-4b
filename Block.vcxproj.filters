@@ -82,6 +82,9 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Ui.cpp">
+		<Filter>ソース ファイル</Filter>
+	</ClCompile>
+    <ClCompile Include="SoundLoading.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -156,6 +159,9 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Ui.h">
+		<Filter>ヘッダー ファイル</Filter>
+	</ClInclude>
+    <ClInclude Include="SoundLoading.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

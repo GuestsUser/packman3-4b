@@ -22,6 +22,8 @@ class Player {
 
 	int foodCount; //今回の残機で食べたエサ個数
 	int* foodCountTotal; //エサを食べた合計個数
+	int* life;
+	int* start;
 	std::unordered_map<std::string, Food*>* food; //エサやフルーツの配列
 	Grid** tile;
 
@@ -65,4 +67,5 @@ public:
 
 	Move GetTileMovable(int x, int y, Direction get) const { return tile[x][y].ReadPlayer()[(int)get]; } //指定タイルの指定方向の移動可否を返す
 	void DieAnim();
+	void Restart();
 };

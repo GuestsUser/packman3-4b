@@ -58,7 +58,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	}
 	ImageDel();
 	FoodDel();
-	MapDel();
+	//MapDel();
 	//ScoreDel();
 	WorldVal::Destruct(); //’l‹¤—L‚ÌŽÀ‘Ì”jŠü
 	delete key;
