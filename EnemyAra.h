@@ -27,6 +27,7 @@ private:
     int count; //時間経過変数
     int attack; //攻撃状態切り替え変数
     int ijike; //イジケ状態切り替え変数
+    int warp;   //ワープ時スピード切り替え
 
     int* enemyImage; //enemy画像格納用変数
     int* enemyImage_eye; //enemyの目の画像格納用変数
