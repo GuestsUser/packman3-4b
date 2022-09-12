@@ -1,6 +1,7 @@
 #pragma once
 #include <unordered_map>
 #include <string>
+#include <deque>
 
 class Grid;
 class Food;
@@ -10,6 +11,7 @@ class Player;
 class GameMap {
 	class Staging; //ステージ用演出クラス
 
+	std::deque<EnemyAra*>* enemy;
 	Game* parent;
 	Staging* staging; //READY!等の演出を纏めた内部クラス
 	Grid** tile; //マップの二次元配列
@@ -19,7 +21,7 @@ class GameMap {
 	bool push;
 	static bool Missflg;
 public:
-	GameMap(Game* set,Player* pacman);
+	GameMap(Game* set,Player* pacman, std::deque<EnemyAra*>* getEnemy);
 	~GameMap();
 	void Miss();
 	void Restart();

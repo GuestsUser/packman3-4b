@@ -166,7 +166,7 @@ public:
 	}
 };
 
-GameMap::GameMap(Game* set,Player* pacman) :staging(new Staging(this)), tile(WorldVal::Get<Grid*>("map")), map(*WorldVal::Get<int>("mapImage")),food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")), parent(set),player(pacman) {
+GameMap::GameMap(Game* set,Player* pacman, std::deque<EnemyAra*>* getEnemy) :staging(new Staging(this)), tile(WorldVal::Get<Grid*>("map")), map(*WorldVal::Get<int>("mapImage")),food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")), parent(set),player(pacman),enemy(getEnemy) {
 	staging->AnimeStartUp(&Staging::Start);
 }
 GameMap::~GameMap() {
