@@ -105,14 +105,19 @@ public:
 	void Miss() {  //ƒpƒbƒNƒ}ƒ“‚ªƒ~ƒX‚µ‚½‚Ì‰‰o
 		int* life;
 		life = WorldVal::Get<int>("Life");
-		enemy[0]->SetRunUpdate(false);	/*“G‚Ì“®‚«‚ğ~‚ß‚éi‰¼j*/
-		enemy[1]->SetRunUpdate(false);	/*“G‚Ì“®‚«‚ğ~‚ß‚éi‰¼j*/
-		enemy[2]->SetRunUpdate(false);	/*“G‚Ì“®‚«‚ğ~‚ß‚éi‰¼j*/
-		enemy[3]->SetRunUpdate(false);	/*“G‚Ì“®‚«‚ğ~‚ß‚éi‰¼j*/
+		(*caller->enemy)[0]->SetRunUpdate(false);	/*“G‚Ì“®‚«‚ğ~‚ß‚éi‰¼j*/
+		(*caller->enemy)[1]->SetRunUpdate(false);	/*“G‚Ì“®‚«‚ğ~‚ß‚éi‰¼j*/
+		(*caller->enemy)[2]->SetRunUpdate(false);	/*“G‚Ì“®‚«‚ğ~‚ß‚éi‰¼j*/
+		(*caller->enemy)[3]->SetRunUpdate(false);	/*“G‚Ì“®‚«‚ğ~‚ß‚éi‰¼j*/
 		caller->player->SetRunUpdate(false);	/*Player‚Ì“®‚«‚ğ~‚ß‚é*/
+
 		if (count >= 60) {
-			caller->player->DieAnim();
+			(*caller->enemy)[0]->SetRunDraw(false);/*“G‚Ì•`‰æ‚ğÁ‚·*/
+			(*caller->enemy)[1]->SetRunDraw(false);/*“G‚Ì•`‰æ‚ğÁ‚·*/
+			(*caller->enemy)[2]->SetRunDraw(false);/*“G‚Ì•`‰æ‚ğÁ‚·*/
+			(*caller->enemy)[3]->SetRunDraw(false);/*“G‚Ì•`‰æ‚ğÁ‚·*/
 		}
+
 		if (*life >= 1) {
 			if (count >= 220) {
 				*life -= 1;

@@ -7,6 +7,7 @@ class Grid;
 class Food;
 class Game;
 class Player;
+class EnemyAra;
 
 class GameMap {
 	class Staging; //ステージ用演出クラス

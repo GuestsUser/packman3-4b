@@ -9,7 +9,7 @@
 #include "GameMap.h"
 Game::State Game::state = Game::State::start; //static•Ï”‚Ì’è‹`
 
-Game::Game() :player(), map(GameMap(this, &player)),enemy(std::deque<EnemyAra*>()) {
+Game::Game() :player(),enemy(std::deque<EnemyAra*>()), map(GameMap(this, &player, &enemy)) {
 	state = State::start; //‰Šú‰»–ˆ‰ñstart‚ğ‘ã“ü‚·‚é
 	enemy.push_back(new EnemyRed(&player, &enemy)); //Ô‚Ì“G‚ğ’Ç‰Á‚·‚é
 	enemy.push_back(new EnemyPink(&player));
