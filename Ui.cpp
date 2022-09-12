@@ -23,25 +23,17 @@ void GameUi::UiUpdate() {
 	count++;
 	score = WorldVal::Get<int>("score");
 	hiscore = WorldVal::Get<int>("highScore");
+	zanki = WorldVal::Get<int>("Life");
 	if (key->GetKeyState(B_KEY) == KEY_PUSH) { //Bボタン(赤ボタン)が押された瞬間
 		round++;
 		if (round >= 9&& round <21) {
 			std::rotate(roundfruit.begin(), roundfruit.begin() + 1, roundfruit.end());
 		}
 	}
-	/*if (key->GetKeyState(XINPUT_BUTTON_DPAD_UP) == KEY_PUSH) {
-		zanki++;
-	}
-	if (key->GetKeyState(XINPUT_BUTTON_DPAD_DOWN) == KEY_PUSH) {
-		zanki--;
-	}*/
-	//if (key->GetKeyState(X_KEY) == KEY_PUSH) { score=score+1000; }
-	//if (key->GetKeyState(Y_KEY) == KEY_PUSH) { score = 0; }
 }
 
 void GameUi::UiDraw() {
 	DrawFormatString(0,100, GetColor(255, 255, 255), "Round %d", round);
-	DrawFormatString(0, 150, GetColor(255, 255, 255), "残機 %d", zanki);
 	hiscoreDraw();
 	scoreDraw();
 	fruitUiDraw();
@@ -110,16 +102,16 @@ void GameUi::fruitUiDraw() {//ステージに応じた果物の表示
 
 
 void GameUi::pacmanUiDraw() {//パックマンの残機表示
-	if (zanki >= 1) {
+	if (*zanki >= 1) {
 		DrawRotaGraph3(700, 500, 0, 0, 2, 2, 0, pacmanImage[4], TRUE, FALSE);
 
-		if (zanki >= 2) {
+		if (*zanki >= 2) {
 			DrawRotaGraph3(750, 500, 0, 0, 2, 2, 0, pacmanImage[4], TRUE, FALSE);
 
-			if (zanki >= 3) {
+			if (*zanki >= 3) {
 				DrawRotaGraph3(800, 500, 0, 0, 2, 2, 0, pacmanImage[4], TRUE, FALSE);
 
-				if (zanki >= 4) {
+				if (*zanki >= 4) {
 					DrawRotaGraph3(700, 550, 0, 0, 2, 2, 0, pacmanImage[4], TRUE, FALSE);
 
 				}

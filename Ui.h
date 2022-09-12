@@ -16,7 +16,7 @@ public:
     void fruitUiDraw();//ステージ果物
     int* score;      
     int* hiscore;
-    int zanki = 4;//パックマンの残機数(仮）
+    int* zanki ;//パックマンの残機数(仮）
     int scorecount; //1upが点滅するカウント
     int round=1;  //ラウンド
     int count;
