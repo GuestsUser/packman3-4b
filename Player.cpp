@@ -15,6 +15,7 @@ public:
 	enum class State { start, run, curve, stop, free };
 
 private:
+private:
 	Player* player;
 	State state;
 	Direction direction;
@@ -196,7 +197,7 @@ public:
 	Direction GetDirection() { return nowDirection; } //åªç›ÇÃêiçsï˚å¸ÇÃéÊìæ
 };
 
-Player::Player() :isUpdate(true), isDraw(true), renderCenter(3), center(3), rad(1), posX(13 * TILE + (TILE - 1)), posY(23 * TILE), move(new Moving(this)), foodCount(0), foodCountTotal(WorldVal::Get<int>("foodCountTotal")), playerImg(*WorldVal::Get<int[12]>("playerImage")), killImg(*WorldVal::Get<int[11]>("killImage")), food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")), tile(WorldVal::Get<Grid*>("map")), score(WorldVal::Get<int>("score")), highScore(WorldVal::Get<int>("highScore")),diecount(0),killnum(0) {}
+Player::Player() :isUpdate(true), isDraw(true), renderCenter(3), center(3), rad(1), posX(13 * TILE + (TILE - 1)), posY(23 * TILE), move(new Moving(this)), foodCount(0),start(WorldVal::Get<int>("start")) ,life(WorldVal::Get<int>("Life")) , foodCountTotal(WorldVal::Get<int>("foodCountTotal")), playerImg(*WorldVal::Get<int[12]>("playerImage")), killImg(*WorldVal::Get<int[11]>("killImage")), food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")), tile(WorldVal::Get<Grid*>("map")), score(WorldVal::Get<int>("score")), highScore(WorldVal::Get<int>("highScore")), diecount(0), killnum(0) {}
 Player::~Player() { delete move; }
 
 void Player::Update() {
@@ -287,6 +288,7 @@ void Player::DieAnim()
 		//{
 		//	killnum = 0;
 		//}
-
 	}
+}
+void Player::Restart() {
 }
