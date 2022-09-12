@@ -10,6 +10,9 @@
 
 //‰Šú‰»
 EnemyAra::EnemyAra() {
+    moveMode = MoveMode::standby; //Å‰‚Í‘Ò‹@ó‘Ô
+    state = State::wait;
+
     isUpdate = true;
     isDraw = true;
 

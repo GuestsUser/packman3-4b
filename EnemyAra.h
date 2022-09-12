@@ -8,7 +8,6 @@ public:
 private:
     static MoveMode moveMode; //縄張り、攻撃のモードチェンジは全敵共通なのでstatic
     State state; //状態は敵によりけりなので通常変数
-    static int enableCount; //画面内のneutral, waitの敵数カウント
 
     bool reversOrder; //trueで次の移動先を強制的に反転方向に設定する
     bool isUpdate; //falseでupdate実行禁止
@@ -69,10 +68,7 @@ public:
     virtual void SetStandbyModeTarget() = 0; //上記の縄張りモード版
     virtual void SetWaitModeTarget() = 0; //巣の中の待機位置決定関数
 
-    virtual void Spurt() {} //通常以外の速度がある敵はこれをオーバーライドして動作をカスタムする
-    void EnebleCheck() {//このクラスのUpdate呼び出し前にシーンの方で呼び出す、neutral, waitの敵をカウントする
-        if (state != State::neutral && state != State::wait) { enableCount++; }
-    } 
+    virtual int Spurt() { return -1; } //通常以外の速度がある敵はこれをオーバーライドして動作をカスタムする、返り値-1はスパートを利用しない扱い
 
     void SetUp(Type setType, Direction setDirection, int setX, int setY); //継承先コンストラクタ内で必ず呼び出す必要あり、setTypeに敵種類、setDirectionに最初に向いてる方向、setX,Yに現在位置を座標で代入
     void SetReversOrder(bool set) { reversOrder = set; } //trueで次の移動先を強制的に反転方向に設定する
@@ -85,4 +81,10 @@ public:
         targetPos_x = setX;
         targetPos_y = setY;
     }
+
+    void SetState(State set) { state = set; }
+    static void SetMoveMode(MoveMode set) { moveMode = set; }
+
+    State GetState() { return state; }
+    static MoveMode GetMoveMode() { return moveMode; }
 };
