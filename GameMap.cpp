@@ -191,12 +191,13 @@ void GameMap::Draw() {
 }
 void GameMap::Update() {
 	for (auto itr : *food) { itr.second->Update(); } //食べ物処理実行
+
+	if (staging->GetRunState() != Staging::State::free) { return; } //演出系が未実行の場合だけ以降を実行
 	switch (Game::GetSceneState()) {
 	case Game::State::start:
 			break;
 	case Game::State::miss:
 		staging->AnimeStartUp(&Staging::Miss);
-		//staging->Restart();
 		Game::SetSceneState(Game::State::run);
 		break;
 	}
