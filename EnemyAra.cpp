@@ -9,10 +9,14 @@
 #include <deque>
 #include "MapLoading.h"
 
+int EnemyAra::nowStage = 0;
+int EnemyAra::timer = 0;
 EnemyAra::MoveMode EnemyAra::moveMode = EnemyAra::MoveMode::standby; //実体定義
 
 //初期化
 EnemyAra::EnemyAra() {
+    nowStage = *WorldVal::Get<int>("nowStage"); //現在ステージ数の取得
+    timer = 0;
     moveMode = MoveMode::standby; //最初は待機状態
     state = State::wait;
 
@@ -33,12 +37,7 @@ EnemyAra::EnemyAra() {
     targetPos_x = 0;
     targetPos_y = 0;
 
-    speedLevel = 1;
-
     count = 0;
-    attack = 0;
-
-    ijike = 0;
     warp = 0;   /*ワープ時のエネミーの移動速度*/
 
     speedCount = 0;
@@ -64,7 +63,6 @@ void EnemyAra::SetUp(Type setType, Direction setDirection, int setX, int setY) {
 void EnemyAra::Update() {
     if (isUpdate) {
         count++; //時間経過
-        ModeChange();
         Move(ChangeSpeed());
     }
 }
@@ -75,7 +73,7 @@ void EnemyAra::Draw(){ //敵と敵の目を表示
         int y = SHIFT_Y + (drawY - renderCenter) * Y_RATE;
         int sub = (int)type * 2 + ((count / 4) % 2); //使用画像ナンバー
         DrawRotaGraph3(x, y, 0, 0, X_RATE, Y_RATE, 0, enemyImage[sub], TRUE, FALSE);
-        if (ijike == 0) { DrawRotaGraph3(x, y, 0, 0, X_RATE, Y_RATE, 0, enemyImage_eye[(int)enemyVec], TRUE, FALSE); } //イジケじゃないなら
+        if (state != State::cringe) { DrawRotaGraph3(x, y, 0, 0, X_RATE, Y_RATE, 0, enemyImage_eye[(int)enemyVec], TRUE, FALSE); } //イジケじゃないなら
 
         //デバッグ表示
         DrawHitBox(ClculatTileX(), ClculatTileY(), GetColor(255, 255, 255));
@@ -102,10 +100,10 @@ void EnemyAra::Move(int move) {
         int currentTileX = ClculatTileX();
         int currentTileY = ClculatTileY();
 
-        if (attack) { SetAttackModeTarget(); } //ターゲットマスの設定(追いかけモードの時)
+        if (moveMode == MoveMode::attack) { SetAttackModeTarget(); } //ターゲットマスの設定(追いかけモードの時)
         else { SetStandbyModeTarget(); } //ターゲットマス(縄張りモード)
         if (reversOrder) { SetReversMove(); break; } //反転方向移動は移動先を決定するので以降の移動先決定処理を通る必要がないからbreak
-        if (ijike) { SetCringeMove(); break; } //イジケ状態の場合も移動先決定なので終わったらbreak
+        if (state == State::cringe) { SetCringeMove(); break; } //イジケ状態の場合も移動先決定なので終わったらbreak
 
         int max = pow(35, 2)*2;
 
@@ -139,36 +137,30 @@ void EnemyAra::Move(int move) {
 
     //以下デバッグ表記
     SetFontSize(30);
-    //DrawFormatString(700, 30, GetColor(255, 255, 255), "Time：%.2lf", (double)count / 60);
-    ////DrawFormatString(0, 60, GetColor(255, 255, 255), "%d", okMove);
-    //DrawFormatString(700, 100, GetColor(255, 255, 255), "〇エネミー情報");
-    //DrawFormatString(700, 150, GetColor(255, 0, 0), "X位置：%d", ClculatTileX());
-    //DrawFormatString(700, 200, GetColor(0, 0, 255), "Y位置：%d", ClculatTileY());
-    //DrawFormatString(700, 250, GetColor(0, 255, 0), "移動方向：%d", enemyVec);
 }
-//スピードレベルによってスピードを変える
-int EnemyAra::ChangeSpeed() {
+
+int EnemyAra::ChangeSpeed() { //スピードレベルによってスピードを変える
     int cringe = 10; //イジケ状態速
     int damage = 32; //イジケ状態で食べられて巣に戻る状態速、仮の値
     int tunnel = 8; //ワープトンネル速
     int speed = Spurt(); //今回の動作速、とりあえず通常速
 
     int move = 0; //今回の座標移動量
-    switch (speedLevel) {
-    case 1:
-        if (speed < 0) { speed = 15; }
+    switch (ClculatSpeedLevel()) { //レベルに合わせた速度代入
+    case 0:
+        if (speed < 0) { speed = 15; } //スパート不使用の場合本来の通常速を入れる
         break;
-    case 2:
+    case 1:
         if (speed < 0) { speed = 17; }
         cringe = 11;
         tunnel = 9;
         break;
-    case 3:
+    case 2:
         if (speed < 0) { speed = 19; }
         cringe = 12;
         tunnel = 10;
         break;
-    case 4:
+    case 3:
         if (speed < 0) { speed = 19; }
         cringe = 9;
         tunnel = 10;
@@ -190,32 +182,40 @@ int EnemyAra::ChangeSpeed() {
     return move; //今回の動作量を返す
 }
 
-//攻撃状態、休憩状態の切り替え
-void EnemyAra::ModeChange() {
-    switch (speedLevel) {
+void EnemyAra::ModeChange(std::deque<EnemyAra*>* enemyList) { //攻撃状態、休憩状態の切り替え
+    for (int i = 0; i < enemyList->size(); ++i) { //敵のステートチェック
+        State state = (*enemyList)[i]->state;
+
+        if (state == State::cringe || state == State::damage || (!(*enemyList)[i]->isUpdate) || (!(*enemyList)[i]->isDraw)) { return; } //cringe、damageの敵がいる場合モードチェンジカウントを進めない、UpdateやDrawを実行しない止まった敵がいる場合も進めない
+    }
+
+    bool standby = timer == 25 * FPS || timer == 50 * FPS; //休憩切替条件、取り敢えずスピードレベル2、3の物を入れている
+    bool attack = timer == 5 * FPS || timer == 30 * FPS || timer == 55 * FPS; //攻撃切替条件、上記と同様にレベル2、3の値
+
+    switch (ClculatSpeedLevel()) {
+    case 0:
+        standby = timer == 27 * FPS || timer == 54 * FPS || timer == 79 * FPS;
+        attack = timer == 7 * FPS || timer == 34 * FPS || timer == 59 * FPS || timer == 84 * FPS;
+        break;
     case 1:
-        if (count == 0 || count == 27 * FPS || count == 54 * FPS || count == 79 * FPS) {
-            attack = 0;//休憩状態
-            reversOrder = true;
-        }
-        if (count == 7 * FPS || count == 34 * FPS || count == 59 * FPS || count == 84 * FPS) {
-            attack = 1;///攻撃状態
-            reversOrder = true;
-        }
-        break;
-    case 2:
-        break;
-    case 3:
-        break;
-    case 4:
+        standby = timer == 27 * FPS || timer == 54 * FPS ;
+        attack = timer == 7 * FPS || timer == 34 * FPS || timer == 59 * FPS;
         break;
     }
+
+    if (standby) { moveMode = MoveMode::standby; } //休憩状態
+    if (attack) { moveMode = MoveMode::attack; } //攻撃状態
+
+    if (standby || attack) { for (int i = 0; i < enemyList->size(); ++i) { (*enemyList)[i]->reversOrder = true; } } //モードチェンジした場合全敵に反転命令
+
+    ++timer; //タイマーカウント
 
     //以下デバッグ表記
     const char* debugMessage[2] = { "休息中" ,"攻撃中" };
     unsigned int color[2] = { GetColor(0, 255, 255) ,GetColor(255, 255, 0) };
+    int sub = (int)moveMode;
     SetFontSize(35);
-    DrawFormatString(0, 50, color[attack], debugMessage[attack]);
+    DrawFormatString(0, 50, color[sub], debugMessage[sub]);
 }
 
 void EnemyAra::SetCringeMove() {

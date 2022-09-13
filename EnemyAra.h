@@ -1,11 +1,14 @@
 #pragma once
 #include "Grid.h"
+#include <deque>
 class EnemyAra {
 public:
     enum class MoveMode { standby, attack }; //縄張りモードか攻撃モードかの列挙型
     enum class State { neutral, cringe, damage, wait }; //敵の状態、この状態に応じてマスの移動可能方向取得配列を変える他、移動先決定関数も変更する
     enum class Type { red, pink, blue, orange }; //敵の種類
 private:
+    static int nowStage; //現在ステージ数
+    static int timer; //縄張り、追いかけモードのモードチェンジ用タイマー
     static MoveMode moveMode; //縄張り、攻撃のモードチェンジは全敵共通なのでstatic
     State state; //状態は敵によりけりなので通常変数
 
@@ -23,15 +26,12 @@ private:
     int targetPos_x; //目標マスのポジション変数
     int targetPos_y;
 
-    int speedLevel; //スピードレベル格納変数
     int speedCount;
 
     int center;
     int renderCenter;
 
     int count; //時間経過変数
-    int attack; //攻撃状態切り替え変数
-    int ijike; //イジケ状態切り替え変数
     int warp;   //ワープ時スピード切り替え
 
     int* enemyImage; //enemy画像格納用変数
@@ -43,7 +43,7 @@ private:
 
     int ChangeSpeed();
     void Move(int move);
-    void ModeChange();
+    
 
     void SetCringeMove(); //イジケ状態時位置決定関数、これはオーバーライドする形式ではない
     void SetReversMove(); //反対方向へ移動方向を向ける関数
@@ -54,6 +54,7 @@ private:
     int ClculatLocalY()const; //上記のy版
     int ClculatLimitX(Direction angle)const; //この位置に着いたら現在マスから移動可能方向を取得し方向転換する位置を返してくれる
     int ClculatLimitY(Direction angle)const; //上記のy版
+
 public:
     EnemyAra();
     void Draw();
@@ -64,6 +65,8 @@ public:
     void SetRunDraw(bool set) { isDraw = set; }
     bool GetRunUpdate() { return isUpdate; }
     bool GetRunDraw() { return isDraw; }
+
+    static void ModeChange(std::deque<EnemyAra*>* enemyList); //縄張り、追いかけモードのモードチェンジ用関数、シーン内で1
 
     virtual void SetAttackModeTarget() = 0; //追いかけモード中の狙いマス決定関数、オーバーライドして使う
     virtual void SetStandbyModeTarget() = 0; //上記の縄張りモード版
@@ -77,6 +80,7 @@ public:
     Direction GetDirection() { return enemyVec; } //現在の移動方向を取得できる
     int ClculatTileX()const; //現在マスを返してくれる
     int ClculatTileY()const; //上記のy版
+    static int ClculatSpeedLevel() { return (nowStage > 0) + (nowStage >= 4) + (nowStage >= 21); } //現在の速度レベルを計算
 
     void TargetSet(int setX, int setY) { //ターゲットマス指定、指定はワープエリア込みで考える
         targetPos_x = setX;

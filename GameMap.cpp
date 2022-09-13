@@ -6,12 +6,13 @@
 #include "Grid.h"
 #include "Worldval.h"
 #include "Food.h"
-#include <unordered_map>
-#include <string>
+#include "FoodLoading.h"
 #include "Title.h"
 #include "EnemyAra.h"
 #include "Player.h"
 #include "SoundLoading.h"
+#include <unordered_map>
+#include <string>
 #include <deque>
 
 class GameMap::Staging { //演出系、他のファイルに取り込まないのでクラス内に直接処理を書き込んでいい
@@ -97,7 +98,10 @@ public:
 		//4回点滅したら（1回の点滅で24count）
 		if (count >= 95) {
 			state = State::free;	//アニメ状態を終了済みに書き換える
-			caller->parent->SetNext(new Title());
+
+			*WorldVal::Get<int>("nowStage") += 1; //次ステージにカウントを進める
+			FoodIni(); //エサ状態の初期化
+			caller->parent->SetNext(new Game()); //次ステージに移行
 		}
 		count++;
 	}
@@ -148,13 +152,12 @@ public:
 			DrawRotaGraph3(SHIFT_X + 145, SHIFT_Y + 273, 0, 0, X_RATE, Y_RATE, 0, gameOverImage, TRUE, FALSE);
 		}
 		if (count == 180) {
-			int* life;
-			life = WorldVal::Get<int>("Life");
-			*life = INI_LIFE;
+			//各種初期化
+			*WorldVal::Get<int>("Life") = INI_LIFE;
+			*WorldVal::Get<int>("nowStage") = 0;
+			*WorldVal::Get<int>("start") = 0;
+			FoodIni();
 
-			int* start;
-			start = WorldVal::Get<int>("start");
-			*start = 0;
 			//シーンを次のステージにする（次ラウンド）
 			//今はタイトルに戻るようにする
 			caller->parent->SetNext(new Title());
