@@ -32,6 +32,7 @@ private:
     int renderCenter;
 
     int count; //時間経過変数
+    int ijkeCount;  //いじけ時の時間経過変数
     int warp;   //ワープ時スピード切り替え
 
     int* enemyImage; //enemy画像格納用変数

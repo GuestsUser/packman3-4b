@@ -38,6 +38,7 @@ EnemyAra::EnemyAra() {
     targetPos_y = 0;
 
     count = 0;
+    ijkeCount = 360;
     warp = 0;   /*ワープ時のエネミーの移動速度*/
 
     speedCount = 0;
@@ -71,9 +72,45 @@ void EnemyAra::Draw(){ //敵と敵の目を表示
     if (isDraw) {
         int x = SHIFT_X + (drawX - renderCenter) * X_RATE;
         int y = SHIFT_Y + (drawY - renderCenter) * Y_RATE;
-        int sub = (int)type * 2 + ((count / 4) % 2); //使用画像ナンバー
+        int sub = (int)type * 2 + ((count / 6) % 2); //使用画像ナンバー
+        int sub2 = (int)type * 2 + ((count / 12) % 2);
+
+        if (state == State::cringe) {
+            ijkeCount--;
+            if (ijkeCount >= 2 * FPS) {
+                if (sub % 2 == 0) {
+                    DrawRotaGraph3(x, y, 0, 0, X_RATE, Y_RATE, 0, enemyImage[16], TRUE, FALSE);
+                }
+                else {
+                    DrawRotaGraph3(x, y, 0, 0, X_RATE, Y_RATE, 0, enemyImage[17], TRUE, FALSE);
+                }
+            }
+            else {
+                if ((count / 6) % 2 == 0) {
+                    if (sub2 % 2 == 0) {
+                        DrawRotaGraph3(x, y, 0, 0, X_RATE, Y_RATE, 0, enemyImage[16], TRUE, FALSE);
+                    }
+                    else {
+                        DrawRotaGraph3(x, y, 0, 0, X_RATE, Y_RATE, 0, enemyImage[18], TRUE, FALSE);
+                    }
+                }
+                else {
+                    if (sub2 % 2 == 0) {
+                        DrawRotaGraph3(x, y, 0, 0, X_RATE, Y_RATE, 0, enemyImage[17], TRUE, FALSE);
+                    }
+                    else {
+                        DrawRotaGraph3(x, y, 0, 0, X_RATE, Y_RATE, 0, enemyImage[19], TRUE, FALSE);
+                    }
+                }
+            }
+            if (ijkeCount == 0) {
+                state = State::neutral;
+            }
+            return;
+        }
+
         DrawRotaGraph3(x, y, 0, 0, X_RATE, Y_RATE, 0, enemyImage[sub], TRUE, FALSE);
-        if (state != State::cringe) { DrawRotaGraph3(x, y, 0, 0, X_RATE, Y_RATE, 0, enemyImage_eye[(int)enemyVec], TRUE, FALSE); } //イジケじゃないなら
+        DrawRotaGraph3(x, y, 0, 0, X_RATE, Y_RATE, 0, enemyImage_eye[(int)enemyVec], TRUE, FALSE);
 
         //デバッグ表示
         DrawHitBox(ClculatTileX(), ClculatTileY(), GetColor(255, 255, 255));
