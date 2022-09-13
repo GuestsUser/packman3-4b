@@ -148,24 +148,41 @@ void EnemyAra::Move(int move) {
 }
 //スピードレベルによってスピードを変える
 int EnemyAra::ChangeSpeed() {
+    int cringe = 10; //イジケ状態速
+    int damage = 32; //イジケ状態で食べられて巣に戻る状態速、仮の値
+    int tunnel = 8; //ワープトンネル速
+    int speed = Spurt(); //今回の動作速、とりあえず通常速
+
     int move = 0; //今回の座標移動量
-    int speed = 15; //今回の動作速
-    switch (speedLevel)
-    {
+    switch (speedLevel) {
     case 1:
-        if (ijike == 1) { speed = 10; }
-        if (warp == 1) { speed = 8; }
+        if (speed < 0) { speed = 15; }
         break;
     case 2:
-        speed = 17;
+        if (speed < 0) { speed = 17; }
+        cringe = 11;
+        tunnel = 9;
         break;
     case 3:
-        speed = 19;
+        if (speed < 0) { speed = 19; }
+        cringe = 12;
+        tunnel = 10;
         break;
     case 4:
-        speed = 19;
+        if (speed < 0) { speed = 19; }
+        cringe = 9;
+        tunnel = 10;
         break;
     }
+
+    while (true) { //break使いたいからループ、breakを用いる事で処理に優先度を設けることができる
+        if (state == State::damage) { speed = damage; break; } //やられ状態ならその速度にする
+        if (state == State::cringe) { speed = cringe; break; } //イジケ状態ならその速度にする
+        if (warp) { speed = tunnel; } //ワープトンネルエリア内なら指定速に
+        break; //特に条件に当てはまらない場合通常速
+
+    }
+
     speedCount += speed; //今回の速度をカウントに加算
     move = speedCount / MOVABLE_SPEED; //動作座標量の計算
     speedCount -= move * MOVABLE_SPEED; //動作に使った分のカウントを取り除く
