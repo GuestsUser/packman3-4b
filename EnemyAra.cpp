@@ -97,8 +97,8 @@ void EnemyAra::Move(int move) {
         warp = 0;
         if (enemyVec == Direction::left && ClculatTileX() - 1 < 0) { drawX = (AREA_X + WARP_AREA_X) * TILE - (center + 1); }
         if (enemyVec == Direction::right && ClculatTileX() + 1 >= AREA_X + WARP_AREA_X * 2) { drawX = -WARP_AREA_X * TILE + (center + 1);}
-        if (ClculatTileX()-1 < 9 && ClculatTileY() ==14 ||ClculatTileX() +1 > 26 && ClculatTileY() == 14) {warp = 1;}   /*ワープの通路に入れば移動速度が8になる*/
-
+        if (ClculatTileX()-1 < 9 && ClculatTileX() - 1 > 2 && ClculatTileY() ==14 ||ClculatTileX() +1 > 26 && ClculatTileX() + 1 < 33 && ClculatTileY() == 14) {warp = 1;}   /*ワープの通路に入れば移動速度が8になる*/
+        
         int currentTileX = ClculatTileX();
         int currentTileY = ClculatTileY();
 
