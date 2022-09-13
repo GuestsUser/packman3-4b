@@ -7,7 +7,7 @@
 #include "EnemyRed.h"
 
 Enemyblue::Enemyblue(Player* getPlayer,EnemyAra* getEnemyRed) :player(getPlayer),enemyred(getEnemyRed) {
-	SetUp(EnemyAra::Type::blue, Direction::left, 13 * TILE + (TILE - 1)-19, 11 * TILE + (TILE - 1)+18); //初期化処理、詳しくはEnemyAraを参照
+	SetUp(EnemyAra::Type::blue, Direction::up, (12 * TILE) - 4 , 14 * TILE); //初期化処理、詳しくはEnemyAraを参照
 }
 
 void Enemyblue::SetAttackModeTarget() {  //追いかけモードの時ターゲット指定
@@ -34,4 +34,4 @@ void Enemyblue::SetAttackModeTarget() {  //追いかけモードの時ターゲット指定
 	}
 }
 void Enemyblue::SetStandbyModeTarget() { TargetSet(WARP_AREA_X + 26, WARP_AREA_Y+31); } //縄張りモード時のターゲット指定
-void Enemyblue::SetWaitModeTarget() { TargetSet(WARP_AREA_X + 13, WARP_AREA_Y + 11); } //巣の中の位置指定
+void Enemyblue::SetWaitModeTarget() { TargetSet(WARP_AREA_X + 12, WARP_AREA_Y + 14); } //巣の中の位置指定

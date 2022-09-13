@@ -6,7 +6,7 @@
 #include "Grid.h"
 
 EnemyPink::EnemyPink(Player* getPlayer) :player(getPlayer) {
-	SetUp(EnemyAra::Type::pink, Direction::down, 13 * TILE + (TILE - 1), 11 * TILE + (TILE - 1)); //初期化処理、詳しくはEnemyAraを参照
+	SetUp(EnemyAra::Type::pink, Direction::down, (13 * TILE) + 4, (14 * TILE)); //初期化処理、詳しくはEnemyAraを参照
 }
 
 void EnemyPink::SetAttackModeTarget() {  //追いかけモードの時ターゲット指定
