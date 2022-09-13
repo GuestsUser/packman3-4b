@@ -4,6 +4,7 @@
 #include "GetKey.h"
 #include "Game.h"
 #include "CoffeeBreak.h"
+#include "Worldval.h"
 
 Title::Title() {
 	pos_x = 0;
@@ -20,6 +21,8 @@ void Title::Update() {
 	score = WorldVal::Get<int>("score");
 	hiscore = WorldVal::Get<int>("highScore");
 	if (push == true && key->GetKeyState(A_KEY) == KEY_PUSH) { //Aボタン(緑ボタン)が押された瞬間
+
+		*WorldVal::Get<int>("score") = 0; //スコアリセット
 		SetNext(new Game()); //ゲームシーンへ遷移
 		*score = 0;
 	}

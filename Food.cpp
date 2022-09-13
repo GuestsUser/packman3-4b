@@ -5,7 +5,7 @@
 #include "Worldval.h"
 #include <string>
 
-Food::Food(Type set) :type(set), isEnable(true), x(0), y(0), handle(*WorldVal::Get<int[10]>("foodImage")), count(0), foodCount(WorldVal::Get<int>("foodCountTotal")),fruitsCount(0) { if (type != Type::food && type != Type::big) { isEnable = false; } } //setに使用したいタイプを入れる、何も指定しない場合通常エサになる
+Food::Food(Type set) :type(set), isEnable(true), x(0), y(0), handle(*WorldVal::Get<int[10]>("foodImage")), count(0), foodCount(WorldVal::Get<int>("foodCountTotal")),fruitsCount(WorldVal::Get<int>("fruitsDisplay")) { if (type != Type::food && type != Type::big) { isEnable = false; } } //setに使用したいタイプを入れる、何も指定しない場合通常エサになる
 
 int Food::Eat() {
 	int point = 0;
@@ -28,22 +28,22 @@ int Food::Eat() {
 void Food::Update() {
 	if (!(type == Food::Type::food || type == Food::Type::big))
 	{
-		if (fruitsCount == 0)
+		if (*fruitsCount == 0)
 		{
 			if (*foodCount == 70) {
 
 				isEnable = true;
 				count = 0;
-				fruitsCount++;
+				(*fruitsCount)++;
 			}
 		}
-		else if (fruitsCount == 1)
+		else if (*fruitsCount == 1)
 		{
 			if (*foodCount == 170) {
 
 				isEnable = true;
 				count = 0;
-				fruitsCount++;
+				(*fruitsCount)++;
 			}
 		}
 

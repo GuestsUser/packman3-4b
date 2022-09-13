@@ -7,7 +7,7 @@
 #include <math.h>
 
 EnemyOrange::EnemyOrange(Player* getPlayer) :player(getPlayer) {	//初期化処理
-	SetUp(EnemyAra::Type::orange, Direction::left, 13 * TILE + (TILE - 1), 11 * TILE + (TILE - 1));
+	SetUp(EnemyAra::Type::orange, Direction::up, (15 * TILE) + 4, 14 * TILE);
 }
 
 void EnemyOrange::SetAttackModeTarget() {  //追いかけモードの時ターゲット指定

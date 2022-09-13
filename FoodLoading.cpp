@@ -296,3 +296,27 @@ void FoodDel() { //削除処理
 	for (auto get : *food) { delete get.second; } //food実体の削除
 	//delete food; //全体の削除
 }
+
+void FoodIni() {
+	*WorldVal::Get<int>("foodCountTotal") = 0; //ステージ内で食べたエサ個数のリセット
+	*WorldVal::Get<int>("fruitsDisplay") = 0; //ステージ内で出現したフルーツの数をリセット
+	
+	std::unordered_map<std::string, Food*>* food = WorldVal::Get<std::unordered_map<std::string, Food*>>("food");
+	for (auto itr = food->begin(); itr != food->end(); ++itr) { itr->second->SetEnable(true); } //ループで全てのエサを有効化する
+
+	Food* fruit = (*food)["17x17"]; //フルーツターゲットを格納しておく
+	fruit->SetEnable(false); //フルーツは無効化しておく
+
+	int stage = *WorldVal::Get<int>("nowStage"); //現在ステージの取得
+	Food::Type newType = (Food::Type)(((int)Food::Type::cherry) + (stage >= 1) + (stage >= 2) + (stage >= 4) + (stage >= 6) + (stage >= 8) + (stage >= 10) + (stage >= 12));//Type列挙型はチェリーから表示順に並んでいるのでステージ数の条件をいくつクリアしてるかで表示フルーツを決定できる
+	fruit->SetType(newType);
+
+	//if (stage <= 0) { fruit->SetType(Food::Type::cherry); return; } //ステージ1でチェリーに設定
+	//if (stage <= 1) { fruit->SetType(Food::Type::strawberry); return; } //ステージ2でチェリーに設定
+	//if (stage <= 2) { fruit->SetType(Food::Type::orange); return; } //ステージ3でオレンジに設定
+	//if (stage <= 4) { fruit->SetType(Food::Type::apple); return; } //ステージ5でオレンジに設定
+	//if (stage <= 6) { fruit->SetType(Food::Type::melon); return; } //ステージ7でオレンジに設定
+	//if (stage <= 8) { fruit->SetType(Food::Type::galaxian); return; } //ステージ9でオレンジに設定
+	//if (stage <= 10) { fruit->SetType(Food::Type::bell); return; } //ステージ11でオレンジに設定
+	//if (stage <= 12) { fruit->SetType(Food::Type::key); return; } //ステージ13でオレンジに設定
+}

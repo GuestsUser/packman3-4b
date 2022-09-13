@@ -26,6 +26,7 @@ void Game::Update() {
 	map.Update();
 	ui.UiUpdate();
 	player.Update();
+	EnemyAra::ModeChange(&enemy);
 	for (int i = 0; i < enemy.size(); ++i) { enemy[i]->Update(); }
 	count++;
 	
