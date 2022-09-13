@@ -169,6 +169,7 @@ void MapLoading() {
 	grid[15][5].Set(Move::block, Move::movable, Move::block, Move::movable, std::deque<Chara>{Chara::p, Chara::e, Chara::c, Chara::d});
 	grid[15][8].Set(Move::block, Move::movable, Move::block, Move::movable, std::deque<Chara>{Chara::p, Chara::e, Chara::c, Chara::d});
 	grid[15][11].Set(Move::block, Move::movable, Move::block, Move::movable, std::deque<Chara>{Chara::p, Chara::e, Chara::c, Chara::d});
+	grid[15][14].Set(Move::block, Move::block, Move::block, Move::movable, std::deque<Chara>{Chara::e});	//à⁄ìÆâ¬î\èÛë‘
 	grid[15][17].Set(Move::block, Move::movable, Move::block, Move::movable, std::deque<Chara>{Chara::p, Chara::e, Chara::c, Chara::d});
 	grid[15][20].Set(Move::block, Move::movable, Move::block, Move::movable, std::deque<Chara>{Chara::p, Chara::e, Chara::c, Chara::d});
 	grid[15][23].Set(Move::block, Move::movable, Move::block, Move::movable, std::deque<Chara>{Chara::p, Chara::e, Chara::c, Chara::d});
