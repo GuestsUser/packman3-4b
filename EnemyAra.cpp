@@ -142,10 +142,7 @@ void EnemyAra::Move(int move) {
         if (reversOrder) { SetReversMove(); break; } //反転方向移動は移動先を決定するので以降の移動先決定処理を通る必要がないからbreak
         if (state == State::cringe) { SetCringeMove(); break; } //イジケ状態の場合も移動先決定なので終わったらbreak
 
-        int max = pow(35, 2)*2;
-
-        int distance[4] = { max ,max ,max ,max }; //各種移動可能方向に進んだマスから目標マスへの距離保存用
-        int minDistance = max; //最短距離記録用
+        int minDistance = -1; //最短距離記録用、青敵等は長距離を示す可能性があるので初期値は-1とする
         int newDirection= ((int)enemyVec + 2) % 4; //新しい移動方向、取り敢えず反対方向に設定する事でどのマスも移動不能だった場合自動的に反対方向が設定されるという算段
 
         for (int i = 0; i < 4; i++) {
@@ -154,10 +151,10 @@ void EnemyAra::Move(int move) {
 
             int x = currentTileX + ClculatSubX((Direction)i); //ここであるposは現在のマス座標を指す
             int y = currentTileY + ClculatSubY((Direction)i);
-            distance[i] = pow(double(targetPos_x) - double(x), 2) + pow(double(targetPos_y) - double(y), 2);
+            int distance = pow(double(targetPos_x) - double(x), 2) + pow(double(targetPos_y) - double(y), 2);
 
-            if (minDistance > distance[i]) { //目標マスとの最短距離を調べてenemyVecに最短方向のものを格納
-                minDistance = distance[i];
+            if (minDistance > distance || minDistance < 0) { //目標マスとの最短距離を調べてenemyVecに最短方向のものを格納
+                minDistance = distance;
                 newDirection = i;
             }
         }

@@ -80,7 +80,7 @@ public:
 		}
 	}
 	bool IsCurveInRange(int localPos) {
-		bool left = localPos <= 6 && localPos > 3;
+		bool left = localPos <= 7 && localPos > 3;
 		bool right = localPos < 3 && localPos >= 1;
 		return (int)((int)GetDirection() / 2) > 0 ? right : left;
 	}
@@ -115,7 +115,7 @@ public:
 		}
 	}
 	bool IsCurveInRange(int localPos) {
-		bool up = localPos <= 6 && localPos > 3;
+		bool up = localPos <= 7 && localPos > 3;
 		bool down = localPos < 3 && localPos >= 1;
 		return (int)((int)GetDirection() / 2) > 0 ?  down : up;
 	}
