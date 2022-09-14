@@ -197,7 +197,7 @@ public:
 	Direction GetDirection() { return nowDirection; } //現在の進行方向の取得
 };
 
-Player::Player() :isUpdate(true), isDraw(true), renderCenter(3), center(3), rad(1), posX(13 * TILE + (TILE - 1)), posY(23 * TILE), move(new Moving(this)), foodCount(0),start(WorldVal::Get<int>("start")) ,life(WorldVal::Get<int>("Life")) , foodCountTotal(WorldVal::Get<int>("foodCountTotal")), playerImg(*WorldVal::Get<int[12]>("playerImage")), killImg(*WorldVal::Get<int[11]>("killImage")), food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")), tile(WorldVal::Get<Grid*>("map")), score(WorldVal::Get<int>("score")), highScore(WorldVal::Get<int>("highScore")), diecount(0), killnum(0) {}
+Player::Player() :isUpdate(true), isDraw(true), renderCenter(3), center(3), rad(1), posX(13 * TILE + (TILE - 1)), posY(23 * TILE), move(new Moving(this)), foodCount(0),start(WorldVal::Get<int>("start")) ,life(WorldVal::Get<int>("Life")) , foodCountTotal(WorldVal::Get<int>("foodCountTotal")), playerImg(*WorldVal::Get<int[12]>("playerImage")), killImg(*WorldVal::Get<int[11]>("killImage")), food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")), tile(WorldVal::Get<Grid*>("map")), score(WorldVal::Get<int>("score")), highScore(WorldVal::Get<int>("highScore")), diecount(0), killnum(0),eatSE1(*WorldVal::Get<int>("eatSE1")), eatSE2(*WorldVal::Get<int>("eatSE2")), dieSE(*WorldVal::Get<int>("dieSE")){}
 Player::~Player() { delete move; }
 
 void Player::Update() {
@@ -211,6 +211,12 @@ void Player::Update() {
 			if (type == Food::Type::food || type == Food::Type::big) { //種類がエサ、パワーエサの場合食べた個数をカウントする
 				++foodCount;
 				++(*foodCountTotal);
+				if (foodCount % 2 == 0) {
+					PlaySoundMem(eatSE1, DX_PLAYTYPE_BACK);
+				}
+				else {
+					PlaySoundMem(eatSE2, DX_PLAYTYPE_BACK);
+				}
 			}
 			if (*score >= *highScore) { *highScore = *score; } //ハイスコアより値が大きくなった場合ハイスコアの値を更新する
 		}
@@ -278,16 +284,14 @@ void Player::DieAnim()
 	isUpdate = false;
 	isDraw = false;
 	diecount++;
-	//Direction angle = move->GetDirection(); //現在の進行方向
-	DrawRotaGraph3(SHIFT_X + (posX - renderCenter/* + ClculatCenterRadX(angle)*/) * X_RATE, SHIFT_Y + (posY - renderCenter/* +*//* ClculatCenterRadY(angle)*/) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, killImg[killnum], true);
+	if (diecount == 1) {
+		PlaySoundMem(dieSE, DX_PLAYTYPE_BACK);
+	}
+	DrawRotaGraph3(SHIFT_X + (posX - renderCenter) * X_RATE, SHIFT_Y + (posY - renderCenter) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, killImg[killnum], true);
 
-	if (diecount % 10 == 0)
+	if (diecount % 7 == 0)
 	{
 		killnum++;
-		//if (killnum > 10)
-		//{
-		//	killnum = 0;
-		//}
 	}
 }
 void Player::Restart() {
