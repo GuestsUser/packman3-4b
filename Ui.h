@@ -18,7 +18,7 @@ public:
     int* hiscore;
     int* zanki ;//パックマンの残機数(仮）
     int scorecount; //1upが点滅するカウント
-    int round=1;  //ラウンド
+    int *round;  //ラウンド
     int count;
     
 private:

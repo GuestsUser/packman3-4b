@@ -14,6 +14,7 @@
 #include <unordered_map>
 #include <string>
 #include <deque>
+#include "CoffeeBreak.h"
 
 class GameMap::Staging { //演出系、他のファイルに取り込まないのでクラス内に直接処理を書き込んでいい
 public:
@@ -39,7 +40,7 @@ public:
 		startImage1(*WorldVal::Get<int>("playerOneImage")), startImage2(*WorldVal::Get<int>("readyImage")),
 		clearImage1(*WorldVal::Get<int>("clearImage1")), clearImage2(*WorldVal::Get<int>("clearImage2")),
 		gameOverImage(*WorldVal::Get<int>("gameOverImage")){
-		PlaySoundMem(se.seHandle[1], DX_PLAYTYPE_BACK, TRUE);
+		//PlaySoundMem(se.seHandle[1], DX_PLAYTYPE_BACK, TRUE);
 	}
 
 	void Start() { //ゲーム開始時のREADY!等の演出、レベル1の時は音楽も流す
@@ -57,6 +58,9 @@ public:
 		}
 		int* start;
 		start = WorldVal::Get<int>("start");
+		if (*start<=0) {
+			PlaySoundMem(se.seHandle[1], DX_PLAYTYPE_BACK, TRUE);
+		}
 		if (*start >= 1 && count == 0) {
 			count = 121;
 		}
@@ -88,20 +92,32 @@ public:
 	}
 
 	void Clear() { //ゲームクリアの時の演出
-		if ((count / 12) % 2 == 0) {
+		(*caller->enemy)[0]->SetRunUpdate(false);	/*敵の動きを止める（仮）*/
+		(*caller->enemy)[1]->SetRunUpdate(false);	/*敵の動きを止める（仮）*/
+		(*caller->enemy)[2]->SetRunUpdate(false);	/*敵の動きを止める（仮）*/
+		(*caller->enemy)[3]->SetRunUpdate(false);	/*敵の動きを止める（仮）*/
+		caller->player->SetRunUpdate(false);	/*Playerの動きを止める*/
+
+		if (count >= 120) {
+			(*caller->enemy)[0]->SetRunDraw(false);/*敵の描画を消す*/
+			(*caller->enemy)[1]->SetRunDraw(false);/*敵の描画を消す*/
+			(*caller->enemy)[2]->SetRunDraw(false);/*敵の描画を消す*/
+			(*caller->enemy)[3]->SetRunDraw(false);/*敵の描画を消す*/
+		}
+		if (count>=120&&(count / 12) % 2 == 0) {
 			//白画像
 			DrawRotaGraph3(SHIFT_X, SHIFT_Y, 0, 0, X_RATE, Y_RATE, 0, clearImage1, TRUE, FALSE);
 		}
 		else {
 			DrawRotaGraph3(SHIFT_X, SHIFT_Y, 0, 0, X_RATE, Y_RATE, 0, clearImage2, TRUE, FALSE);
 		}
-		//4回点滅したら（1回の点滅で24count）
-		if (count >= 95) {
+		//4回点滅したら95（1回の点滅で24count）
+		if (count >= 215) {
 			state = State::free;	//アニメ状態を終了済みに書き換える
 
 			*WorldVal::Get<int>("nowStage") += 1; //次ステージにカウントを進める
 			FoodIni(); //エサ状態の初期化
-			caller->parent->SetNext(new Game()); //次ステージに移行
+			caller->parent->SetNext(new CoffeeBreak()); //次ステージに移行
 		}
 		count++;
 	}
@@ -202,5 +218,7 @@ void GameMap::Update() {
 		staging->AnimeStartUp(&Staging::Miss);
 		Game::SetSceneState(Game::State::run);
 		break;
+	case Game::State::clear:
+		staging->AnimeStartUp(&Staging::Clear);
 	}
 }

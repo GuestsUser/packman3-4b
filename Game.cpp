@@ -23,6 +23,7 @@ Game::Game() :player(),enemy(std::deque<EnemyAra*>()), map(GameMap(this, &player
 }
 
 void Game::Update() {
+	foodcount=WorldVal::Get<int>("foodCountTotal");
 	map.Update();
 	ui.UiUpdate();
 	player.Update();
@@ -42,6 +43,9 @@ void Game::Update() {
 			state = State::miss;	/*State‚ðƒ~ƒX‚É*/
 			break;
 		}
+	}
+	if (*foodcount >= 244) {
+		state = State::clear;
 	}
 }
 

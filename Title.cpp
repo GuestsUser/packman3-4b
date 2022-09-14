@@ -24,7 +24,7 @@ void Title::Update() {
 
 		*WorldVal::Get<int>("score") = 0; //スコアリセット
 		SetNext(new Game()); //ゲームシーンへ遷移
-		*score = 0;
+		//*score = 0;
 	}
 	if (push == true && key->GetKeyState(Y_KEY) == KEY_PUSH) { //Yボタン(黄色ボタン)が押された瞬間
 		SetNext(new CoffeeBreak()); //ゲームシーンへ遷移

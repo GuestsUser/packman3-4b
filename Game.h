@@ -24,6 +24,7 @@ private:
 	int number;
 	int StartTime;
 	bool push;
+	int* foodcount;
 public:
 	Game();
 	void Update();
