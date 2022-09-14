@@ -5,24 +5,15 @@
 #include "Worldval.h"
 #include <string>
 
-Food::Food(Type set) :type(set), isEnable(true), x(0), y(0), handle(*WorldVal::Get<int[10]>("foodImage")), count(0), foodCount(WorldVal::Get<int>("foodCountTotal")),fruitsCount(WorldVal::Get<int>("fruitsDisplay")) { if (type != Type::food && type != Type::big) { isEnable = false; } } //set‚Ég—p‚µ‚½‚¢ƒ^ƒCƒv‚ğ“ü‚ê‚éA‰½‚àw’è‚µ‚È‚¢ê‡’ÊíƒGƒT‚É‚È‚é
+Food::Food(Type set) :type(set), isEnable(true), x(0), y(0), handle(*WorldVal::Get<int[10]>("foodImage")), count(0), foodCount(WorldVal::Get<int>("foodCountTotal")), fruitsCount(WorldVal::Get<int>("fruitsDisplay")), num(0){ if (type != Type::food && type != Type::big) { isEnable = false; fruitEnable = false; } } //set‚Ég—p‚µ‚½‚¢ƒ^ƒCƒv‚ğ“ü‚ê‚éA‰½‚àw’è‚µ‚È‚¢ê‡’ÊíƒGƒT‚É‚È‚é
 
 int Food::Eat() {
-	int point = 0;
-	switch (type) { //©g‚Ìƒ^ƒCƒv‚É‰‚¶‚Ä“¾“_‚ğ•Ô‚·
-	case Type::food: point = 10; break;
-	case Type::big: point = 50; break;
-	case Type::cherry: point = 100; break;
-	case Type::strawberry: point = 300; break;
-	case Type::orange: point = 500; break;
-	case Type::apple: point = 700; break;
-	case Type::melon: point = 1000; break;
-	case Type::galaxian: point = 2000; break;
-	case Type::bell: point = 3000; break;
-	case Type::key: point = 5000; break;
-	}
 	isEnable = false; //H‚×‚ç‚ê‚é‚Æfalse‚É‚È‚é
-	return point;
+	if (!(type == Food::Type::food || type == Food::Type::big)) {
+		fruitEnable = true;	//ƒtƒ‹[ƒc‚Ì‚İH‚×‚é‚Ætrue‚É‚È‚éiƒXƒRƒA•\¦—pj
+		num = 0;
+	}
+	return GetPoint();
 }
 
 void Food::Update() {
@@ -51,7 +42,6 @@ void Food::Update() {
 		{
 			isEnable = false;
 		}
-
 	}
 
 	DrawFormatString(0, 200, GetColor(0, 255, 0), "%d", *foodCount);
@@ -96,6 +86,17 @@ void Food::Draw() { //*8‚È‚Ç‚Ìƒ}ƒXƒTƒCƒY‚Í‰½ˆ‚©‚É’è”‚ÅéŒ¾‚µ‚Ä‚¨‚«‚½‚¢
 			DrawRotaGraph3(SHIFT_X + (x * TILE - TILE / 2 - WARP_AREA_X * TILE) * X_RATE, SHIFT_Y + (y * TILE - TILE / 2 - WARP_AREA_Y * TILE) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, handle[(int)type], true);
 		}
 	}
+
+	if (fruitEnable == true) {
+		num++;
+		SetFontSize(18);
+		if (num <= 130) {
+			DrawFormatString(SHIFT_X + (x * TILE - TILE / 2 - WARP_AREA_X * TILE) * X_RATE, SHIFT_Y + (y * TILE - WARP_AREA_Y * TILE) * Y_RATE, GetColor(255, 187, 255), "%d", GetPoint());
+		}
+		else {
+			fruitEnable = false;
+		}
+	}
 }
 
 void Food::PosSetUp(const std::string& set) { //unordered_map—p“Y‚¦š‚©‚çÀ•W‚ğæ‚èo‚·ŠÖ”
@@ -108,4 +109,22 @@ void Food::PosSetUp(const std::string& set) { //unordered_map—p“Y‚¦š‚©‚çÀ•W‚ğ
 		}
 	}
 	//‹æØ‚è‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½ê‡“Á‚É‰½‚à‘ã“ü‚³‚ê‚È‚¢
+}
+
+//ƒGƒT‚ÌƒXƒRƒA‚ğó‚¯æ‚é‚±‚Æ‚ª‚Å‚«‚é
+int Food::GetPoint() {
+	int point = 0;
+	switch (type) { //©g‚Ìƒ^ƒCƒv‚É‰‚¶‚Ä“¾“_‚ğ•Ô‚·
+	case Type::food: point = 10; break;
+	case Type::big: point = 50; break;
+	case Type::cherry: point = 100; break;
+	case Type::strawberry: point = 300; break;
+	case Type::orange: point = 500; break;
+	case Type::apple: point = 700; break;
+	case Type::melon: point = 1000; break;
+	case Type::galaxian: point = 2000; break;
+	case Type::bell: point = 3000; break;
+	case Type::key: point = 5000; break;
+	}
+	return point;
 }

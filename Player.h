@@ -40,6 +40,7 @@ class Player {
 
 	int eatSE1;//エサ取った時の音
 	int eatSE2;//エサ取った時の音
+	int fruitSE;
 	int dieSE;//パックマンが死亡した時の音
 
 	//初期位置 x14+4(ワープトンネル分) y23

@@ -7,6 +7,7 @@ void SoundLoading() {
 	WorldVal::Set("startBGM", new int(LoadSoundMem("SE_BGM/PAC_2_StartMusic.wav")));//ゲームスタート時BGM
 	WorldVal::Set("eatSE1", new int(LoadSoundMem("SE_BGM/pac_eat_1.wav")));//エサを食べた音
 	WorldVal::Set("eatSE2", new int(LoadSoundMem("SE_BGM/pac_eat_2.wav")));//エサを食べた音
+	WorldVal::Set("fruitSE", new int(LoadSoundMem("PAC_10_Fruit.wav")));//フルーツターゲットを食べた音
 	WorldVal::Set("dieSE", new int(LoadSoundMem("SE_BGM/PAC_14_Return.wav")));//パックマンが死亡した時の音
 	WorldVal::Set("enemyMoveSE", new int(LoadSoundMem("SE_BGM/PAC_5_MonsterDefault.wav")));//敵が動く音
 	WorldVal::Set("spurtSE1", new int(LoadSoundMem("SE_BGM/PAC_6_Spurt1.wav")));//敵がスパートした時の音 124,125,122,123
