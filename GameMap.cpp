@@ -25,7 +25,6 @@ private:
 	State state; //実行のステータス保持
 	GameMap* caller; //呼び出し元、これを通じてGameMap内の様々な関数にアクセスできる、内部クラスなのでprivateな領域にも直接アクセスできる
 	StagingFunc func; //実行関数
-	SoundLoading se;//音関係
 	int count; //実行時間管理とかに
 	int i;
 	int startImage1;	//Player One画像用
@@ -33,15 +32,14 @@ private:
 	int clearImage1;	//クリア画像（白）
 	int clearImage2;	//クリア画像（青）
 	int gameOverImage;	//ゲームオーバー画像
+	int startBGM;       //ゲームスタート時の音
 
 public:
 	//引数にはこのクラスを使用するmapのアドレスを入れる
 	Staging(GameMap* set) :state(State::free), caller(set), func(nullptr), count(0), 
 		startImage1(*WorldVal::Get<int>("playerOneImage")), startImage2(*WorldVal::Get<int>("readyImage")),
 		clearImage1(*WorldVal::Get<int>("clearImage1")), clearImage2(*WorldVal::Get<int>("clearImage2")),
-		gameOverImage(*WorldVal::Get<int>("gameOverImage")){
-		//PlaySoundMem(se.seHandle[1], DX_PLAYTYPE_BACK, TRUE);
-	}
+		gameOverImage(*WorldVal::Get<int>("gameOverImage")),startBGM(*WorldVal::Get<int>("startBGM")){}
 
 	void Start() { //ゲーム開始時のREADY!等の演出、レベル1の時は音楽も流す
 		std::deque<EnemyAra*>* enemy = caller->parent->EditEnemy();
@@ -59,7 +57,7 @@ public:
 		int* start;
 		start = WorldVal::Get<int>("start");
 		if (*start<=0) {
-			PlaySoundMem(se.seHandle[1], DX_PLAYTYPE_BACK, TRUE);
+			PlaySoundMem(startBGM, DX_PLAYTYPE_BACK, TRUE);
 		}
 		if (*start >= 1 && count == 0) {
 			count = 121;
