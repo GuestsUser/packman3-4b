@@ -1,32 +1,31 @@
-#include "SoundLoading.h"
 #include "DxLib.h"
+#include "SoundLoading.h"
+#include "Worldval.h"
 
 //音読み込み
-SoundLoading::SoundLoading()
-{
-	seHandle[0] = LoadSoundMem("SE_BGM/PAC_1_Credit.wav");
-	seHandle[1] = LoadSoundMem("SE_BGM/PAC_2_StartMusic.wav");
-	seHandle[2] = LoadSoundMem("SE_BGM/PAC_3_Cookie.wav");
-	seHandle[3] = LoadSoundMem("SE_BGM/PAC_4_Extend.wav");
-	seHandle[4] = LoadSoundMem("SE_BGM/PAC_5_MonsterDefault.wav");
-	seHandle[5] = LoadSoundMem("SE_BGM/PAC_6_Spurt1.wav");
-	seHandle[6] = LoadSoundMem("SE_BGM/PAC_7_Spurt2.wav");
-	seHandle[7] = LoadSoundMem("SE_BGM/PAC_8_Spurt3.wav");
-	seHandle[8] = LoadSoundMem("SE_BGM/PAC_9_Spurt4.wav");
-	seHandle[9] = LoadSoundMem("SE_BGM/PAC_10_Fruit.wav");
-	seHandle[10] = LoadSoundMem("SE_BGM/PAC_11_MonsterIjike.wav");
-	seHandle[11] = LoadSoundMem("SE_BGM/PAC_12_Eat.wav");
-	seHandle[12] = LoadSoundMem("SE_BGM/PAC_13_Return.wav");
-	seHandle[13] = LoadSoundMem("SE_BGM/PAC_14_Return.wav");
-	seHandle[14] = LoadSoundMem("SE_BGM/PAC_15_CoffeBrake.wav");
+void SoundLoading() {
+	WorldVal::Set("startBGM", new int(LoadSoundMem("SE_BGM/PAC_2_StartMusic.wav")));//ゲームスタート時BGM
+	WorldVal::Set("eatSE1", new int(LoadSoundMem("SE_BGM/pac_eat_1.wav")));//エサを食べた音
+	WorldVal::Set("eatSE2", new int(LoadSoundMem("SE_BGM/pac_eat_2.wav")));//エサを食べた音
+	WorldVal::Set("dieSE", new int(LoadSoundMem("SE_BGM/PAC_14_Return.wav")));//パックマンが死亡した時の音
+	WorldVal::Set("enemyMoveSE", new int(LoadSoundMem("SE_BGM/PAC_5_MonsterDefault.wav")));//敵が動く音
+	WorldVal::Set("spurtSE1", new int(LoadSoundMem("SE_BGM/PAC_6_Spurt1.wav")));//敵がスパートした時の音 124,125,122,123
+	WorldVal::Set("spurtSE2", new int(LoadSoundMem("SE_BGM/PAC_7_Spurt2.wav")));//敵がスパートした時の音 64
+	WorldVal::Set("spurtSE3", new int(LoadSoundMem("SE_BGM/PAC_8_Spurt3.wav")));//敵がスパートした時の音 31,30
+	WorldVal::Set("spurtSE4", new int(LoadSoundMem("SE_BGM/PAC_9_Spurt4.wav")));//敵がスパートした時の音 16
 }
+
+
+
 //音削除
-SoundLoading::~SoundLoading()
-{
-	for (int i = 0; i < 15; i++)
-	{
-		DeleteSoundMem(seHandle[i]);
-	}
+void SoundDel() {
+	DeleteSoundMem(*WorldVal::Get<int>("startBGM"));
+	DeleteSoundMem(*WorldVal::Get<int>("eatSE1"));
+	DeleteSoundMem(*WorldVal::Get<int>("eatSE2"));
+	DeleteSoundMem(*WorldVal::Get<int>("dieSE"));
+	DeleteSoundMem(*WorldVal::Get<int>("enemyMoveSE"));
+	DeleteSoundMem(*WorldVal::Get<int>("spurtSE1"));
+	DeleteSoundMem(*WorldVal::Get<int>("spurtSE2"));
+	DeleteSoundMem(*WorldVal::Get<int>("spurtSE3"));
+	DeleteSoundMem(*WorldVal::Get<int>("spurtSE4"));
 }
-
-
