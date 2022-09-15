@@ -8,7 +8,7 @@ class PowerModeProcess {
 public:
 	enum class State { start, run, end, free }; //実行状況系ステート
 private:
-	int time; //実行残り時間
+	static int time; //実行残り時間
 
 	static State state; //現在の実行状況、1つのみ存在
 	Player* player; //プレイヤー参照
@@ -23,4 +23,6 @@ public:
 
 	static void PowerModeStart() { state = State::start; } //パワーエサ取得状態の起動
 	static State GetState() { return state; } //実行状況を返す、freeで通常、runでパワーエサ実行中
+
+	static int GetTimeLeft() { return time; } //現在の残り時間を取得する
 };

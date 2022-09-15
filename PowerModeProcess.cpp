@@ -5,8 +5,12 @@
 #include "ConstVal.h"
 
 PowerModeProcess::State PowerModeProcess::state = PowerModeProcess::State::free; //À‘Ì’è‹`
+int PowerModeProcess::time = 0;
 
-PowerModeProcess::PowerModeProcess(Player* setPlayer, std::deque<EnemyAra*>* setEnemy) :time(0),player(setPlayer),enemy(setEnemy) { state = State::free; } //ì¬–¢Àsó‘Ô‚É‰Šú‰»
+PowerModeProcess::PowerModeProcess(Player* setPlayer, std::deque<EnemyAra*>* setEnemy) :player(setPlayer),enemy(setEnemy) { //ì¬–¢Àsó‘Ô‚É‰Šú‰»
+	time = 0;
+	state = State::free;
+}
 
 void PowerModeProcess::Update() {
 	switch (state) {

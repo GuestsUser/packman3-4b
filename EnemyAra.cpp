@@ -5,6 +5,7 @@
 #include "Grid.h"
 #include "Worldval.h"
 #include "DebugUtility.h"
+#include "PowerModeProcess.h"
 #include <math.h>
 #include <deque>
 #include "MapLoading.h"
@@ -38,7 +39,6 @@ EnemyAra::EnemyAra() {
     targetPos_y = 0;
 
     count = 0;
-    ijkeCount = 360;
     warp = 0;   /*ワープ時のエネミーの移動速度*/
 
     speedCount = 0;
@@ -76,7 +76,7 @@ void EnemyAra::Draw(){ //敵と敵の目を表示
         int sub2 = (int)type * 2 + ((count / 12) % 2);
 
         if (state == State::cringe) {
-            ijkeCount--;
+            int ijkeCount = PowerModeProcess::GetTimeLeft();
             if (ijkeCount >= 2 * FPS) {
                 if (sub % 2 == 0) {
                     DrawRotaGraph3(x, y, 0, 0, X_RATE, Y_RATE, 0, enemyImage[16], TRUE, FALSE);
@@ -102,9 +102,6 @@ void EnemyAra::Draw(){ //敵と敵の目を表示
                         DrawRotaGraph3(x, y, 0, 0, X_RATE, Y_RATE, 0, enemyImage[19], TRUE, FALSE);
                     }
                 }
-            }
-            if (ijkeCount == 0) {
-                state = State::neutral;
             }
             return;
         }
