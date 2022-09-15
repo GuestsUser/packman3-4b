@@ -138,6 +138,7 @@ void EnemyAra::Move(int move) {
         else { SetStandbyModeTarget(); } //ターゲットマス(縄張りモード)
         if (reversOrder) { SetReversMove(); break; } //反転方向移動は移動先を決定するので以降の移動先決定処理を通る必要がないからbreak
         if (state == State::cringe) { SetCringeMove(); break; } //イジケ状態の場合も移動先決定なので終わったらbreak
+        if (state == State::damage) { SetWaitModeTarget(); }
 
         int minDistance = -1; //最短距離記録用、青敵等は長距離を示す可能性があるので初期値は-1とする
         int newDirection= ((int)enemyVec + 2) % 4; //新しい移動方向、取り敢えず反対方向に設定する事でどのマスも移動不能だった場合自動的に反対方向が設定されるという算段
@@ -172,7 +173,7 @@ void EnemyAra::Move(int move) {
 
 int EnemyAra::ChangeSpeed() { //スピードレベルによってスピードを変える
     int cringe = 10; //イジケ状態速
-    int damage = 32; //イジケ状態で食べられて巣に戻る状態速、仮の値
+    int damage = 28; //イジケ状態で食べられて巣に戻る状態速、仮の値
     int tunnel = 8; //ワープトンネル速
     int speed = Spurt(); //今回の動作速、とりあえず通常速
 

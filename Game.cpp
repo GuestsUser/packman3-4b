@@ -37,13 +37,14 @@ void Game::Update() {
 	Direction angle = player.GetDirection(); //プレイヤー動作角
 	int px = player.ClculatTileX(angle);
 	int py = player.ClculatTileY(angle);
-	for (int i = 0; i < enemy.size(); ++i) { 
+	for (int i = 0; i < enemy.size(); ++i) {
+		if (enemy[i]->GetState() == EnemyAra::State::damage) { continue; } //やられ状態なら当たり判定処理を取らない
 		int ex = enemy[i]->ClculatTileX();
 		int ey = enemy[i]->ClculatTileY();
 
 		if (px == ex && py == ey) {
-			state = State::miss;	/*Stateをミスに*/
-			break;
+			if (powerMode.GetState() == PowerModeProcess::State::run) { enemy[i]->SetState(EnemyAra::State::damage); break; } //パワーエサ有効なら接触した敵を倒す
+			else { state = State::miss; break; } /*Stateをミスに*/
 		}
 	}
 	if (*foodcount >= 244) {
@@ -57,6 +58,6 @@ void Game::Draw() {
 	map.Draw();
 	ui.UiDraw();
 	player.Draw();
-	for (int i = 0; i < enemy.size(); ++i) { enemy[i]->Draw(); }
+	for (int i = enemy.size() - 1; i >= 0; --i) { enemy[i]->Draw(); } //[0]に入ってるアカベイが優先表示されるよう逆順実行
 	DrawFormatString(50, 50, GetColor(255, 255, 255), "残機：%d", *life);
 }
