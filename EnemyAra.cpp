@@ -105,8 +105,9 @@ void EnemyAra::Draw(){ //敵と敵の目を表示
             }
             return;
         }
-
-        DrawRotaGraph3(x, y, 0, 0, X_RATE, Y_RATE, 0, enemyImage[sub], TRUE, FALSE);
+        if (state != State::damage) {
+            DrawRotaGraph3(x, y, 0, 0, X_RATE, Y_RATE, 0, enemyImage[sub], TRUE, FALSE);
+        }
         DrawRotaGraph3(x, y, 0, 0, X_RATE, Y_RATE, 0, enemyImage_eye[(int)enemyVec], TRUE, FALSE);
 
         //デバッグ表示
