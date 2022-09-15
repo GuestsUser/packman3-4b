@@ -1,14 +1,19 @@
+#include "DxLib.h"
 #include "PowerModeProcess.h"
 #include "EnemyAra.h"
 #include "Player.h"
 #include "Worldval.h"
 #include "ConstVal.h"
+#include <math.h>
 
 PowerModeProcess::State PowerModeProcess::state = PowerModeProcess::State::free; //実体定義
 int PowerModeProcess::time = 0;
+int PowerModeProcess::rawDrawTime = 120; //仮の値
+int PowerModeProcess::drawTime = rawDrawTime;
 
-PowerModeProcess::PowerModeProcess(Player* setPlayer, std::deque<EnemyAra*>* setEnemy) :player(setPlayer),enemy(setEnemy) { //作成時未実行状態に初期化
+PowerModeProcess::PowerModeProcess(Player* setPlayer, std::deque<EnemyAra*>* setEnemy) :player(setPlayer), enemy(setEnemy), combo(0), target(nullptr){ //作成時未実行状態に初期化
 	time = 0;
+	drawTime = 0;
 	state = State::free;
 }
 
@@ -18,6 +23,7 @@ void PowerModeProcess::Update() {
 		if (time <= 0) { //パワーモードが持続していた場合敵反転を実行しないif文
 			for (int i = 0; i < enemy->size(); ++i) { (*enemy)[i]->SetReversOrder(true); } //敵反転命令
 		}
+		combo = 0; //コンボの初期化
 		time = ClculatIniTime(); //新しい実行時間入れ
 		if (time <= 0) { return; } //新しい時間が0なら反転させて終わり
 
@@ -30,7 +36,9 @@ void PowerModeProcess::Update() {
 
 		break;
 	case PowerModeProcess::State::run:
-		--time;
+		if (drawTime > 0) { break; } //スコア表示中は実行停止
+		--time; //カウントダウン
+		
 		if (time <= 0) {
 			player->SetState(Player::State::neutral); //プレイヤーの状態を通常状態に変更
 			for (int i = 0; i < enemy->size(); ++i) {
@@ -45,6 +53,42 @@ void PowerModeProcess::Update() {
 	case PowerModeProcess::State::free:
 		break;
 	}
+}
+
+void PowerModeProcess::Draw() {
+	if (drawTime > 0) { //描写時間が0超過時のみ実行
+		if (drawTime == 1) { //次で終わりの場合終了処理を通る
+			//エネミー、プレイヤーの処理、表示の再開
+			for (int i = 0; i < enemy->size(); ++i) {
+				(*enemy)[i]->SetRunUpdate(true);
+				(*enemy)[i]->SetRunDraw(true);
+			}
+			player->SetRunUpdate(true);
+			player->SetRunDraw(true);
+			drawTime = 0;
+			return;
+		}
+		SetFontSize(18);
+		DrawFormatString(target->GetDrawX(), target->GetDrawY(), GetColor(0, 255, 255), "%d", ClculatScore()); //スコア表示
+		--drawTime;
+	}
+}
+
+void PowerModeProcess::Hit(EnemyAra* set) {
+	target = set; //スコア表示のターゲットを指定
+	drawTime = rawDrawTime; //残り表示時間の初期化
+	for (int i = 0; i < enemy->size(); ++i) {
+		(*enemy)[i]->SetRunUpdate(false); //処理の非実行
+		(*enemy)[i]->SetRunDraw(false); //非表示化
+	}
+	player->SetRunUpdate(false); //処理の非実行
+	player->SetRunDraw(false); //非表示化
+	target->SetState(EnemyAra::State::damage); //ターゲット敵をやられ状態に設定
+	++combo; //コンボ値を加算
+	*WorldVal::Get<int>("score") += ClculatScore(); //スコア加算
+
+	//ここにse鳴らしを入れる
+
 }
 
 int PowerModeProcess::ClculatIniTime() {
@@ -70,3 +114,5 @@ int PowerModeProcess::ClculatIniTime() {
 	default: return 0;
 	}
 }
+
+int PowerModeProcess::ClculatScore() { return 100 * pow(2, combo); }

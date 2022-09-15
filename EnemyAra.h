@@ -66,6 +66,9 @@ public:
     bool GetRunUpdate() { return isUpdate; }
     bool GetRunDraw() { return isDraw; }
 
+    int GetDrawX() const; //表示系関数に直接指定可能な値を返す
+    int GetDrawY() const; //上記のy版
+
     static void ModeChange(std::deque<EnemyAra*>* enemyList); //縄張り、追いかけモードのモードチェンジ用関数、シーン内で1
 
     virtual void SetAttackModeTarget() = 0; //追いかけモード中の狙いマス決定関数、オーバーライドして使う

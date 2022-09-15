@@ -43,7 +43,7 @@ void Game::Update() {
 		int ey = enemy[i]->ClculatTileY();
 
 		if (px == ex && py == ey) {
-			if (powerMode.GetState() == PowerModeProcess::State::run) { enemy[i]->SetState(EnemyAra::State::damage); break; } //パワーエサ有効なら接触した敵を倒す
+			if (powerMode.GetState() == PowerModeProcess::State::run) { powerMode.Hit(enemy[i]); break; } //パワーエサ有効ならパワーエサ実行クラスに接触を通知
 			else { state = State::miss; break; } /*Stateをミスに*/
 		}
 	}
@@ -58,6 +58,7 @@ void Game::Draw() {
 	map.Draw();
 	ui.UiDraw();
 	player.Draw();
+	powerMode.Draw();
 	for (int i = enemy.size() - 1; i >= 0; --i) { enemy[i]->Draw(); } //[0]に入ってるアカベイが優先表示されるよう逆順実行
 	DrawFormatString(50, 50, GetColor(255, 255, 255), "残機：%d", *life);
 }
