@@ -5,6 +5,7 @@
 #include "Grid.h"
 #include "Worldval.h"
 #include "DebugUtility.h"
+#include "PowerModeProcess.h"
 #include <math.h>
 #include <deque>
 #include "MapLoading.h"
@@ -38,7 +39,6 @@ EnemyAra::EnemyAra() {
     targetPos_y = 0;
 
     count = 0;
-    ijkeCount = 360;
     warp = 0;   /*ワープ時のエネミーの移動速度*/
 
     speedCount = 0;
@@ -76,7 +76,7 @@ void EnemyAra::Draw(){ //敵と敵の目を表示
         int sub2 = (int)type * 2 + ((count / 12) % 2);
 
         if (state == State::cringe) {
-            ijkeCount--;
+            int ijkeCount = PowerModeProcess::GetTimeLeft();
             if (ijkeCount >= 2 * FPS) {
                 if (sub % 2 == 0) {
                     DrawRotaGraph3(x, y, 0, 0, X_RATE, Y_RATE, 0, enemyImage[16], TRUE, FALSE);
@@ -102,9 +102,6 @@ void EnemyAra::Draw(){ //敵と敵の目を表示
                         DrawRotaGraph3(x, y, 0, 0, X_RATE, Y_RATE, 0, enemyImage[19], TRUE, FALSE);
                     }
                 }
-            }
-            if (ijkeCount == 0) {
-                state = State::neutral;
             }
             return;
         }
@@ -141,6 +138,7 @@ void EnemyAra::Move(int move) {
         else { SetStandbyModeTarget(); } //ターゲットマス(縄張りモード)
         if (reversOrder) { SetReversMove(); break; } //反転方向移動は移動先を決定するので以降の移動先決定処理を通る必要がないからbreak
         if (state == State::cringe) { SetCringeMove(); break; } //イジケ状態の場合も移動先決定なので終わったらbreak
+        if (state == State::damage) { SetWaitModeTarget(); }
 
         int minDistance = -1; //最短距離記録用、青敵等は長距離を示す可能性があるので初期値は-1とする
         int newDirection= ((int)enemyVec + 2) % 4; //新しい移動方向、取り敢えず反対方向に設定する事でどのマスも移動不能だった場合自動的に反対方向が設定されるという算段
@@ -175,7 +173,7 @@ void EnemyAra::Move(int move) {
 
 int EnemyAra::ChangeSpeed() { //スピードレベルによってスピードを変える
     int cringe = 10; //イジケ状態速
-    int damage = 32; //イジケ状態で食べられて巣に戻る状態速、仮の値
+    int damage = 28; //イジケ状態で食べられて巣に戻る状態速、仮の値
     int tunnel = 8; //ワープトンネル速
     int speed = Spurt(); //今回の動作速、とりあえず通常速
 
@@ -259,14 +257,18 @@ void EnemyAra::SetCringeMove() {
     std::deque<int> subList = std::deque<int>(); //移動可能な方向を保有する動的配列
     for (int i = 0; i < 4; i++){
         if (revers == i) { continue; } //今回のiが反対方向だった場合飛ばす
-        if (tile[currentTileX][currentTileY].ReadEnemy()[i] == Move::movable) { subList.push_back(i); } //移動可能なら持っておく
+        if (tile[currentTileX][currentTileY].ReadCringe()[i] == Move::movable) { subList.push_back(i); } //移動可能なら持っておく
     }
     if (subList.size() <= 0) { enemyVec = (Direction)revers; } //どの方向にも動けない場合、移動方向を反対に設定
-    else { enemyVec = (Direction)GetRand(subList[subList.size() - 1]); } //移動可能な方向からランダムに方向を取り出し、設定する
+    else { enemyVec = (Direction)subList[GetRand(subList.size() - 1)]; } //移動可能な方向からランダムに方向を取り出し、設定する
+    limitX = ClculatLimitX(enemyVec);
+    limitY = ClculatLimitY(enemyVec);
 }
 
 void EnemyAra::SetReversMove() { 
     enemyVec = (Direction)(((int)enemyVec + 2) % 4); //動作方向を反対に設定する
+    limitX = ClculatLimitX(enemyVec);
+    limitY = ClculatLimitY(enemyVec);
     reversOrder = false; //反転命令を実行したのでfalseにする
 }
 

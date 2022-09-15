@@ -2,6 +2,7 @@
 #include "CoffeeBreak.h"
 #include "GetKey.h"
 #include "Title.h"
+#include "Game.h"
 
 CoffeeBreak::CoffeeBreak() {
 	LoadDivGraph("Resource/image/monster.png", 20, 20, 1, 16, 16, monsterImage);
@@ -20,15 +21,9 @@ CoffeeBreak::~CoffeeBreak() {
 void CoffeeBreak::Update() {
 	count++;
 	if (count >= 660) {
-		SetNext(new Title());
+		SetNext(new Game());
 		StopSoundFile();
 	}
-	if (key->GetKeyState(B_KEY) == KEY_PUSH) { //Aボタン(緑ボタン)が押された瞬間
-		SetNext(new Title()); //ゲームシーンへ遷移
-		StopSoundFile();
-
-	}
-
 }
 
 void CoffeeBreak::Draw() {

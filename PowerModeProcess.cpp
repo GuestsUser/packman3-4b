@@ -5,8 +5,12 @@
 #include "ConstVal.h"
 
 PowerModeProcess::State PowerModeProcess::state = PowerModeProcess::State::free; //実体定義
+int PowerModeProcess::time = 0;
 
-PowerModeProcess::PowerModeProcess(Player* setPlayer, std::deque<EnemyAra*>* setEnemy) :time(0),player(setPlayer),enemy(setEnemy) { state = State::free; } //作成時未実行状態に初期化
+PowerModeProcess::PowerModeProcess(Player* setPlayer, std::deque<EnemyAra*>* setEnemy) :player(setPlayer),enemy(setEnemy) { //作成時未実行状態に初期化
+	time = 0;
+	state = State::free;
+}
 
 void PowerModeProcess::Update() {
 	switch (state) {
@@ -22,6 +26,7 @@ void PowerModeProcess::Update() {
 			EnemyAra::State enemyState = (*enemy)[i]->GetState();
 			if (enemyState == EnemyAra::State::neutral || enemyState == EnemyAra::State::wait) { (*enemy)[i]->SetState(EnemyAra::State::cringe); } //通常、待機状態の敵にのみイジケ状態を付与する
 		}
+		state = State::run; //実行中に変更
 
 		break;
 	case PowerModeProcess::State::run:
