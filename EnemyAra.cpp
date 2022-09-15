@@ -259,14 +259,18 @@ void EnemyAra::SetCringeMove() {
     std::deque<int> subList = std::deque<int>(); //移動可能な方向を保有する動的配列
     for (int i = 0; i < 4; i++){
         if (revers == i) { continue; } //今回のiが反対方向だった場合飛ばす
-        if (tile[currentTileX][currentTileY].ReadEnemy()[i] == Move::movable) { subList.push_back(i); } //移動可能なら持っておく
+        if (tile[currentTileX][currentTileY].ReadCringe()[i] == Move::movable) { subList.push_back(i); } //移動可能なら持っておく
     }
     if (subList.size() <= 0) { enemyVec = (Direction)revers; } //どの方向にも動けない場合、移動方向を反対に設定
-    else { enemyVec = (Direction)GetRand(subList[subList.size() - 1]); } //移動可能な方向からランダムに方向を取り出し、設定する
+    else { enemyVec = (Direction)subList[GetRand(subList.size() - 1)]; } //移動可能な方向からランダムに方向を取り出し、設定する
+    limitX = ClculatLimitX(enemyVec);
+    limitY = ClculatLimitY(enemyVec);
 }
 
 void EnemyAra::SetReversMove() { 
     enemyVec = (Direction)(((int)enemyVec + 2) % 4); //動作方向を反対に設定する
+    limitX = ClculatLimitX(enemyVec);
+    limitY = ClculatLimitY(enemyVec);
     reversOrder = false; //反転命令を実行したのでfalseにする
 }
 

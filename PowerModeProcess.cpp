@@ -22,6 +22,7 @@ void PowerModeProcess::Update() {
 			EnemyAra::State enemyState = (*enemy)[i]->GetState();
 			if (enemyState == EnemyAra::State::neutral || enemyState == EnemyAra::State::wait) { (*enemy)[i]->SetState(EnemyAra::State::cringe); } //通常、待機状態の敵にのみイジケ状態を付与する
 		}
+		state = State::run; //実行中に変更
 
 		break;
 	case PowerModeProcess::State::run:
