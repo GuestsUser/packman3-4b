@@ -6,12 +6,15 @@
 class Food;
 
 class Player {
+public:
+	enum class State { neutral, power }; //速度変化なんかに使う状態、neutralが通常状態、powerがパワーエサ状態
+private:
 	class Moving; //動作用内部クラス
+	State state; //状態、速度変化くらいにしか使わない
 
 	int* playerImg; //パックマン画像ハンドル
 	int* killImg; //死亡モーション
 	
-
 	bool isUpdate; //falseでupdate実行禁止
 	bool isDraw; //上記のdraw版
 	int posX, posY; //描写用座標、描写用座標はグリッド添え字から出した座標と速度によって動いたドットを加えた描写に必要な各種加工を行えばその位置に表示が可能な座標を入れている
@@ -69,6 +72,9 @@ public:
 	int ClculatTileX(Direction angle)const; //現在マスを返してくれる
 	int ClculatTileY(Direction angle)const; //上記のy版
 	Direction GetDirection()const; //現在移動方向を返す
+
+	void SetState(State set) { state = set; } //現在ステートを指定の物に変更
+	State GetState() { return state; } //現在ステートを取得
 
 	Move GetTileMovable(int x, int y, Direction get) const { return tile[x][y].ReadPlayer()[(int)get]; } //指定タイルの指定方向の移動可否を返す
 	void DieAnim();
