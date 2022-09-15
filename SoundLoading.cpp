@@ -14,6 +14,7 @@ void SoundLoading() {
 	WorldVal::Set("spurtSE2", new int(LoadSoundMem("SE_BGM/PAC_7_Spurt2.wav")));//敵がスパートした時の音 64
 	WorldVal::Set("spurtSE3", new int(LoadSoundMem("SE_BGM/PAC_8_Spurt3.wav")));//敵がスパートした時の音 31,30
 	WorldVal::Set("spurtSE4", new int(LoadSoundMem("SE_BGM/PAC_9_Spurt4.wav")));//敵がスパートした時の音 16
+	WorldVal::Set("extendSE", new int(LoadSoundMem("SE_BGM/PAC_4_Extend.wav")));//残機up音
 }
 
 
@@ -23,10 +24,12 @@ void SoundDel() {
 	DeleteSoundMem(*WorldVal::Get<int>("startBGM"));
 	DeleteSoundMem(*WorldVal::Get<int>("eatSE1"));
 	DeleteSoundMem(*WorldVal::Get<int>("eatSE2"));
+	DeleteSoundMem(*WorldVal::Get<int>("fruitSE"));
 	DeleteSoundMem(*WorldVal::Get<int>("dieSE"));
 	DeleteSoundMem(*WorldVal::Get<int>("enemyMoveSE"));
 	DeleteSoundMem(*WorldVal::Get<int>("spurtSE1"));
 	DeleteSoundMem(*WorldVal::Get<int>("spurtSE2"));
 	DeleteSoundMem(*WorldVal::Get<int>("spurtSE3"));
 	DeleteSoundMem(*WorldVal::Get<int>("spurtSE4"));
+	DeleteSoundMem(*WorldVal::Get<int>("extendSE"));
 }
