@@ -167,6 +167,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapLoading.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PowerModeProcess.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="ScoreLoading.cpp" />
     <ClCompile Include="SoundLoading.cpp" />
@@ -193,6 +194,7 @@
     <ClInclude Include="ImageLoading.h" />
     <ClInclude Include="MapLoading.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PowerModeProcess.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="ScoreLoading.h" />
