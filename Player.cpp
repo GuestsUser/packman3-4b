@@ -258,7 +258,12 @@ void Player::Draw() {
 
 		DrawFormatString(0, 10, GetColor(255, 255, 255), "%2d", motionIndex);
 		DrawCircle(SHIFT_X + (posX + ClculatCenterRadX(angle)) * X_RATE, SHIFT_Y + (posY+ ClculatCenterRadY(angle)) * Y_RATE,65 * X_RATE,GetColor(0,255,0),false);
-		DrawRotaGraph3(SHIFT_X + (posX - renderCenter + ClculatCenterRadX(angle)) * X_RATE, SHIFT_Y + (posY - renderCenter + ClculatCenterRadY(angle)) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, playerImg[motionIndex], true);
+		if ((*foodCountTotal) != 244) {
+			DrawRotaGraph3(SHIFT_X + (posX - renderCenter + ClculatCenterRadX(angle)) * X_RATE, SHIFT_Y + (posY - renderCenter + ClculatCenterRadY(angle)) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, playerImg[motionIndex], true);
+		}
+		else {
+			DrawRotaGraph3(SHIFT_X + (posX - renderCenter + ClculatCenterRadX(angle)) * X_RATE, SHIFT_Y + (posY - renderCenter + ClculatCenterRadY(angle)) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, playerImg[0], true);
+		}
 
 		DrawHitBox(ClculatTileX(angle), ClculatTileY(angle), GetColor(255, 189, 78)); //デバッグ表示
 	}
