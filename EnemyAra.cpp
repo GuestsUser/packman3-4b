@@ -34,6 +34,7 @@ EnemyAra::EnemyAra() {
     limitY = 0;
 
     enemyVec = Direction::left;
+    oldVec = enemyVec;
 
     targetPos_x = 0;
     targetPos_y = 0;
@@ -107,7 +108,7 @@ void EnemyAra::Draw(){ //敵と敵の目を表示
         }
 
         DrawRotaGraph3(x, y, 0, 0, X_RATE, Y_RATE, 0, enemyImage[sub], TRUE, FALSE);
-        DrawRotaGraph3(x, y, 0, 0, X_RATE, Y_RATE, 0, enemyImage_eye[(int)enemyVec], TRUE, FALSE);
+        DrawRotaGraph3(x, y, 0, 0, X_RATE, Y_RATE, 0, enemyImage_eye[(int)oldVec], TRUE, FALSE); //oldVecは基本enemyVevを追跡してるがスコア表示中は追跡を止められるから表示の指定に丁度いい
 
         //デバッグ表示
         DrawHitBox(ClculatTileX(), ClculatTileY(), GetColor(255, 255, 255));
@@ -125,30 +126,39 @@ void EnemyAra::Move(int move) {
     
     bool run = (int)((int)enemyVec / 2) == 0 ? raw <= limit : raw >= limit;
 
+    if (state == State::wait || state == State::damage) { reversOrder = false; } //待機状態、やられ状態なら反転は即時無効化
     while (run) { //マス移動があった場合(whileを使っているのは下記if文でbreakを用いたかったからでループの意図はない)
         warp = 0;
         if (enemyVec == Direction::left && ClculatTileX() - 1 < 0) { drawX = (AREA_X + WARP_AREA_X) * TILE - (center + 1); }
         if (enemyVec == Direction::right && ClculatTileX() + 1 >= AREA_X + WARP_AREA_X * 2) { drawX = -WARP_AREA_X * TILE + (center + 1);}
-        if (ClculatTileX()-1 < 9 && ClculatTileX() - 1 > 2 && ClculatTileY() ==14 ||ClculatTileX() +1 > 26 && ClculatTileX() + 1 < 33 && ClculatTileY() == 14) {warp = 1;}   /*ワープの通路に入れば移動速度が8になる*/
         
-        int currentTileX = ClculatTileX();
-        int currentTileY = ClculatTileY();
+        int tileX = ClculatTileX();
+        int tileY = ClculatTileY();
 
-        if (moveMode == MoveMode::attack) { SetAttackModeTarget(); } //ターゲットマスの設定(追いかけモードの時)
-        else { SetStandbyModeTarget(); } //ターゲットマス(縄張りモード)
+        if (tileX - 1 < 9 && tileX - 1 > 2 && tileY == 14 || tileX + 1 > 26 && tileX + 1 < 33 && tileY == 14) { warp = 1; }   /*ワープの通路に入れば移動速度が8になる*/
+        if ((tileX >= 14 && tileX <= 21) && (tileY >= 12 && tileY <= 16)) { warp = 1; } //巣の中にいる時もワープ速にする
+
         if (reversOrder) { SetReversMove(); break; } //反転方向移動は移動先を決定するので以降の移動先決定処理を通る必要がないからbreak
         if (state == State::cringe) { SetCringeMove(); break; } //イジケ状態の場合も移動先決定なので終わったらbreak
-        if (state == State::damage) { SetWaitModeTarget(); }
+        if (state == State::damage) { //やられ状態の場合ターゲットを巣の指定位置へ指定する処理
+            SetWaitModeTarget();
+            if (tileX == targetPos_x && tileY == targetPos_y) { state = State::neutral; } //指定位置に着いた場合、現在は直接neutralを指定しているが、waitからneutralへ移行するプログラムが出来ればwaitに変更予定
+        }
+        if (state == State::neutral) { //通常状態の場合動作モードに合わせたターゲット指定
+            if (moveMode == MoveMode::attack) { SetAttackModeTarget(); } //ターゲットマスの設定(追いかけモードの時)
+            else { SetStandbyModeTarget(); } //ターゲットマス(縄張りモード)
+        }
 
         int minDistance = -1; //最短距離記録用、青敵等は長距離を示す可能性があるので初期値は-1とする
         int newDirection= ((int)enemyVec + 2) % 4; //新しい移動方向、取り敢えず反対方向に設定する事でどのマスも移動不能だった場合自動的に反対方向が設定されるという算段
+        const ::Move* grid = ReadTile(tileX, tileY); //現在所属するマスの移動可能方向配列、現在ステートに応じた物
 
         for (int i = 0; i < 4; i++) {
             if (((int)enemyVec + 2) % 4 == i) { continue; } //今回のiが反対方向だった場合飛ばす
-            if (tile[currentTileX][currentTileY].ReadEnemy()[i] == Move::block) { continue; } //移動不可なら飛ばす
+            if (grid[i] == Move::block) { continue; } //移動不可なら飛ばす
 
-            int x = currentTileX + ClculatSubX((Direction)i); //ここであるposは現在のマス座標を指す
-            int y = currentTileY + ClculatSubY((Direction)i);
+            int x = tileX + ClculatSubX((Direction)i); //ここであるposは現在のマス座標を指す
+            int y = tileY + ClculatSubY((Direction)i);
             int distance = pow(double(targetPos_x) - double(x), 2) + pow(double(targetPos_y) - double(y), 2);
 
             if (minDistance > distance || minDistance < 0) { //目標マスとの最短距離を調べてenemyVecに最短方向のものを格納
@@ -159,6 +169,7 @@ void EnemyAra::Move(int move) {
         if ((int)enemyVec % 2 != newDirection % 2) { *edit = limit - (useY ? WARP_AREA_Y : WARP_AREA_X) * TILE - center; } //曲がる場合今までの軸がリミットを超えていた場合リミット内に納める処理
 
         enemyVec = (Direction)newDirection; //新しい方向に設定
+        if (!PowerModeProcess::GetIsPause()) { oldVec = enemyVec; } //スコア表示中だった場合旧方向の更新をしない
 
         limitX = ClculatLimitX(enemyVec);
         limitY = ClculatLimitY(enemyVec);
@@ -202,7 +213,7 @@ int EnemyAra::ChangeSpeed() { //スピードレベルによってスピードを変える
     while (true) { //break使いたいからループ、breakを用いる事で処理に優先度を設けることができる
         if (state == State::damage) { speed = damage; break; } //やられ状態ならその速度にする
         if (state == State::cringe) { speed = cringe; break; } //イジケ状態ならその速度にする
-        if (warp) { speed = tunnel; } //ワープトンネルエリア内なら指定速に
+        if (warp && state == State::neutral) { speed = tunnel; } //ワープトンネルエリア内なら指定速に、通常状態以外ならエリア内でも通常速
         break; //特に条件に当てはまらない場合通常速
 
     }
@@ -253,11 +264,12 @@ void EnemyAra::ModeChange(std::deque<EnemyAra*>* enemyList) { //攻撃状態、休憩状
 void EnemyAra::SetCringeMove() {
     int currentTileX = ClculatTileX();
     int currentTileY = ClculatTileY();
+    const ::Move* grid = ReadTile(currentTileX, currentTileY); //現在所属するマスの移動可能方向配列、現在ステートに応じた物
     int revers = ((int)enemyVec + 2) % 4; //進行方向の反対方向
     std::deque<int> subList = std::deque<int>(); //移動可能な方向を保有する動的配列
     for (int i = 0; i < 4; i++){
         if (revers == i) { continue; } //今回のiが反対方向だった場合飛ばす
-        if (tile[currentTileX][currentTileY].ReadCringe()[i] == Move::movable) { subList.push_back(i); } //移動可能なら持っておく
+        if (grid[i] == Move::movable) { subList.push_back(i); } //移動可能なら持っておく
     }
     if (subList.size() <= 0) { enemyVec = (Direction)revers; } //どの方向にも動けない場合、移動方向を反対に設定
     else { enemyVec = (Direction)subList[GetRand(subList.size() - 1)]; } //移動可能な方向からランダムに方向を取り出し、設定する
@@ -283,3 +295,12 @@ int EnemyAra::ClculatTileX() const { return (drawX + center) / TILE + WARP_AREA_
 int EnemyAra::ClculatTileY() const { return (drawY + center) / TILE + WARP_AREA_Y; }
 int EnemyAra::ClculatLimitX(Direction angle)const { return(ClculatTileX() + ClculatSubX(angle))* TILE + center; } //この位置に着いたら現在マスから移動可能方向を取得し方向転換する位置を返してくれる
 int EnemyAra::ClculatLimitY(Direction angle)const { return (ClculatTileY() + ClculatSubY(angle)) * TILE + center; } //上記のy版
+
+const ::Move* EnemyAra::ReadTile(int x, int y) {
+    switch (state) {
+    case EnemyAra::State::neutral: return tile[x][y].ReadEnemy();
+    case EnemyAra::State::cringe: return tile[x][y].ReadCringe();
+    case EnemyAra::State::damage: return tile[x][y].ReadDamage();
+    case EnemyAra::State::wait: return tile[x][y].ReadWait();
+    }
+}

@@ -78,6 +78,7 @@ void PowerModeProcess::Hit(EnemyAra* set) {
 	target = set; //スコア表示のターゲットを指定
 	drawTime = rawDrawTime; //残り表示時間の初期化
 	for (int i = 0; i < enemy->size(); ++i) {
+		if ((*enemy)[i]->GetState() == EnemyAra::State::damage) { continue; } //やられ状態の敵は止めない
 		(*enemy)[i]->SetRunUpdate(false); //処理の非実行
 		(*enemy)[i]->SetRunDraw(false); //非表示化
 	}

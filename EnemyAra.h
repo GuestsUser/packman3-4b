@@ -38,6 +38,7 @@ private:
     int* enemyImage_eye; //enemyの目の画像格納用変数
 
     Direction enemyVec; //敵の移動方向変数
+    Direction oldVec; //やられ状態敵の目の方向固定用
     Type type; //敵の種類記憶
     Grid** tile; //マップタイル配列
 
@@ -54,6 +55,8 @@ private:
     int ClculatLocalY()const; //上記のy版
     int ClculatLimitX(Direction angle)const; //この位置に着いたら現在マスから移動可能方向を取得し方向転換する位置を返してくれる
     int ClculatLimitY(Direction angle)const; //上記のy版
+
+    const ::Move* ReadTile(int x, int y); //現在stateに応じて[x][y]位置の移動可能方向配列を返す
 
 public:
     EnemyAra();
