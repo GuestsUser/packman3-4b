@@ -15,6 +15,7 @@ void SoundLoading() {
 	WorldVal::Set("spurtSE3", new int(LoadSoundMem("SE_BGM/PAC_8_Spurt3.wav")));//敵がスパートした時の音 31,30
 	WorldVal::Set("spurtSE4", new int(LoadSoundMem("SE_BGM/PAC_9_Spurt4.wav")));//敵がスパートした時の音 16
 	WorldVal::Set("extendSE", new int(LoadSoundMem("SE_BGM/PAC_4_Extend.wav")));//残機up音
+	WorldVal::Set("eatSE3", new int(LoadSoundMem("SE_BGM/PAC_12_Eat.wav")));//敵を食べた音
 }
 
 

@@ -22,6 +22,8 @@ private:
 
 	int ClculatIniTime(); //現在ステージから実行時間を返す関数
 	int ClculatScore(); //現在のコンボ値から加算スコアを計算
+
+	int eatSE3;	//敵を食べた音
 public:
 	PowerModeProcess(Player* setPlayer, std::deque<EnemyAra*>* setEnemy);
 

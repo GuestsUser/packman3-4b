@@ -11,7 +11,7 @@ int PowerModeProcess::time = 0;
 int PowerModeProcess::rawDrawTime = 120; //仮の値
 int PowerModeProcess::drawTime = rawDrawTime;
 
-PowerModeProcess::PowerModeProcess(Player* setPlayer, std::deque<EnemyAra*>* setEnemy) :player(setPlayer), enemy(setEnemy), combo(0), target(nullptr){ //作成時未実行状態に初期化
+PowerModeProcess::PowerModeProcess(Player* setPlayer, std::deque<EnemyAra*>* setEnemy) :player(setPlayer), enemy(setEnemy), combo(0), target(nullptr), eatSE3(*WorldVal::Get<int>("eatSE3")) { //作成時未実行状態に初期化
 	time = 0;
 	drawTime = 0;
 	state = State::free;
@@ -88,6 +88,7 @@ void PowerModeProcess::Hit(EnemyAra* set) {
 	*WorldVal::Get<int>("score") += ClculatScore(); //スコア加算
 
 	//ここにse鳴らしを入れる
+	PlaySoundMem(eatSE3,DX_PLAYTYPE_BACK);
 
 }
 
