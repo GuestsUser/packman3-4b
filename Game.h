@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "EnemyAra.h"
 #include "PowerModeProcess.h"
+#include "Sound.h"
 #include <deque>
 
 //ゲームシーン、現在は空、動作確認をしたい時こちらのUpdate等に追記していってほしい
@@ -21,6 +22,7 @@ private:
 	GameUi ui;
 	PowerModeProcess powerMode; //パワーエサ取得時処理とかやるやつ
 	std::deque<EnemyAra*> enemy;
+	Sound sound;
 	static State state; //Foodに次レベルに移行する度Gameの内容を入れ替えたくなかったのでstatic変数にしてヘッダーさえインクルードしておけばいつでもアクセスできる
 	int count;
 	int number;
