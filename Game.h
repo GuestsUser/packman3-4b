@@ -24,6 +24,7 @@ private:
 	int number;
 	int StartTime;
 	bool push;
+	int current = 0;
 public:
 	Game();
 	void Update();

@@ -201,6 +201,9 @@ Player::Player() :isUpdate(true), isDraw(true), renderCenter(3), center(3), rad(
 Player::~Player() { delete move; }
 
 void Player::Update() {
+	int* activeFoodCount;
+	activeFoodCount = WorldVal::Get<int>("activeFoodCount");
+
 	if (isUpdate) { //bool変数に停止命令(false)が入れられている場合実行しない
 		move->Update();
 		std::string sub = std::to_string(ClculatTileX(move->GetDirection())) + "x" + std::to_string(ClculatTileY(move->GetDirection())); //エサ連想配列取得用添え字
@@ -210,11 +213,13 @@ void Player::Update() {
 			Food::Type type = itr->second->GetType(); //食べた物の種類
 			if (type == Food::Type::food || type == Food::Type::big) { //種類がエサ、パワーエサの場合食べた個数をカウントする
 				++foodCount;
+				++(*activeFoodCount);
 				++(*foodCountTotal);
 			}
 			if (*score >= *highScore) { *highScore = *score; } //ハイスコアより値が大きくなった場合ハイスコアの値を更新する
 		}
 	}
+	DrawFormatString(400, 50, GetColor(255, 255, 255), "エサ%d", *activeFoodCount);
 }
 
 void Player::Draw() {

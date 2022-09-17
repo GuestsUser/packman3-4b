@@ -113,7 +113,13 @@ void EnemyAra::Move(int move) {
 
         for (int i = 0; i < 4; i++) {
             if (((int)enemyVec + 2) % 4 == i) { continue; } //今回のiが反対方向だった場合飛ばす
-            if (tile[currentTileX][currentTileY].ReadEnemy()[i] == Move::block) { continue; } //移動不可なら飛ばす
+            
+            if (state == State::wait) {
+                if (tile[currentTileX][currentTileY].ReadWait()[i] == Move::block) { continue; } //移動不可なら飛ばす
+            }
+            else {
+                if (tile[currentTileX][currentTileY].ReadEnemy()[i] == Move::block) { continue; } //移動不可なら飛ばす
+            }
 
             int x = currentTileX + ClculatSubX((Direction)i); //ここであるposは現在のマス座標を指す
             int y = currentTileY + ClculatSubY((Direction)i);

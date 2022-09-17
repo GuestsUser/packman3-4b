@@ -88,6 +88,16 @@ public:
 	}
 
 	void Clear() { //ゲームクリアの時の演出
+		int* dieCount;
+		dieCount = WorldVal::Get<int>("dieCount");
+		*dieCount = 0;
+		int* activeFoodCount;
+		activeFoodCount = WorldVal::Get<int>("activeFoodCount");
+		*activeFoodCount = 0;
+		int* enemyActive;
+		enemyActive = WorldVal::Get<int>("enemyActive");
+		*enemyActive = 0;
+
 		if ((count / 12) % 2 == 0) {
 			//白画像
 			DrawRotaGraph3(SHIFT_X, SHIFT_Y, 0, 0, X_RATE, Y_RATE, 0, clearImage1, TRUE, FALSE);
@@ -107,8 +117,20 @@ public:
 	}
 
 	void Miss() {  //パックマンがミスした時の演出
+		int* dieCount;
+		dieCount = WorldVal::Get<int>("dieCount");
+		*dieCount += 1;
+
 		int* life;
 		life = WorldVal::Get<int>("Life");
+
+		int* enemyActive;
+		enemyActive = WorldVal::Get<int>("enemyActive");
+		*enemyActive = 0;
+
+		int* activeFoodCount;
+		activeFoodCount = WorldVal::Get<int>("activeFoodCount");
+		*activeFoodCount = 0;
 		(*caller->enemy)[0]->SetRunUpdate(false);	/*敵の動きを止める（仮）*/
 		(*caller->enemy)[1]->SetRunUpdate(false);	/*敵の動きを止める（仮）*/
 		(*caller->enemy)[2]->SetRunUpdate(false);	/*敵の動きを止める（仮）*/
@@ -146,6 +168,15 @@ public:
 	}
 		
 	void GameOver() {  //残機がなくなった時3の演出
+		int* dieCount;
+		dieCount = WorldVal::Get<int>("dieCount");
+		*dieCount = 0;
+		int* activeFoodCount;
+		activeFoodCount = WorldVal::Get<int>("activeFoodCount");
+		*activeFoodCount = 0;
+		int* enemyActive;
+		enemyActive = WorldVal::Get<int>("enemyActive");
+		*enemyActive = 0;
 		if (count <= 180) {
 
 			DrawRotaGraph3(SHIFT_X + 149, SHIFT_Y + 176, 0, 0, X_RATE, Y_RATE, 0, startImage1, TRUE, FALSE);
