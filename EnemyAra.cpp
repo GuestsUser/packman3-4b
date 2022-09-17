@@ -70,8 +70,8 @@ void EnemyAra::Update() {
 
 void EnemyAra::Draw(){ //敵と敵の目を表示
     if (isDraw) {
-        int x = SHIFT_X + (drawX - renderCenter) * X_RATE;
-        int y = SHIFT_Y + (drawY - renderCenter) * Y_RATE;
+        int x = GetDrawX();
+        int y = GetDrawY();
         int sub = (int)type * 2 + ((count / 6) % 2); //使用画像ナンバー
         int sub2 = (int)type * 2 + ((count / 12) % 2);
 
@@ -272,6 +272,9 @@ void EnemyAra::SetReversMove() {
     limitY = ClculatLimitY(enemyVec);
     reversOrder = false; //反転命令を実行したのでfalseにする
 }
+
+int EnemyAra::GetDrawX() const { return SHIFT_X + (drawX - renderCenter) * X_RATE; }
+int EnemyAra::GetDrawY() const { return SHIFT_Y + (drawY - renderCenter) * Y_RATE; }
 
 int EnemyAra::ClculatSubX(Direction angle) const { return std::sin((360 - 90 * (int)angle) * (PI / 180)); }
 int EnemyAra::ClculatSubY(Direction angle) const { return std::sin((360 - 90 * (int)angle + 270) * (PI / 180)); }
