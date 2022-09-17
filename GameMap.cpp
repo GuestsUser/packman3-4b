@@ -10,7 +10,6 @@
 #include "Title.h"
 #include "EnemyAra.h"
 #include "Player.h"
-#include "SoundLoading.h"
 #include <unordered_map>
 #include <string>
 #include <deque>
@@ -85,6 +84,7 @@ public:
 			for (i = 0; i < enemy->size(); ++i) {
 				(*enemy)[i]->SetRunUpdate(true);
 			}
+			caller->sound->SetSEUpdate(true);
 		}
 
 		count++;
@@ -195,7 +195,7 @@ public:
 	}
 };
 
-GameMap::GameMap(Game* set,Player* pacman, std::deque<EnemyAra*>* getEnemy) :staging(new Staging(this)), tile(WorldVal::Get<Grid*>("map")), map(*WorldVal::Get<int>("mapImage")),food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")), parent(set),player(pacman),enemy(getEnemy) {
+GameMap::GameMap(Game* set,Player* pacman, std::deque<EnemyAra*>* getEnemy,Sound* se) :staging(new Staging(this)), tile(WorldVal::Get<Grid*>("map")), map(*WorldVal::Get<int>("mapImage")),food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")), parent(set),player(pacman),enemy(getEnemy),sound(se) {
 	staging->AnimeStartUp(&Staging::Start);
 }
 GameMap::~GameMap() {

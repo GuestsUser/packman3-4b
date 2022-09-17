@@ -11,7 +11,7 @@
 
 Game::State Game::state = Game::State::start; //static•Ï”‚Ì’è‹`
 
-Game::Game() :player(), enemy(std::deque<EnemyAra*>()), map(GameMap(this, &player, &enemy)), powerMode(PowerModeProcess(&player, &enemy)) {
+Game::Game() :player(), enemy(std::deque<EnemyAra*>()), map(GameMap(this, &player, &enemy,&sound)), powerMode(PowerModeProcess(&player, &enemy)) {
 	state = State::start; //‰Šú‰»–ˆ‰ñstart‚ğ‘ã“ü‚·‚é
 	enemy.push_back(new EnemyRed(&player, &enemy)); //Ô‚Ì“G‚ğ’Ç‰Á‚·‚é
 	enemy.push_back(new EnemyPink(&player));
@@ -29,6 +29,8 @@ void Game::Update() {
 	ui.UiUpdate();
 	player.Update();
 	powerMode.Update();
+	sound.Update();
+	sound.spurtSound();
 	EnemyAra::ModeChange(&enemy);
 	for (int i = 0; i < enemy.size(); ++i) { enemy[i]->Update(); }
 	count++;
