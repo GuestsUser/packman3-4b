@@ -11,7 +11,7 @@
 
 Game::State Game::state = Game::State::start; //static変数の定義
 
-Game::Game() :player(), enemy(std::deque<EnemyAra*>()), map(GameMap(this, &player, &enemy,&sound)), powerMode(PowerModeProcess(&player, &enemy)) {
+Game::Game() :player(), enemy(std::deque<EnemyAra*>()), powerMode(PowerModeProcess(&player, &enemy)), sound(Sound(&powerMode,&player,&enemy)), map(GameMap(this, &player, &enemy, &sound)){
 	state = State::start; //初期化時毎回startを代入する
 	enemy.push_back(new EnemyRed(&player, &enemy)); //赤の敵を追加する
 	enemy.push_back(new EnemyPink(&player));
@@ -52,15 +52,19 @@ void Game::Update() {
 	if (*foodcount >= 244) {
 		state = State::clear;
 	}
+	/*DrawBox(0, 315, 200, 370, GetColor(255, 0, 0), TRUE);
+	DrawBox(400, 360, 500, 380, GetColor(255, 0, 0), TRUE);*/
 }
 
 void Game::Draw() {
 	int* life;
 	life = WorldVal::Get<int>("Life");
 	map.Draw();
-	ui.UiDraw();
 	player.Draw();
 	powerMode.Draw();
 	for (int i = enemy.size() - 1; i >= 0; --i) { enemy[i]->Draw(); } //[0]に入ってるアカベイが優先表示されるよう逆順実行
 	DrawFormatString(50, 50, GetColor(255, 255, 255), "残機：%d", *life);
+	DrawBox(100, 250, 192, 450, GetColor(0, 0, 0), TRUE);
+	DrawBox(640, 250, 732, 450, GetColor(0, 0, 0), TRUE);
+	ui.UiDraw();
 }

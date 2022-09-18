@@ -7,12 +7,21 @@
 
 
 GameUi::GameUi() {
+	round = WorldVal::Get<int>("nowStage");
+	score = WorldVal::Get<int>("score");
+	hiscore = WorldVal::Get<int>("highScore");
+	zanki = WorldVal::Get<int>("Life");
 	LoadDivGraph("Resource/image/item.png", 10, 10, 1, 16, 16, fruitImage);
 	LoadDivGraph("Resource/image/pacman.png", 12, 12, 1, 16, 16, pacmanImage);
 	hiscoreImage= LoadGraph("Resource/image/highScore.png");
 	scoreImage = LoadGraph("Resource/image/1up.png");
-	count = 0;
+	//count = 0;
 	scorecount = 0;
+	if (*round >= 8 && *round < 20) {
+		for (int i = 0; i < *round - 7;i++) {
+			std::rotate(roundfruit.begin(), roundfruit.begin() + 1, roundfruit.end());
+		}
+	}
 }
 
 GameUi::~GameUi() {
@@ -20,14 +29,8 @@ GameUi::~GameUi() {
 }
 
 void GameUi::UiUpdate() {
-	count++;
-	round = WorldVal::Get<int>("nowStage");
-	score = WorldVal::Get<int>("score");
-	hiscore = WorldVal::Get<int>("highScore");
-	zanki = WorldVal::Get<int>("Life");
-	if (*round >= 8 && *round < 20) {
-		std::rotate(roundfruit.begin(), roundfruit.begin() + 1, roundfruit.end());
-	}
+	//count++;
+	
 }
 
 void GameUi::UiDraw() {

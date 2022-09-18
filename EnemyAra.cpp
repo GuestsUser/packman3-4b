@@ -18,8 +18,9 @@ EnemyAra::MoveMode EnemyAra::moveMode = EnemyAra::MoveMode::standby; //実体定義
 EnemyAra::EnemyAra() {
     nowStage = *WorldVal::Get<int>("nowStage"); //現在ステージ数の取得
     timer = 0;
-    moveMode = MoveMode::wait; //最初は待機状態
+    moveMode = MoveMode::standby; //最初は待機状態
     state = State::neutral; //最初の見た目は通常状態
+    imageState = state;
 
     isUpdate = true;
     isDraw = true;
@@ -76,7 +77,7 @@ void EnemyAra::Draw(){ //敵と敵の目を表示
         int sub = (int)type * 2 + ((count / 6) % 2); //使用画像ナンバー
         int sub2 = (int)type * 2 + ((count / 12) % 2);
 
-        if (state == State::cringe) {
+        if (state == State::cringe || (state >= State::wait && imageState == State::cringe)) { //状態がイジケ、若しくは待機、巣から抜ける状態でも画像がcringeを指している場合イジケ用画像描写
             int ijkeCount = PowerModeProcess::GetTimeLeft();
             if (ijkeCount >= 2 * FPS) {
                 if (sub % 2 == 0) {
@@ -106,8 +107,9 @@ void EnemyAra::Draw(){ //敵と敵の目を表示
             }
             return;
         }
-
-        DrawRotaGraph3(x, y, 0, 0, X_RATE, Y_RATE, 0, enemyImage[sub], TRUE, FALSE);
+        if (state != State::damage) {
+            DrawRotaGraph3(x, y, 0, 0, X_RATE, Y_RATE, 0, enemyImage[sub], TRUE, FALSE);
+        }
         DrawRotaGraph3(x, y, 0, 0, X_RATE, Y_RATE, 0, enemyImage_eye[(int)oldVec], TRUE, FALSE); //oldVecは基本enemyVevを追跡してるがスコア表示中は追跡を止められるから表示の指定に丁度いい
 
         //デバッグ表示
@@ -143,7 +145,7 @@ void EnemyAra::Move(int move) {
             SetWaitModeTarget();
             if (tileX == targetPos_x && tileY == targetPos_y) { state = State::neutral; } //指定位置に着いた場合、現在は直接neutralを指定しているが、waitからneutralへ移行するプログラムが出来ればwaitに変更予定
         }
-        if (state == State::neutral) { //通常状態の場合動作モードに合わせたターゲット指定
+        if (state == State::neutral || state == State::ready) { //通常状態の場合動作モードに合わせたターゲット指定
             if (moveMode == MoveMode::attack) { SetAttackModeTarget(); } //ターゲットマスの設定(追いかけモードの時)
             else { SetStandbyModeTarget(); } //ターゲットマス(縄張りモード)
         }
@@ -296,10 +298,10 @@ int EnemyAra::ClculatLimitX(Direction angle)const { return(ClculatTileX() + Clcu
 int EnemyAra::ClculatLimitY(Direction angle)const { return (ClculatTileY() + ClculatSubY(angle)) * TILE + center; } //上記のy版
 
 const ::Move* EnemyAra::ReadTile(int x, int y) {
-    if (moveMode == MoveMode::wait) { tile[x][y].ReadWait(); } //動作モードが待機なら待機状態のマスを返す
     switch (state) {
-    case EnemyAra::State::neutral: return tile[x][y].ReadEnemy();
     case EnemyAra::State::cringe: return tile[x][y].ReadCringe();
     case EnemyAra::State::damage: return tile[x][y].ReadDamage();
+    case EnemyAra::State::wait: return tile[x][y].ReadWait();
+    default: return tile[x][y].ReadEnemy(); //通常、巣から抜ける状態の場合どちらも通常状態の配列を返す
     }
 }

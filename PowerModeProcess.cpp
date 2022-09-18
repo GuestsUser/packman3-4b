@@ -11,7 +11,7 @@ int PowerModeProcess::time = 0;
 int PowerModeProcess::rawDrawTime = 120; //仮の値
 int PowerModeProcess::drawTime = rawDrawTime;
 
-PowerModeProcess::PowerModeProcess(Player* setPlayer, std::deque<EnemyAra*>* setEnemy) :player(setPlayer), enemy(setEnemy), combo(0), target(nullptr){ //作成時未実行状態に初期化
+PowerModeProcess::PowerModeProcess(Player* setPlayer, std::deque<EnemyAra*>* setEnemy) :player(setPlayer), enemy(setEnemy), combo(0), target(nullptr), eatSE3(*WorldVal::Get<int>("eatSE3")) { //作成時未実行状態に初期化
 	time = 0;
 	drawTime = 0;
 	state = State::free;
@@ -30,7 +30,7 @@ void PowerModeProcess::Update() {
 		player->SetState(Player::State::power); //プレイヤーの状態をパワーエサ有効状態に変更
 		for (int i = 0; i < enemy->size(); ++i) { 
 			EnemyAra::State enemyState = (*enemy)[i]->GetState();
-			if (enemyState == EnemyAra::State::neutral || enemyState == EnemyAra::State::wait) { (*enemy)[i]->SetState(EnemyAra::State::cringe); } //通常、待機状態の敵にのみイジケ状態を付与する
+			if (enemyState != EnemyAra::State::damage) { (*enemy)[i]->SetState(EnemyAra::State::cringe); } //やられ状態以外ならイジケ状態を付与する
 		}
 		state = State::run; //実行中に変更
 
@@ -43,7 +43,7 @@ void PowerModeProcess::Update() {
 			player->SetState(Player::State::neutral); //プレイヤーの状態を通常状態に変更
 			for (int i = 0; i < enemy->size(); ++i) {
 				EnemyAra::State enemyState = (*enemy)[i]->GetState();
-				if (enemyState == EnemyAra::State::cringe) { (*enemy)[i]->SetState(EnemyAra::State::neutral); } //待機状態解除方法によってはバグを生む可能性あり
+				if (enemyState != EnemyAra::State::damage) { (*enemy)[i]->SetState(EnemyAra::State::neutral); } //やられ状態以外の敵は通常にする
 			}
 			state = State::free; //実行状況を解放状態に変更
 		}
@@ -89,6 +89,7 @@ void PowerModeProcess::Hit(EnemyAra* set) {
 	*WorldVal::Get<int>("score") += ClculatScore(); //スコア加算
 
 	//ここにse鳴らしを入れる
+	PlaySoundMem(eatSE3,DX_PLAYTYPE_BACK);
 
 }
 

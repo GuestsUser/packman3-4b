@@ -3,14 +3,15 @@
 #include <deque>
 class EnemyAra {
 public:
-    enum class MoveMode { standby, attack, wait, ready }; //縄張りモードか攻撃モードかの列挙型、待機動作、巣から出る動作も含むようになった
-    enum class State { neutral, cringe, damage }; //敵の状態、この状態に応じてマスの移動可能方向取得配列を変える他、移動先決定関数も変更する
+    enum class MoveMode { standby, attack }; //縄張りモードか攻撃モードかの列挙型
+    enum class State { neutral, cringe, damage, wait, ready }; //敵の状態、この状態に応じてマスの移動可能方向取得配列を変える他、移動先決定関数も変更する
     enum class Type { red, pink, blue, orange }; //敵の種類
 private:
     static int nowStage; //現在ステージ数
     static int timer; //縄張り、追いかけモードのモードチェンジ用タイマー
     static MoveMode moveMode; //縄張り、攻撃のモードチェンジは全敵共通なのでstatic
     State state; //状態は敵によりけりなので通常変数
+    State imageState; //stateがwaitやreadyの時、現在画像を保持する為のstate
 
     bool reversOrder; //trueで次の移動先を強制的に反転方向に設定する
     bool isUpdate; //falseでupdate実行禁止
@@ -82,8 +83,7 @@ public:
 
     void SetUp(Type setType, Direction setDirection, int setX, int setY); //継承先コンストラクタ内で必ず呼び出す必要あり、setTypeに敵種類、setDirectionに最初に向いてる方向、setX,Yに現在位置を座標で代入
     void SetReversOrder(bool set) { //trueで次の移動先を強制的に反転方向に設定する
-        if (state != State::damage) { reversOrder = set; }
-        
+        if (state == State::neutral || state == State::cringe) { reversOrder = set; } //通常とイジケ状態の場合だけ反転を受け付ける
     }
 
     Direction GetDirection() { return enemyVec; } //現在の移動方向を取得できる
@@ -96,9 +96,14 @@ public:
         targetPos_y = setY;
     }
 
-    void SetState(State set) { state = set; }
+    void SetState(State set) { 
+        if (state == State::wait || state == State::ready) { imageState = set; } //敵が待機、巣から抜ける状態の場合画像ステートを変更する
+        else { state = set; } //それ以外ならstateを変更する
+    }
+    void SetStateReinterpret(State set) { state = set; } //stateの状態に関係なく強制セット、使用は非奨励
     static void SetMoveMode(MoveMode set) { moveMode = set; }
 
     State GetState() { return state; }
+    State GetImageState() { return imageState; }
     static MoveMode GetMoveMode() { return moveMode; }
 };

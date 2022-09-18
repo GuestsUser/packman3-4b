@@ -32,13 +32,15 @@ private:
 	int clearImage2;	//クリア画像（青）
 	int gameOverImage;	//ゲームオーバー画像
 	int startBGM;       //ゲームスタート時の音
+	int extendSE;		//残機Up音
 
 public:
 	//引数にはこのクラスを使用するmapのアドレスを入れる
 	Staging(GameMap* set) :state(State::free), caller(set), func(nullptr), count(0), 
 		startImage1(*WorldVal::Get<int>("playerOneImage")), startImage2(*WorldVal::Get<int>("readyImage")),
 		clearImage1(*WorldVal::Get<int>("clearImage1")), clearImage2(*WorldVal::Get<int>("clearImage2")),
-		gameOverImage(*WorldVal::Get<int>("gameOverImage")),startBGM(*WorldVal::Get<int>("startBGM")){}
+		gameOverImage(*WorldVal::Get<int>("gameOverImage")),startBGM(*WorldVal::Get<int>("startBGM")),
+		extendSE(*WorldVal::Get<int>("extendSE")){}
 
 	void Start() { //ゲーム開始時のREADY!等の演出、レベル1の時は音楽も流す
 		std::deque<EnemyAra*>* enemy = caller->parent->EditEnemy();
@@ -121,6 +123,9 @@ public:
 	}
 
 	void Miss() {  //パックマンがミスした時の演出
+		caller->sound->StopSound();
+		caller->sound->isUpdate = false;
+		StopSoundMem(extendSE);
 		int* life;
 		life = WorldVal::Get<int>("Life");
 		(*caller->enemy)[0]->SetRunUpdate(false);	/*敵の動きを止める（仮）*/

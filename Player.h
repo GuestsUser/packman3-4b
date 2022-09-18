@@ -41,12 +41,11 @@ private:
 	int diecount;
 	int killnum;
 
-	int eatSE1;//エサ取った時の音
-	int eatSE2;//エサ取った時の音
-	int fruitSE;
-	int dieSE;//パックマンが死亡した時の音
-
-	//初期位置 x14+4(ワープトンネル分) y23
+	int eatSE1;		//エサ取った時の音
+	int eatSE2;		//エサ取った時の音
+	int fruitSE;	//フルーツを食べたときの音
+	int dieSE;		//パックマンが死亡した時の音
+	int extendSE;	//残機upしたときの音
 
 public:
 	Player();
