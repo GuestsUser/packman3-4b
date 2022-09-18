@@ -15,9 +15,9 @@ void SoundLoading() {
 	WorldVal::Set("squrtSE3", new int(LoadSoundMem("SE_BGM/PAC_8_Spurt3.wav")));//敵がスパートした時の音 31,30
 	WorldVal::Set("squrtSE4", new int(LoadSoundMem("SE_BGM/PAC_9_Spurt4.wav")));//敵がスパートした時の音 16
 	WorldVal::Set("extendSE", new int(LoadSoundMem("SE_BGM/PAC_4_Extend.wav")));//残機up音
-	WorldVal::Set("eatSE3", new int(LoadSoundMem("SE_BGM/PAC_12_Eat.wav")));//敵を食べた音
-	WorldVal::Set("damageSE",new int(LoadSoundMem("SE_BGM/PAC_13_Return.wav")));//敵がやられ状態になっている間の音
-	WorldVal::Set("cringeSE", new int(LoadSoundMem("SE_BGM/PAC_13_Return.wav")));//敵がいじけ状態になっているときの音
+	WorldVal::Set("eatSE3", new int(LoadSoundMem("SE_BGM/PAC_12_Eat1.wav")));//敵を食べた音
+	WorldVal::Set("damageSE",new int(LoadSoundMem("SE_BGM/PAC_13_Return1.wav")));//敵がやられ状態になっている間の音
+	WorldVal::Set("cringeSE", new int(LoadSoundMem("SE_BGM/PAC_11_MonsterIjike1.wav")));//敵がいじけ状態になっているときの音
 }
 
 

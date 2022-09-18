@@ -35,8 +35,9 @@ public:
 
 	void Update();
 	void spurtSound();
-	void ChangeSound();
-	void StopSound();
+	void ChangeSound();	//
+	void StopSound();	//敵のスパート音を止める時音を出すための関数
+	void SoundSe();		//敵がいじけ状態からやられ状態になった時音を出すための関数
 
 	void SetSEUpdate(bool set) { isUpdate = set; }
 	bool GetSEUpdate() { return isUpdate; }
