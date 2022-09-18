@@ -2,15 +2,16 @@
 #include "PowerModeProcess.h"
 #include "Player.h"
 #include "EnemyAra.h"
+#include <deque>
 
-class Sound
+class Sound 
 {
 public:
-	Sound();
+	Sound(PowerModeProcess* set, Player* pacman, std::deque<EnemyAra*>* getEnemy);
 
-	PowerModeProcess powerMode; //パワーエサ取得時処理とかやるやつ
-	Player player;
-	std::deque<EnemyAra*> enemy;
+	PowerModeProcess* powerMode;
+	Player* player;
+	std::deque<EnemyAra*>* enemy;
 
 	int count1;
 	int count2;
@@ -19,10 +20,14 @@ public:
 	int count5;
 
 	int enemyMoveSE;
-	int spurtSE1;
-	int spurtSE2;
-	int spurtSE3;
-	int spurtSE4;
+	int squrtSE1;
+	int squrtSE2;
+	int squrtSE3;
+	int squrtSE4;
+
+	int cringeSE;
+	int damageSE;
+	bool flg;
 
 	int* foodcount;
 
@@ -30,6 +35,8 @@ public:
 
 	void Update();
 	void spurtSound();
+	void ChangeSound();
+	void StopSound();
 
 	void SetSEUpdate(bool set) { isUpdate = set; }
 	bool GetSEUpdate() { return isUpdate; }

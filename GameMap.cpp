@@ -123,6 +123,8 @@ public:
 	}
 
 	void Miss() {  //パックマンがミスした時の演出
+		caller->sound->StopSound();
+		caller->sound->isUpdate = false;
 		StopSoundMem(extendSE);
 		int* life;
 		life = WorldVal::Get<int>("Life");
