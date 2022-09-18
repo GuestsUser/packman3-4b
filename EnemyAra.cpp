@@ -18,8 +18,8 @@ EnemyAra::MoveMode EnemyAra::moveMode = EnemyAra::MoveMode::standby; //実体定義
 EnemyAra::EnemyAra() {
     nowStage = *WorldVal::Get<int>("nowStage"); //現在ステージ数の取得
     timer = 0;
-    moveMode = MoveMode::standby; //最初は待機状態
-    state = State::wait;
+    moveMode = MoveMode::wait; //最初は待機状態
+    state = State::neutral; //最初の見た目は通常状態
 
     isUpdate = true;
     isDraw = true;
@@ -126,7 +126,6 @@ void EnemyAra::Move(int move) {
     
     bool run = (int)((int)enemyVec / 2) == 0 ? raw <= limit : raw >= limit;
 
-    if (state == State::wait || state == State::damage) { reversOrder = false; } //待機状態、やられ状態なら反転は即時無効化
     while (run) { //マス移動があった場合(whileを使っているのは下記if文でbreakを用いたかったからでループの意図はない)
         warp = 0;
         if (enemyVec == Direction::left && ClculatTileX() - 1 < 0) { drawX = (AREA_X + WARP_AREA_X) * TILE - (center + 1); }
@@ -297,10 +296,10 @@ int EnemyAra::ClculatLimitX(Direction angle)const { return(ClculatTileX() + Clcu
 int EnemyAra::ClculatLimitY(Direction angle)const { return (ClculatTileY() + ClculatSubY(angle)) * TILE + center; } //上記のy版
 
 const ::Move* EnemyAra::ReadTile(int x, int y) {
+    if (moveMode == MoveMode::wait) { tile[x][y].ReadWait(); } //動作モードが待機なら待機状態のマスを返す
     switch (state) {
     case EnemyAra::State::neutral: return tile[x][y].ReadEnemy();
     case EnemyAra::State::cringe: return tile[x][y].ReadCringe();
     case EnemyAra::State::damage: return tile[x][y].ReadDamage();
-    case EnemyAra::State::wait: return tile[x][y].ReadWait();
     }
 }

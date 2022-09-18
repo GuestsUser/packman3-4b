@@ -3,8 +3,8 @@
 #include <deque>
 class EnemyAra {
 public:
-    enum class MoveMode { standby, attack }; //縄張りモードか攻撃モードかの列挙型
-    enum class State { neutral, cringe, damage, wait }; //敵の状態、この状態に応じてマスの移動可能方向取得配列を変える他、移動先決定関数も変更する
+    enum class MoveMode { standby, attack, wait, ready }; //縄張りモードか攻撃モードかの列挙型、待機動作、巣から出る動作も含むようになった
+    enum class State { neutral, cringe, damage }; //敵の状態、この状態に応じてマスの移動可能方向取得配列を変える他、移動先決定関数も変更する
     enum class Type { red, pink, blue, orange }; //敵の種類
 private:
     static int nowStage; //現在ステージ数
@@ -81,7 +81,10 @@ public:
     virtual int Spurt() { return -1; } //通常以外の速度がある敵はこれをオーバーライドして動作をカスタムする、返り値-1はスパートを利用しない扱い
 
     void SetUp(Type setType, Direction setDirection, int setX, int setY); //継承先コンストラクタ内で必ず呼び出す必要あり、setTypeに敵種類、setDirectionに最初に向いてる方向、setX,Yに現在位置を座標で代入
-    void SetReversOrder(bool set) { reversOrder = set; } //trueで次の移動先を強制的に反転方向に設定する
+    void SetReversOrder(bool set) { //trueで次の移動先を強制的に反転方向に設定する
+        if (state != State::damage) { reversOrder = set; }
+        
+    }
 
     Direction GetDirection() { return enemyVec; } //現在の移動方向を取得できる
     int ClculatTileX()const; //現在マスを返してくれる
