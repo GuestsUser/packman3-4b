@@ -40,7 +40,7 @@ void Game::Update() {
 	int px = player.ClculatTileX(angle);
 	int py = player.ClculatTileY(angle);
 	for (int i = 0; i < enemy.size(); ++i) {
-		if (enemy[i]->GetState() != EnemyAra::State::neutral || enemy[i]->GetState() != EnemyAra::State::cringe) { continue; } //通常、イジケ状態以外なら判定は取らない
+		if (enemy[i]->GetState() != EnemyAra::State::neutral && enemy[i]->GetState() != EnemyAra::State::cringe) { continue; } //通常、イジケ状態以外なら判定は取らない
 		int ex = enemy[i]->ClculatTileX();
 		int ey = enemy[i]->ClculatTileY();
 
