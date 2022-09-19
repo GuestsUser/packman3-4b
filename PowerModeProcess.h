@@ -3,6 +3,7 @@
 
 class Player;
 class EnemyAra;
+class Sound;
 
 class PowerModeProcess {
 public:
@@ -19,13 +20,14 @@ private:
 	static State state; //現在の実行状況、1つのみ存在
 	Player* player; //プレイヤー参照
 	std::deque<EnemyAra*>* enemy; //エネミー参照
+	Sound* sound;
 
 	int ClculatIniTime(); //現在ステージから実行時間を返す関数
 	int ClculatScore(); //現在のコンボ値から加算スコアを計算
 
 	int eatSE3;	//敵を食べた音
 public:
-	PowerModeProcess(Player* setPlayer, std::deque<EnemyAra*>* setEnemy);
+	PowerModeProcess(Player* setPlayer, std::deque<EnemyAra*>* setEnemy,Sound* setSound);
 
 	void Update();
 	void Draw();

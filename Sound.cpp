@@ -144,3 +144,9 @@ void Sound::StopSound() {
 	StopSoundMem(squrtSE3);
 	StopSoundMem(squrtSE4);
 }
+
+void Sound::SoundSe() {
+	StopSoundMem(cringeSE);
+	StopSoundMem(damageSE);
+	PlaySoundMem(damageSE, DX_PLAYTYPE_LOOP);
+}

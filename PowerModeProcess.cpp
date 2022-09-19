@@ -2,6 +2,7 @@
 #include "PowerModeProcess.h"
 #include "EnemyAra.h"
 #include "Player.h"
+#include "Sound.h"
 #include "Worldval.h"
 #include "ConstVal.h"
 #include <math.h>
@@ -11,7 +12,7 @@ int PowerModeProcess::time = 0;
 int PowerModeProcess::rawDrawTime = 120; //âºÇÃíl
 int PowerModeProcess::drawTime = rawDrawTime;
 
-PowerModeProcess::PowerModeProcess(Player* setPlayer, std::deque<EnemyAra*>* setEnemy) :player(setPlayer), enemy(setEnemy), combo(0), target(nullptr), eatSE3(*WorldVal::Get<int>("eatSE3")) { //çÏê¨éûñ¢é¿çsèÛë‘Ç…èâä˙âª
+PowerModeProcess::PowerModeProcess(Player* setPlayer, std::deque<EnemyAra*>* setEnemy,Sound* setSound) :player(setPlayer), enemy(setEnemy), sound(setSound),combo(0), target(nullptr), eatSE3(*WorldVal::Get<int>("eatSE3")) { //çÏê¨éûñ¢é¿çsèÛë‘Ç…èâä˙âª
 	time = 0;
 	drawTime = 0;
 	state = State::free;
@@ -66,6 +67,7 @@ void PowerModeProcess::Draw() {
 			player->SetRunUpdate(true);
 			player->SetRunDraw(true);
 			drawTime = 0;
+			sound->SoundSe();
 			return;
 		}
 		SetFontSize(18);
