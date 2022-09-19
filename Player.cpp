@@ -10,6 +10,7 @@
 #include <string>
 #include <math.h>
 #include "DxLib.h"
+#include "EnemyAra.h"
 
 class Movable {
 public:
@@ -128,12 +129,16 @@ private:
 	Player* caller; //呼び出し元
 	Movable* x;
 	Movable* y;
-
+	EnemyAra* enemyara;
+	Food* food;
+	Player* player;
+	int eatspeed;
 	int safeZone; //マス内座標でsafeZone～TILE-safeZone内でないと新たに曲がる事ができない、その為の変数
 	int speed; //速度、現在は状態によらず一定な仮の物
 	int speedCount; //速度の蓄積状況記録、毎フレームこれにspeedを加算し、speedCount/MOVABLE_SPEEDの値分描写座標を動かす
 	Direction nowDirection; //現在の進行方向
 	Direction lastInput; //最後の入力方向保持
+	void ChangeSpeed();
 public:
 	Moving(Player* player) :caller(player), safeZone(2), speed(16), speedCount(0), nowDirection(Direction::left), lastInput(nowDirection), x(new XMove(&caller->posX, caller)),y(new YMove(&caller->posY, caller)) {
 		x->SetState(Movable::State::run);
@@ -193,10 +198,63 @@ public:
 
 		x->Update(move); //座標移動
 		y->Update(move);
+		ChangeSpeed();
 	}
 
 	Direction GetDirection() { return nowDirection; } //現在の進行方向の取得
 };
+
+void Player::Moving::ChangeSpeed() {
+	DrawFormatString(0, 150, GetColor(255, 0, 0), "%d", speed);
+	PowerModeProcess::State playerstate = PowerModeProcess::GetState();
+	Player::State playerState = caller->GetState();
+	std::string sub = std::to_string(caller->ClculatTileX(caller->move->GetDirection())) + "x" + std::to_string(caller->ClculatTileY(caller->move->GetDirection())); //エサ連想配列取得用添え字
+	auto itr = caller->food->find(sub); //エサ配列内に指定添え字をキーに持つエサがあるか調べる
+	if (itr != caller->food->end() && itr->second->GetEnable()) {//指定位置にエサが配置されている且つエサが食べられる状態である場合
+		Food::Type type = itr->second->GetType(); //食べた物の種類
+		if (type == Food::Type::food) { eatspeed = 1; }
+		if (type == Food::Type::big) { eatspeed = 2; }
+
+	}
+	eatspeed = 0;
+	switch (enemyara->ClculatSpeedLevel()) { //レベルに合わせた速度代
+	case 0:
+		if (playerState == Player::State::neutral) {
+			if (eatspeed == 0) { speed = 16; }//何も食べてない時
+			if (eatspeed == 1) { speed = 15; }//通常エサを食べた時
+			if (eatspeed == 2) { speed = 13; }//パワーエサを食べた時
+		}
+		if (playerState == Player::State::power) {//逆転してる時
+			if (eatspeed == 0) { speed = 18; }//何も食べてない時
+			if (eatspeed == 1) { speed = 17; }//通常エサを食べた時
+			if (eatspeed == 2) { speed = 15; }//パワーエサを食べた時
+		}
+		break;
+	case 1:
+		if (playerstate != PowerModeProcess::State::run) {
+			if (eatspeed == 0) { speed = 18; }//何も食べてない時
+			if (eatspeed == 1) { speed = 17; }//通常エサを食べた時
+			if (eatspeed == 2) { speed = 15; }//パワーエサを食べた時
+		}
+		if (playerstate == PowerModeProcess::State::run) {//逆転してる時
+			if (eatspeed == 0) { speed = 19; }//何も食べてない時
+			if (eatspeed == 1) { speed = 18; }//通常エサを食べた時
+			if (eatspeed == 2) { speed = 16; }//パワーエサを食べた時
+		}
+		break;
+	case 2:
+		speed = 20;
+		if (eatspeed == 0) { speed = 20; }//何も食べてない時
+		if (eatspeed == 1) { speed = 19; }//通常エサを食べた時
+		if (eatspeed == 2) { speed = 17; }//パワーエサを食べた時
+		break;
+	case 3:
+		if (eatspeed == 0) { speed = 18; }//何も食べてない時
+		if (eatspeed == 1) { speed = 17; }//通常エサを食べた時
+		if (eatspeed == 2) { speed = 15; }//パワーエサを食べた時
+		break;
+	}
+}
 
 Player::Player() :isUpdate(true), isDraw(true), renderCenter(3), center(3), rad(1), posX(13 * TILE + (TILE - 1)), posY(23 * TILE), move(new Moving(this)), state(State::neutral), foodCount(0),start(WorldVal::Get<int>("start")) ,life(WorldVal::Get<int>("Life")) , foodCountTotal(WorldVal::Get<int>("foodCountTotal")), playerImg(*WorldVal::Get<int[12]>("playerImage")), killImg(*WorldVal::Get<int[11]>("killImage")), food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")), tile(WorldVal::Get<Grid*>("map")), score(WorldVal::Get<int>("score")), highScore(WorldVal::Get<int>("highScore")), diecount(0), killnum(0),eatSE1(*WorldVal::Get<int>("eatSE1")), eatSE2(*WorldVal::Get<int>("eatSE2")), dieSE(*WorldVal::Get<int>("dieSE")), fruitSE(*WorldVal::Get<int>("fruitSE")), extendSE(*WorldVal::Get<int>("extendSE")) {}
 Player::~Player() { delete move; }
