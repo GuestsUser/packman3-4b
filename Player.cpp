@@ -14,8 +14,6 @@
 class Movable {
 public:
 	enum class State { start, run, curve, stop, free };
-
-private:
 private:
 	Player* player;
 	State state;
@@ -202,6 +200,9 @@ Player::Player() :isUpdate(true), isDraw(true), renderCenter(3), center(3), rad(
 Player::~Player() { delete move; }
 
 void Player::Update() {
+	int* activeFoodCount;
+	activeFoodCount = WorldVal::Get<int>("activeFoodCount");
+
 	if (isUpdate) { //bool変数に停止命令(false)が入れられている場合実行しない
 		move->Update();
 		int* life;
@@ -214,6 +215,7 @@ void Player::Update() {
 			
 			if (type == Food::Type::food || type == Food::Type::big) { //種類がエサ、パワーエサの場合食べた個数をカウントする
 				++foodCount;
+				++(*activeFoodCount);
 				++(*foodCountTotal);
 				if (foodCount % 2 == 0) {
 					PlaySoundMem(eatSE1, DX_PLAYTYPE_BACK);
@@ -233,6 +235,7 @@ void Player::Update() {
 			}
 		}
 	}
+	DrawFormatString(400, 50, GetColor(255, 255, 255), "エサ%d", *activeFoodCount);
 }
 
 void Player::Draw() {
