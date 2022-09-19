@@ -33,5 +33,5 @@ void Enemyblue::SetAttackModeTarget() {  //追いかけモードの時ターゲット指定
 		}
 	}
 }
-void Enemyblue::SetStandbyModeTarget() { TargetSet(WARP_AREA_X + 26, WARP_AREA_Y+31); } //縄張りモード時のターゲット指定
+void Enemyblue::SetStandbyModeTarget() { TargetSet(WARP_AREA_X + 27, WARP_AREA_Y+31); } //縄張りモード時のターゲット指定
 void Enemyblue::SetWaitModeTarget() { TargetSet(WARP_AREA_X + 12, WARP_AREA_Y + 14); } //巣の中の位置指定

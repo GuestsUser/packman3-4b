@@ -28,5 +28,5 @@ void EnemyOrange::SetAttackModeTarget() {  //追いかけモードの時ターゲット指定
 	}
 }
 
-void EnemyOrange::SetStandbyModeTarget() { TargetSet(WARP_AREA_X + 1, WARP_AREA_Y + 31); }	 //縄張りモード時のターゲット指定
+void EnemyOrange::SetStandbyModeTarget() { TargetSet(WARP_AREA_X , WARP_AREA_Y + 31); }	 //縄張りモード時のターゲット指定
 void EnemyOrange::SetWaitModeTarget() { TargetSet(WARP_AREA_X + 13, WARP_AREA_Y + 11); } //巣の中の位置指定
