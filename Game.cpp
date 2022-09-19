@@ -40,12 +40,12 @@ void Game::Update() {
 	int px = player.ClculatTileX(angle);
 	int py = player.ClculatTileY(angle);
 	for (int i = 0; i < enemy.size(); ++i) {
-		if (enemy[i]->GetState() == EnemyAra::State::damage) { continue; } //やられ状態なら当たり判定処理を取らない
+		if (enemy[i]->GetState() != EnemyAra::State::neutral || enemy[i]->GetState() != EnemyAra::State::cringe) { continue; } //通常、イジケ状態以外なら判定は取らない
 		int ex = enemy[i]->ClculatTileX();
 		int ey = enemy[i]->ClculatTileY();
 
 		if (px == ex && py == ey) {
-			if (powerMode.GetState() == PowerModeProcess::State::run) { powerMode.Hit(enemy[i]); break; } //パワーエサ有効ならパワーエサ実行クラスに接触を通知
+			if (enemy[i]->GetState()==EnemyAra::State::cringe) { powerMode.Hit(enemy[i]); break; } //イジケ状態ならパワーエサ実行クラスに接触を通知
 			else { state = State::miss; break; } /*Stateをミスに*/
 		}
 	}
