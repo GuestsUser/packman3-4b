@@ -58,6 +58,7 @@ void EnemyAra::SetUp(Type setType, Direction setDirection, int setX, int setY) {
     drawX = setX;
     drawY = setY;
     enemyVec = setDirection;
+    oldVec = enemyVec;
     limitX = ClculatLimitX(enemyVec);
     limitY = ClculatLimitY(enemyVec);
     SetStandbyModeTarget(); //待機状態の目標マスに設定
