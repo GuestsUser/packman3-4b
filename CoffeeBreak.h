@@ -40,6 +40,7 @@ private:
     int monsteranime2;
     int monstereyesanime;
     int kugi;
+    int* round;
     std::array<int, 4 > pacmananime{ 3, 4, 5, 4 };
     std::array<int, 4 > bigpacmananime{ 9, 10, 11, 10 };
 };

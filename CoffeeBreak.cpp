@@ -13,6 +13,8 @@ CoffeeBreak::CoffeeBreak() {
 	LoadDivGraph("Resource/image/pacman.png", 12, 12, 1, 16, 16, pacmanImage);
 
 	PlaySoundFile("SE_BGM/PAC_15_CoffeBrake.wav", DX_PLAYTYPE_BACK);
+	count = 0;
+	round = WorldVal::Get<int>("nowStage");
 
 }
 
@@ -22,16 +24,42 @@ CoffeeBreak::~CoffeeBreak() {
 
 void CoffeeBreak::Update() {
 	count++;
-	if (count >= 660) {
+	if (*round==2) {
+		if (count >= 660) {
+			SetNext(new Game());
+			StopSoundFile();
+		}
+	}
+	else if (*round == 5) {
+		if (count >= 510) {
+			SetNext(new Game());
+			StopSoundFile();
+		}
+	}
+	else if (*round == 9|| count >= 540 && *round == 13 || count >= 540 && *round == 17) {
+		if (count >= 540) {
+			SetNext(new Game());
+			StopSoundFile();
+		}
+	}
+	else {
 		SetNext(new Game());
 		StopSoundFile();
 	}
+	
 }
 
 void CoffeeBreak::Draw() {
-	Manga1();
-	//Manga2();
-	//Manga3();
+	if (*round == 2) {
+		Manga1();
+	}
+	if (*round == 5) {
+		Manga2();
+	}
+	if (*round == 9 || *round == 13 || *round == 17) {
+		Manga3();
+	}
+	
 	DrawBox(0, 0, 321, 721, GetColor(0, 0, 0), TRUE);
 	DrawBox(960, 0, 1281, 721, GetColor(0, 0, 0), TRUE);
 }

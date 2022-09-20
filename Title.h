@@ -21,4 +21,6 @@ private:
 
 	int* score;
 	int* hiscore;
+	int* round;  //ラウンド(確認用)
+	int roundcount;//ラウンドカウント(確認用)
 };

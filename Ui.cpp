@@ -22,6 +22,11 @@ GameUi::GameUi() {
 			std::rotate(roundfruit.begin(), roundfruit.begin() + 1, roundfruit.end());
 		}
 	}
+	if(*round>=20){
+		for (int i = 0; i < 12; i++) {
+			std::rotate(roundfruit.begin(), roundfruit.begin() + 1, roundfruit.end());
+	}
+	}
 }
 
 GameUi::~GameUi() {

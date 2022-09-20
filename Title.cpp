@@ -11,6 +11,7 @@ Title::Title() {
 	pos_y = 720;
 	titleImage = LoadGraph("Resource/image/Title.png");
 	push = false;
+	round = WorldVal::Get<int>("nowStage");
 }
 
 Title::~Title() {
@@ -29,6 +30,10 @@ void Title::Update() {
 	if (push == true && key->GetKeyState(Y_KEY) == KEY_PUSH) { //Yボタン(黄色ボタン)が押された瞬間
 		SetNext(new CoffeeBreak()); //ゲームシーンへ遷移
 	}
+	if (push == true && key->GetKeyState(X_KEY) == KEY_PUSH) { //Xボタン(黄色ボタン)が押された瞬間 ステージ数を増やす(コーヒーブレイク確認用）
+		*WorldVal::Get<int>("nowStage") += 1; //次ステージにカウントを進める
+		roundcount++;
+	}
 }
 
 void Title::Draw() {
@@ -38,6 +43,7 @@ void Title::Draw() {
 	//DrawString(530, pos_y + 380, "Push A Start!", GetColor(210, 210, 210));
 	DrawFormatString(350+pos_x, 100+pos_y, GetColor(255, 255, 255), "%7d", *score);
 	DrawFormatString(700+pos_x, 100+pos_y, GetColor(255, 255, 255), "%7d", *hiscore);
+	DrawFormatString(0 + pos_x, 0 + pos_y, GetColor(255, 255, 255), "%7d", roundcount);//roundcountが2,5,9,13,17の時コーヒーブレイクが流れる
 }
 
 void Title::Move() {
