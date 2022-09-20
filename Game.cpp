@@ -53,7 +53,7 @@ void Game::Update() {
 		if ((enemy)[0]->GetState() == EnemyAra::State::wait) { (enemy)[0]->SetStateReinterpret(EnemyAra::State::ready); }
 		if ((enemy)[1]->GetState() == EnemyAra::State::wait) { (enemy)[1]->SetStateReinterpret(EnemyAra::State::ready); }
 		if ((enemy)[3]->GetState() == EnemyAra::State::wait && *activeFoodCount == 30 || count >= 300 && *enemyActive == 0) { (enemy)[3]->SetStateReinterpret(EnemyAra::State::ready); *enemyActive = 1; count = 0; }/*エサを30個食べるorエサを最後に食べてあら5秒後に三体目の敵が出現*/
-		if ((enemy)[2]->GetState() == EnemyAra::State::wait && *activeFoodCount == 90 || count >= 300 && *enemyActive == 1) {(enemy)[2]->SetStateReinterpret(EnemyAra::State::ready); }
+		if ((enemy)[2]->GetState() == EnemyAra::State::wait && *activeFoodCount == 90 || count >= 300 && *enemyActive == 1) {(enemy)[2]->SetStateReinterpret(EnemyAra::State::ready); *enemyActive = 2; }
 	}
 	else if (*dieCount >= 1) {	/*1度死んだあと*/
 		if((enemy)[1]->GetState() == EnemyAra::State::wait){(enemy)[0]->SetStateReinterpret(EnemyAra::State::ready);}

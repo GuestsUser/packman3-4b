@@ -98,12 +98,21 @@ public:
 		(*caller->enemy)[2]->SetRunUpdate(false);	/*“G‚Ì“®‚«‚ğ~‚ß‚éi‰¼j*/
 		(*caller->enemy)[3]->SetRunUpdate(false);	/*“G‚Ì“®‚«‚ğ~‚ß‚éi‰¼j*/
 		caller->player->SetRunUpdate(false);	/*Player‚Ì“®‚«‚ğ~‚ß‚é*/
+		PowerModeProcess::SetRunUpdate(false); //ƒpƒ[ƒGƒTŠÔŒo‰ß‚Ì’â~
 
 		if (count >= 120) {
 			(*caller->enemy)[0]->SetRunDraw(false);/*“G‚Ì•`‰æ‚ğÁ‚·*/
 			(*caller->enemy)[1]->SetRunDraw(false);/*“G‚Ì•`‰æ‚ğÁ‚·*/
 			(*caller->enemy)[2]->SetRunDraw(false);/*“G‚Ì•`‰æ‚ğÁ‚·*/
 			(*caller->enemy)[3]->SetRunDraw(false);/*“G‚Ì•`‰æ‚ğÁ‚·*/
+
+			if ((count / 12) % 2 == 0) {
+				//”’‰æ‘œ
+				DrawRotaGraph3(SHIFT_X, SHIFT_Y, 0, 0, X_RATE, Y_RATE, 0, clearImage1, TRUE, FALSE);
+			}
+			else {
+				DrawRotaGraph3(SHIFT_X, SHIFT_Y, 0, 0, X_RATE, Y_RATE, 0, clearImage2, TRUE, FALSE);
+			}
 		}
 		if (count >= 120 && (count / 12) % 2 == 0) {
 			int* dieCount = WorldVal::Get<int>("dieCount");
@@ -114,13 +123,7 @@ public:
 			*enemyActive = 0;
 		}
 
-		if ((count / 12) % 2 == 0) {
-			//”’‰æ‘œ
-			DrawRotaGraph3(SHIFT_X, SHIFT_Y, 0, 0, X_RATE, Y_RATE, 0, clearImage1, TRUE, FALSE);
-		}
-		else {
-			DrawRotaGraph3(SHIFT_X, SHIFT_Y, 0, 0, X_RATE, Y_RATE, 0, clearImage2, TRUE, FALSE);
-		}
+		
 		//4‰ñ“_–Å‚µ‚½‚ç95i1‰ñ‚Ì“_–Å‚Å24countj
 		if (count >= 215) {
 			state = State::free;	//ƒAƒjƒó‘Ô‚ğI—¹Ï‚İ‚É‘‚«Š·‚¦‚é
