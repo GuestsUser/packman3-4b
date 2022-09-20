@@ -36,7 +36,7 @@ void CoffeeBreak::Update() {
 			StopSoundFile();
 		}
 	}
-	else if (*round == 9|| count >= 540 && *round == 13 || count >= 540 && *round == 17) {
+	else if (*round == 9|| *round == 13 || *round == 17) {
 		if (count >= 540) {
 			SetNext(new Game());
 			StopSoundFile();
