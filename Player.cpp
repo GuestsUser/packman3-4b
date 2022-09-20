@@ -32,6 +32,10 @@ public:
 
 	int GetMoveSub() { return -1 + 2 * (int)((int)direction / 2); } //移動方向に対応した符号返し、上、左はマイナス方向への移動、下、右がプラス方向への移動なので/2を利用した
 	void Moving(int speed) { *posEdit += speed * GetMoveSub(); }
+	void StopAdjust() { //停止処理の際座標が停止位置をオーバーする可能性があるので綺麗に停止位置に止める処理
+		int adjust = ((int)direction % 2 == 0 ? player->ClculatLocalY(direction) : player->ClculatLocalX(direction)) - 3; //中央位置の3からどれだけ離れているかを入れる
+		*posEdit -= adjust;
+	}
 	bool IsMovable(int localPos)const { //現在進行方向にマス内座標中心を越えた時、進行可能かどうか判定する
 		bool minus = localPos >= 0 && localPos <= 3; //判定範囲に入っていた場合true
 		bool plus = localPos >= 3 && localPos < 8;
@@ -45,7 +49,7 @@ public:
 	const int* ReadPos() const { return posEdit; }
 	const Player* const ReadPlayer() { return player; }
 
-
+	//Player* EditPlayer() { return player; }
 	void SetState(State set) { state = set; }
 	void SetDirection(Direction set) { direction = set; }
 
@@ -63,6 +67,7 @@ public:
 			break;
 		case Movable::State::run:
 			if (!IsMovable(ReadPlayer()->ClculatLocalX(GetDirection()))) {
+				StopAdjust();
 				SetState(State::free);
 				break;
 			}
@@ -70,6 +75,7 @@ public:
 			break;
 		case Movable::State::curve:
 			if (!IsCurveInRange(ReadPlayer()->ClculatLocalX(GetDirection()))) { 
+				//StopAdjust();
 				SetState(State::free);
 				break;
 			}
@@ -98,6 +104,7 @@ public:
 			break;
 		case Movable::State::run:
 			if (!IsMovable(ReadPlayer()->ClculatLocalY(GetDirection()))) {
+				StopAdjust();
 				SetState(State::free);
 				break;
 			}
@@ -105,6 +112,7 @@ public:
 			break;
 		case Movable::State::curve:
 			if (!IsCurveInRange(ReadPlayer()->ClculatLocalY(GetDirection()))) {
+				//StopAdjust();
 				SetState(State::free);
 				break;
 			}
