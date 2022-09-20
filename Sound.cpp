@@ -41,14 +41,16 @@ void Sound::Update()
 			}
 		}
 
-		for (int i = 0; i < enemy->size(); ++i) {
-			EnemyAra::State enemyState = (*enemy)[i]->GetState();
-			//if (enemyState == EnemyAra::State::neutral || enemyState == EnemyAra::State::wait) { (*enemy)[i]->SetState(EnemyAra::State::cringe); } //通常、待機状態の敵にのみイジケ状態を付与する
-			if (enemyState == EnemyAra::State::cringe) {
-				ChangeSound();
-				return;
-			}
-		}
+		if (powerMode->GetState() == PowerModeProcess::State::run) { ChangeSound(); return; } //パワーエサ有効中なら曲を変える
+
+		//for (int i = 0; i < enemy->size(); ++i) {
+		//	EnemyAra::State enemyState = (*enemy)[i]->GetState();
+		//	//if (enemyState == EnemyAra::State::neutral || enemyState == EnemyAra::State::wait) { (*enemy)[i]->SetState(EnemyAra::State::cringe); } //通常、待機状態の敵にのみイジケ状態を付与する
+		//	if (enemyState == EnemyAra::State::cringe) {
+		//		ChangeSound();
+		//		return;
+		//	}
+		//}
 		StopSoundMem(cringeSE);
 		flg = false;
 	}
@@ -62,7 +64,7 @@ void Sound::spurtSound()
 
 		if (*foodcount >= 116 && *foodcount <= 179)//116
 		{
-			if (count2 == 0)
+			if (count2 == 0 && !flg)
 			{
 				StopSoundMem(enemyMoveSE);
 				count2 = 1;
@@ -75,7 +77,7 @@ void Sound::spurtSound()
 		}
 		else if (*foodcount >= 180 && *foodcount <= 211)//180
 		{
-			if (count3 == 0)
+			if (count3 == 0 && !flg)
 			{
 				StopSoundMem(squrtSE1);
 				count3 = 1;
@@ -88,7 +90,7 @@ void Sound::spurtSound()
 		}
 		else if (*foodcount >= 212 && *foodcount <= 227)//212
 		{
-			if (count4 == 0)
+			if (count4 == 0 && !flg)
 			{
 				StopSoundMem(squrtSE2);
 				count4 = 1;
@@ -101,7 +103,7 @@ void Sound::spurtSound()
 		}
 		else if (*foodcount >= 228 && *foodcount <= 243)//228
 		{
-			if (count5 == 0)
+			if (count5 == 0 && !flg)
 			{
 				StopSoundMem(squrtSE3);
 				count5 = 1;
@@ -113,7 +115,11 @@ void Sound::spurtSound()
 			}
 		}
 		else if (*foodcount == 244) {
-			StopSoundMem(squrtSE3);
+			//クリアしたら、鳴る可能性のある音すべて止める
+			
+			StopSound();
+			StopSoundMem(cringeSE);
+			StopSoundMem(damageSE);
 		}
 	}
 }

@@ -37,4 +37,5 @@ public:
 	static State GetState() { return state; } //実行状況を返す、freeで通常、runでパワーエサ実行中
 
 	static int GetTimeLeft() { return time; } //現在の残り時間を取得する
+	static bool GetIsPause() { return drawTime > 0; } //ポーズ中のスコア表示が持続していればtrue
 };

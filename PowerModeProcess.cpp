@@ -31,7 +31,7 @@ void PowerModeProcess::Update() {
 		player->SetState(Player::State::power); //プレイヤーの状態をパワーエサ有効状態に変更
 		for (int i = 0; i < enemy->size(); ++i) { 
 			EnemyAra::State enemyState = (*enemy)[i]->GetState();
-			if (enemyState == EnemyAra::State::neutral || enemyState == EnemyAra::State::wait) { (*enemy)[i]->SetState(EnemyAra::State::cringe); } //通常、待機状態の敵にのみイジケ状態を付与する
+			if (enemyState != EnemyAra::State::damage) { (*enemy)[i]->SetState(EnemyAra::State::cringe); } //やられ状態以外ならイジケ状態を付与する
 		}
 		state = State::run; //実行中に変更
 
@@ -44,7 +44,7 @@ void PowerModeProcess::Update() {
 			player->SetState(Player::State::neutral); //プレイヤーの状態を通常状態に変更
 			for (int i = 0; i < enemy->size(); ++i) {
 				EnemyAra::State enemyState = (*enemy)[i]->GetState();
-				if (enemyState == EnemyAra::State::cringe) { (*enemy)[i]->SetState(EnemyAra::State::neutral); } //待機状態解除方法によってはバグを生む可能性あり
+				if (enemyState != EnemyAra::State::damage) { (*enemy)[i]->SetState(EnemyAra::State::neutral); } //やられ状態以外の敵は通常にする
 			}
 			state = State::free; //実行状況を解放状態に変更
 		}
@@ -80,6 +80,7 @@ void PowerModeProcess::Hit(EnemyAra* set) {
 	target = set; //スコア表示のターゲットを指定
 	drawTime = rawDrawTime; //残り表示時間の初期化
 	for (int i = 0; i < enemy->size(); ++i) {
+		if ((*enemy)[i]->GetState() == EnemyAra::State::damage) { continue; } //やられ状態の敵は止めない
 		(*enemy)[i]->SetRunUpdate(false); //処理の非実行
 		(*enemy)[i]->SetRunDraw(false); //非表示化
 	}

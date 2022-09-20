@@ -4,13 +4,14 @@
 class EnemyAra {
 public:
     enum class MoveMode { standby, attack }; //縄張りモードか攻撃モードかの列挙型
-    enum class State { neutral, cringe, damage, wait }; //敵の状態、この状態に応じてマスの移動可能方向取得配列を変える他、移動先決定関数も変更する
+    enum class State { neutral, cringe, damage, wait, ready }; //敵の状態、この状態に応じてマスの移動可能方向取得配列を変える他、移動先決定関数も変更する
     enum class Type { red, pink, blue, orange }; //敵の種類
 private:
     static int nowStage; //現在ステージ数
     static int timer; //縄張り、追いかけモードのモードチェンジ用タイマー
     static MoveMode moveMode; //縄張り、攻撃のモードチェンジは全敵共通なのでstatic
     State state; //状態は敵によりけりなので通常変数
+    State imageState; //stateがwaitやreadyの時、現在画像を保持する為のstate
 
     bool reversOrder; //trueで次の移動先を強制的に反転方向に設定する
     bool isUpdate; //falseでupdate実行禁止
@@ -38,6 +39,7 @@ private:
     int* enemyImage_eye; //enemyの目の画像格納用変数
 
     Direction enemyVec; //敵の移動方向変数
+    Direction oldVec; //やられ状態敵の目の方向固定用
     Type type; //敵の種類記憶
     Grid** tile; //マップタイル配列
 
@@ -54,6 +56,8 @@ private:
     int ClculatLocalY()const; //上記のy版
     int ClculatLimitX(Direction angle)const; //この位置に着いたら現在マスから移動可能方向を取得し方向転換する位置を返してくれる
     int ClculatLimitY(Direction angle)const; //上記のy版
+
+    const ::Move* ReadTile(int x, int y); //現在stateに応じて[x][y]位置の移動可能方向配列を返す
 
 public:
     EnemyAra();
@@ -78,7 +82,9 @@ public:
     virtual int Spurt() { return -1; } //通常以外の速度がある敵はこれをオーバーライドして動作をカスタムする、返り値-1はスパートを利用しない扱い
 
     void SetUp(Type setType, Direction setDirection, int setX, int setY); //継承先コンストラクタ内で必ず呼び出す必要あり、setTypeに敵種類、setDirectionに最初に向いてる方向、setX,Yに現在位置を座標で代入
-    void SetReversOrder(bool set) { reversOrder = set; } //trueで次の移動先を強制的に反転方向に設定する
+    void SetReversOrder(bool set) { //trueで次の移動先を強制的に反転方向に設定する
+        if (state == State::neutral || state == State::cringe) { reversOrder = set; } //通常とイジケ状態の場合だけ反転を受け付ける
+    }
 
     Direction GetDirection() { return enemyVec; } //現在の移動方向を取得できる
     int ClculatTileX()const; //現在マスを返してくれる
@@ -90,9 +96,14 @@ public:
         targetPos_y = setY;
     }
 
-    void SetState(State set) { state = set; }
+    void SetState(State set) { 
+        if (state == State::wait || state == State::ready) { imageState = set; } //敵が待機、巣から抜ける状態の場合画像ステートを変更する
+        else { state = set; } //それ以外ならstateを変更する
+    }
+    void SetStateReinterpret(State set) { state = set; } //stateの状態に関係なく強制セット、使用は非奨励
     static void SetMoveMode(MoveMode set) { moveMode = set; }
 
     State GetState() { return state; }
+    State GetImageState() { return imageState; }
     static MoveMode GetMoveMode() { return moveMode; }
 };
