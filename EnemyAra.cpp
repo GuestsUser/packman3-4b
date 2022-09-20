@@ -22,7 +22,7 @@ EnemyAra::EnemyAra() {
     state = State::wait; //最初の見た目は通常状態
     imageState = State::neutral;
 
-    isUpdate = true;
+    isUpdate = false;
     isDraw = true;
 
     type = Type::red; //取り敢えずアカベイを代入

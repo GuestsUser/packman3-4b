@@ -137,7 +137,7 @@ public:
 
 	void Miss() {  //パックマンがミスした時の演出
 		caller->sound->StopSound();
-		//StopSoundMem(caller->sound->cringeSE);
+		StopSoundMem(caller->sound->cringeSE);
 		StopSoundMem(caller->sound->damageSE);
 		caller->sound->isUpdate = false;
 		StopSoundMem(extendSE);

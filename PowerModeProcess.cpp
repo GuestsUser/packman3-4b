@@ -29,7 +29,7 @@ void PowerModeProcess::Update() {
 		}
 		combo = 0; //コンボの初期化
 		time = ClculatIniTime(); //新しい実行時間入れ
-		if (time <= 0) { return; } //新しい時間が0なら反転させて終わり
+		if (time <= 0) { state=State::free; return; } //新しい時間が0なら反転させて終わり
 
 		player->SetState(Player::State::power); //プレイヤーの状態をパワーエサ有効状態に変更
 		for (int i = 0; i < enemy->size(); ++i) { 

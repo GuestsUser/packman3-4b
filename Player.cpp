@@ -262,7 +262,7 @@ void Player::Moving::ChangeSpeed() {
 	}
 }
 
-Player::Player() :isUpdate(true), isDraw(true), renderCenter(3), center(3), rad(1), posX(13 * TILE + (TILE - 1)), posY(23 * TILE), move(new Moving(this)), state(State::neutral), foodCount(0),start(WorldVal::Get<int>("start")) ,life(WorldVal::Get<int>("Life")) , foodCountTotal(WorldVal::Get<int>("foodCountTotal")), playerImg(*WorldVal::Get<int[12]>("playerImage")), killImg(*WorldVal::Get<int[11]>("killImage")), food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")), tile(WorldVal::Get<Grid*>("map")), score(WorldVal::Get<int>("score")), highScore(WorldVal::Get<int>("highScore")), diecount(0), killnum(0),eatSE1(*WorldVal::Get<int>("eatSE1")), eatSE2(*WorldVal::Get<int>("eatSE2")), dieSE(*WorldVal::Get<int>("dieSE")), fruitSE(*WorldVal::Get<int>("fruitSE")), extendSE(*WorldVal::Get<int>("extendSE")) {}
+Player::Player() :isUpdate(false), isDraw(true), renderCenter(3), center(3), rad(1), posX(13 * TILE + (TILE - 1)), posY(23 * TILE), move(new Moving(this)), state(State::neutral), foodCount(0),start(WorldVal::Get<int>("start")) ,life(WorldVal::Get<int>("Life")) , foodCountTotal(WorldVal::Get<int>("foodCountTotal")), playerImg(*WorldVal::Get<int[12]>("playerImage")), killImg(*WorldVal::Get<int[11]>("killImage")), food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")), tile(WorldVal::Get<Grid*>("map")), score(WorldVal::Get<int>("score")), highScore(WorldVal::Get<int>("highScore")), diecount(0), killnum(0),eatSE1(*WorldVal::Get<int>("eatSE1")), eatSE2(*WorldVal::Get<int>("eatSE2")), dieSE(*WorldVal::Get<int>("dieSE")), fruitSE(*WorldVal::Get<int>("fruitSE")), extendSE(*WorldVal::Get<int>("extendSE")) {}
 Player::~Player() { delete move; }
 
 void Player::Update() {
