@@ -105,7 +105,16 @@ public:
 			(*caller->enemy)[2]->SetRunDraw(false);/*“G‚Ì•`‰æ‚ğÁ‚·*/
 			(*caller->enemy)[3]->SetRunDraw(false);/*“G‚Ì•`‰æ‚ğÁ‚·*/
 		}
-		if (count>=120&&(count / 12) % 2 == 0) {
+		if (count >= 120 && (count / 12) % 2 == 0) {
+			int* dieCount = WorldVal::Get<int>("dieCount");
+			*dieCount = 0;
+			int* activeFoodCount = WorldVal::Get<int>("activeFoodCount");
+			*activeFoodCount = 0;
+			int* enemyActive = WorldVal::Get<int>("enemyActive");
+			*enemyActive = 0;
+		}
+
+		if ((count / 12) % 2 == 0) {
 			//”’‰æ‘œ
 			DrawRotaGraph3(SHIFT_X, SHIFT_Y, 0, 0, X_RATE, Y_RATE, 0, clearImage1, TRUE, FALSE);
 		}
@@ -129,8 +138,21 @@ public:
 		StopSoundMem(caller->sound->damageSE);
 		caller->sound->isUpdate = false;
 		StopSoundMem(extendSE);
+
+		int* dieCount;
+		dieCount = WorldVal::Get<int>("dieCount");
+		*dieCount += 1;
+
 		int* life;
 		life = WorldVal::Get<int>("Life");
+
+		int* enemyActive;
+		enemyActive = WorldVal::Get<int>("enemyActive");
+		*enemyActive = 0;
+
+		int* activeFoodCount;
+		activeFoodCount = WorldVal::Get<int>("activeFoodCount");
+		*activeFoodCount = 0;
 		(*caller->enemy)[0]->SetRunUpdate(false);	/*“G‚Ì“®‚«‚ğ~‚ß‚éi‰¼j*/
 		(*caller->enemy)[1]->SetRunUpdate(false);	/*“G‚Ì“®‚«‚ğ~‚ß‚éi‰¼j*/
 		(*caller->enemy)[2]->SetRunUpdate(false);	/*“G‚Ì“®‚«‚ğ~‚ß‚éi‰¼j*/
@@ -168,6 +190,15 @@ public:
 	}
 		
 	void GameOver() {  //c‹@‚ª‚È‚­‚È‚Á‚½3‚Ì‰‰o
+		int* dieCount;
+		dieCount = WorldVal::Get<int>("dieCount");
+		*dieCount = 0;
+		int* activeFoodCount;
+		activeFoodCount = WorldVal::Get<int>("activeFoodCount");
+		*activeFoodCount = 0;
+		int* enemyActive;
+		enemyActive = WorldVal::Get<int>("enemyActive");
+		*enemyActive = 0;
 		if (count <= 180) {
 
 			DrawRotaGraph3(SHIFT_X + 149, SHIFT_Y + 176, 0, 0, X_RATE, Y_RATE, 0, startImage1, TRUE, FALSE);

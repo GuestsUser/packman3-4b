@@ -20,7 +20,8 @@ Game::Game() :player(), enemy(std::deque<EnemyAra*>()), powerMode(PowerModeProce
 
 	push = false;
 	count = 0;
-	number = 0;
+	number = 0; 
+	
 }
 
 void Game::Update() {
@@ -32,8 +33,35 @@ void Game::Update() {
 	sound.Update();
 	//sound.spurtSound();
 	EnemyAra::ModeChange(&enemy);
+	int* dieCount;
+	dieCount = WorldVal::Get<int>("dieCount");
+	int* activeFoodCount;
+	activeFoodCount = WorldVal::Get<int>("activeFoodCount");
+	int* enemyActive;
+	enemyActive = WorldVal::Get<int>("enemyActive");
+	
+
+	if (*activeFoodCount > current) {
+		count = 0;
+		current++;
+	}
+	else {
+		count++;
+	}
+
+	if (*dieCount == 0) {
+		if ((enemy)[0]->GetState() == EnemyAra::State::wait) { (enemy)[0]->SetStateReinterpret(EnemyAra::State::ready); }
+		if ((enemy)[1]->GetState() == EnemyAra::State::wait) { (enemy)[1]->SetStateReinterpret(EnemyAra::State::ready); }
+		if ((enemy)[3]->GetState() == EnemyAra::State::wait && *activeFoodCount == 30 || count >= 300 && *enemyActive == 0) { (enemy)[3]->SetStateReinterpret(EnemyAra::State::ready); *enemyActive = 1; count = 0; }/*エサを30個食べるorエサを最後に食べてあら5秒後に三体目の敵が出現*/
+		if ((enemy)[2]->GetState() == EnemyAra::State::wait && *activeFoodCount == 90 || count >= 300 && *enemyActive == 1) {(enemy)[2]->SetStateReinterpret(EnemyAra::State::ready); }
+	}
+	else if (*dieCount >= 1) {	/*1度死んだあと*/
+		if((enemy)[1]->GetState() == EnemyAra::State::wait){(enemy)[0]->SetStateReinterpret(EnemyAra::State::ready);}
+		if((enemy)[1]->GetState() == EnemyAra::State::wait && *activeFoodCount == 7 || count >= 300 && *enemyActive == 0) { (enemy)[1]->SetStateReinterpret(EnemyAra::State::ready); count = 0; *enemyActive = 1; }
+		if((enemy)[3]->GetState() == EnemyAra::State::wait && *activeFoodCount == 17 || count >= 300 && *enemyActive == 1){ (enemy)[3]->SetStateReinterpret(EnemyAra::State::ready); count = 0; *enemyActive = 2;}
+		if((enemy)[2]->GetState() == EnemyAra::State::wait && *activeFoodCount == 32 || count >= 300 && *enemyActive == 2){ (enemy)[2]->SetStateReinterpret(EnemyAra::State::ready); count = 0; *enemyActive = 3;}
+	}
 	for (int i = 0; i < enemy.size(); ++i) { enemy[i]->Update(); }
-	count++;
 	
 	//テスト
 	Direction angle = player.GetDirection(); //プレイヤー動作角
@@ -59,6 +87,12 @@ void Game::Update() {
 void Game::Draw() {
 	int* life;
 	life = WorldVal::Get<int>("Life");
+	int* activeFoodCount;
+	activeFoodCount = WorldVal::Get<int>("activeFoodCount");
+	int* enemyActive;
+	enemyActive = WorldVal::Get<int>("enemyActive");
+	int* dieCount;
+	dieCount = WorldVal::Get<int>("dieCount");
 	map.Draw();
 	player.Draw();
 	powerMode.Draw();
@@ -67,4 +101,10 @@ void Game::Draw() {
 	DrawBox(100, 250, 192, 450, GetColor(0, 0, 0), TRUE);
 	DrawBox(640, 250, 732, 450, GetColor(0, 0, 0), TRUE);
 	ui.UiDraw();
+
+	DrawFormatString(600, 50, GetColor(255, 255, 255), "count%d", count);
+	DrawFormatString(900, 50, GetColor(255, 255, 255), "fc%d", *activeFoodCount);
+	DrawFormatString(900, 80, GetColor(255, 255, 255), "it%d", current);
+	DrawFormatString(900, 110, GetColor(255, 255, 255), "enemyActive%d", *enemyActive);
+	DrawFormatString(900, 140, GetColor(255, 255, 255), "dieCounr%d", *dieCount);
 }
