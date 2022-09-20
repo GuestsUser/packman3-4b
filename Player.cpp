@@ -260,7 +260,6 @@ Player::~Player() { delete move; }
 void Player::Update() {
 	int* activeFoodCount;
 	activeFoodCount = WorldVal::Get<int>("activeFoodCount");
-
 	if (isUpdate) { //bool変数に停止命令(false)が入れられている場合実行しない
 		move->Update();
 		int* life;
@@ -287,8 +286,10 @@ void Player::Update() {
 			}
 			if (type == Food::Type::big) { PowerModeProcess::PowerModeStart(); } //パワーエサの取得で逆転状態にする
 			if (*score >= *highScore) { *highScore = *score; } //ハイスコアより値が大きくなった場合ハイスコアの値を更新する
-			if (*score == EXTEND_QUOTA) {
-				*life += 1; 
+			if (*score - i >= EXTEND_QUOTA && limit < EXTEND_LIMIT) {/*scoreがEXTEND_LIMITより大きいかつ残機アップした回数がEXTEND_LIMITより少なかったら残機アップ*/
+				limit++;
+				*life += 1;
+				i += 10000;
 				PlaySoundMem(extendSE, DX_PLAYTYPE_BACK);
 			}
 		}
