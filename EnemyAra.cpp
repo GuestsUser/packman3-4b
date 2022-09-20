@@ -108,7 +108,7 @@ void EnemyAra::Draw(){ //敵と敵の目を表示
             }
             return;
         }
-        if (state != State::damage) {
+        if (state != State::damage && (!PowerModeProcess::GetIsPause())) {
             DrawRotaGraph3(x, y, 0, 0, X_RATE, Y_RATE, 0, enemyImage[sub], TRUE, FALSE);
         }
         DrawRotaGraph3(x, y, 0, 0, X_RATE, Y_RATE, 0, enemyImage_eye[(int)oldVec], TRUE, FALSE); //oldVecは基本enemyVevを追跡してるがスコア表示中は追跡を止められるから表示の指定に丁度いい
@@ -215,7 +215,7 @@ int EnemyAra::ChangeSpeed() { //スピードレベルによってスピードを変える
     while (true) { //break使いたいからループ、breakを用いる事で処理に優先度を設けることができる
         if (state == State::damage) { speed = damage; break; } //やられ状態ならその速度にする
         if (state == State::cringe) { speed = cringe; break; } //イジケ状態ならその速度にする
-        if (warp && state == State::neutral) { speed = tunnel; } //ワープトンネルエリア内なら指定速に、通常状態以外ならエリア内でも通常速
+        if (warp && state == State::neutral) { speed = tunnel; } //ワープトンネルエリア内なら指定速に、通常状態以外ならエリア内でも通常速、最終的にはreadyに変更すべき
         break; //特に条件に当てはまらない場合通常速
 
     }
