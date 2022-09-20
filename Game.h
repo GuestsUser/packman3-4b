@@ -29,6 +29,7 @@ private:
 	int StartTime;
 	bool push;
 	int* foodcount;
+	int current = 0;
 public:
 	Game();
 	void Update();
