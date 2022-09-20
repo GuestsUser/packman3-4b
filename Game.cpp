@@ -50,16 +50,16 @@ void Game::Update() {
 	}
 
 	if (*dieCount == 0) {
-		(enemy)[0]->SetState(EnemyAra::State::neutral);
-		(enemy)[1]->SetState(EnemyAra::State::neutral);
-		if (*activeFoodCount == 30 || count >= 300 && *enemyActive == 0) { (enemy)[3]->SetState(EnemyAra::State::neutral); *enemyActive = 1; count = 0; }/*エサを30個食べるorエサを最後に食べてあら5秒後に三体目の敵が出現*/
-		if (*activeFoodCount == 90 || count >= 300 && *enemyActive == 1) {(enemy)[2]->SetState(EnemyAra::State::neutral); }
+		if ((enemy)[0]->GetState() == EnemyAra::State::wait) { (enemy)[0]->SetStateReinterpret(EnemyAra::State::ready); }
+		if ((enemy)[1]->GetState() == EnemyAra::State::wait) { (enemy)[1]->SetStateReinterpret(EnemyAra::State::ready); }
+		if ((enemy)[3]->GetState() == EnemyAra::State::wait && *activeFoodCount == 30 || count >= 300 && *enemyActive == 0) { (enemy)[3]->SetStateReinterpret(EnemyAra::State::ready); *enemyActive = 1; count = 0; }/*エサを30個食べるorエサを最後に食べてあら5秒後に三体目の敵が出現*/
+		if ((enemy)[2]->GetState() == EnemyAra::State::wait && *activeFoodCount == 90 || count >= 300 && *enemyActive == 1) {(enemy)[2]->SetStateReinterpret(EnemyAra::State::ready); }
 	}
 	else if (*dieCount >= 1) {	/*1度死んだあと*/
-		(enemy)[0]->SetState(EnemyAra::State::neutral);
-		if (*activeFoodCount == 7 || count >= 300 && *enemyActive == 0) { (enemy)[1]->SetState(EnemyAra::State::neutral); count = 0; *enemyActive = 1; }
-		if(*activeFoodCount == 17 || count >= 300 && *enemyActive == 1){ (enemy)[3]->SetState(EnemyAra::State::neutral); count = 0; *enemyActive = 2;}
-		if(*activeFoodCount == 32 || count >= 300 && *enemyActive == 2){ (enemy)[2]->SetState(EnemyAra::State::neutral); count = 0; *enemyActive = 3;}
+		if((enemy)[1]->GetState() == EnemyAra::State::wait){(enemy)[0]->SetStateReinterpret(EnemyAra::State::ready);}
+		if((enemy)[1]->GetState() == EnemyAra::State::wait && *activeFoodCount == 7 || count >= 300 && *enemyActive == 0) { (enemy)[1]->SetStateReinterpret(EnemyAra::State::ready); count = 0; *enemyActive = 1; }
+		if((enemy)[3]->GetState() == EnemyAra::State::wait && *activeFoodCount == 17 || count >= 300 && *enemyActive == 1){ (enemy)[3]->SetStateReinterpret(EnemyAra::State::ready); count = 0; *enemyActive = 2;}
+		if((enemy)[2]->GetState() == EnemyAra::State::wait && *activeFoodCount == 32 || count >= 300 && *enemyActive == 2){ (enemy)[2]->SetStateReinterpret(EnemyAra::State::ready); count = 0; *enemyActive = 3;}
 	}
 	for (int i = 0; i < enemy.size(); ++i) { enemy[i]->Update(); }
 	
@@ -91,6 +91,8 @@ void Game::Draw() {
 	activeFoodCount = WorldVal::Get<int>("activeFoodCount");
 	int* enemyActive;
 	enemyActive = WorldVal::Get<int>("enemyActive");
+	int* dieCount;
+	dieCount = WorldVal::Get<int>("dieCount");
 	map.Draw();
 	player.Draw();
 	powerMode.Draw();
@@ -104,4 +106,5 @@ void Game::Draw() {
 	DrawFormatString(900, 50, GetColor(255, 255, 255), "fc%d", *activeFoodCount);
 	DrawFormatString(900, 80, GetColor(255, 255, 255), "it%d", current);
 	DrawFormatString(900, 110, GetColor(255, 255, 255), "enemyActive%d", *enemyActive);
+	DrawFormatString(900, 140, GetColor(255, 255, 255), "dieCounr%d", *dieCount);
 }

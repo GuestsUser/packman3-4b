@@ -19,8 +19,8 @@ EnemyAra::EnemyAra() {
     nowStage = *WorldVal::Get<int>("nowStage"); //現在ステージ数の取得
     timer = 0;
     moveMode = MoveMode::standby; //最初は待機状態
-    state = State::neutral; //最初の見た目は通常状態
-    imageState = state;
+    state = State::wait; //最初の見た目は通常状態
+    imageState = State::neutral;
 
     isUpdate = true;
     isDraw = true;
@@ -138,6 +138,7 @@ void EnemyAra::Move(int move) {
 
         if (tileX - 1 < 9 && tileX - 1 > 2 && tileY == 14 || tileX + 1 > 26 && tileX + 1 < 33 && tileY == 14) { warp = 1; }   /*ワープの通路に入れば移動速度が8になる*/
         if ((tileX >= 14 && tileX <= 21) && (tileY >= 12 && tileY <= 16)) { warp = 1; } //巣の中にいる時もワープ速にする
+        else if (state == State::ready) { state = imageState; }
 
         if (reversOrder) { SetReversMove(); break; } //反転方向移動は移動先を決定するので以降の移動先決定処理を通る必要がないからbreak
         if (state == State::cringe) { SetCringeMove(); break; } //イジケ状態の場合も移動先決定なので終わったらbreak
