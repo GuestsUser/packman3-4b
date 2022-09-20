@@ -11,14 +11,17 @@ PowerModeProcess::State PowerModeProcess::state = PowerModeProcess::State::free;
 int PowerModeProcess::time = 0;
 int PowerModeProcess::rawDrawTime = 120; //仮の値
 int PowerModeProcess::drawTime = rawDrawTime;
+bool PowerModeProcess::isUpdate = true;
 
 PowerModeProcess::PowerModeProcess(Player* setPlayer, std::deque<EnemyAra*>* setEnemy,Sound* setSound) :player(setPlayer), enemy(setEnemy), sound(setSound),combo(0), target(nullptr), eatSE3(*WorldVal::Get<int>("eatSE3")) { //作成時未実行状態に初期化
+	isUpdate = true;
 	time = 0;
 	drawTime = 0;
 	state = State::free;
 }
 
 void PowerModeProcess::Update() {
+	if (!isUpdate) { return; } //falseだった場合即抜け
 	switch (state) {
 	case PowerModeProcess::State::start:
 		if (time <= 0) { //パワーモードが持続していた場合敵反転を実行しないif文

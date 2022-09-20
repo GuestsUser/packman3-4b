@@ -145,8 +145,10 @@ void EnemyAra::Move(int move) {
         if (state == State::cringe) { SetCringeMove(); break; } //イジケ状態の場合も移動先決定なので終わったらbreak
         if (state == State::damage) { //やられ状態の場合ターゲットを巣の指定位置へ指定する処理
             SetWaitModeTarget();
-            if (tileX == targetPos_x && tileY == targetPos_y) { 
-                state = State::neutral; } //指定位置に着いた場合、現在は直接neutralを指定しているが、waitからneutralへ移行するプログラムが出来ればwaitに変更予定
+            if (tileX == targetPos_x && tileY == targetPos_y) { //指定位置に着いた場合
+                state = State::ready; //準備状態にする
+                imageState = State::neutral; //保持する画像状態を通常の物にする
+            }
         }
         if (state == State::neutral || state == State::ready) { //通常状態の場合動作モードに合わせたターゲット指定
             if (moveMode == MoveMode::attack) { SetAttackModeTarget(); } //ターゲットマスの設定(追いかけモードの時)
@@ -217,7 +219,7 @@ int EnemyAra::ChangeSpeed() { //スピードレベルによってスピードを変える
     while (true) { //break使いたいからループ、breakを用いる事で処理に優先度を設けることができる
         if (state == State::damage) { speed = damage; break; } //やられ状態ならその速度にする
         if (state == State::cringe) { speed = cringe; break; } //イジケ状態ならその速度にする
-        if (warp && state == State::neutral) { speed = tunnel; } //ワープトンネルエリア内なら指定速に、通常状態以外ならエリア内でも通常速、最終的にはreadyに変更すべき
+        if (warp && (state == State::neutral || state == State::ready)) { speed = tunnel; } //ワープトンネルエリア内なら指定速に、通常状態以外ならエリア内でも通常速、最終的にはreadyに変更すべき
         break; //特に条件に当てはまらない場合通常速
 
     }
