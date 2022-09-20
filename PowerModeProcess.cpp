@@ -70,6 +70,10 @@ void PowerModeProcess::Draw() {
 			sound->SoundSe();
 			return;
 		}
+		for (int i = 0; i < enemy->size(); ++i) {
+			if ((*enemy)[i]->GetState() != EnemyAra::State::damage) { (*enemy)[i]->SetRunUpdate(false); } //damageèÛë‘à»äOÇÃìGÇÃUpdateÇèÌÇ…é~ÇﬂÇÈÇÊÇ§Ç…Ç∑ÇÈéñÇ≈Ç‚ÇÁÇÍèÛë‘ÇÃìGÇ™ëÉÇ…íÖÇ¢ÇƒreadyèÛë‘Ç…Ç»Ç¡ÇΩÇÁUpdateÇí‚é~Ç∑ÇÈ
+			
+		}
 		SetFontSize(18);
 		DrawFormatString(target->GetDrawX(), target->GetDrawY(), GetColor(0, 255, 255), "%d", ClculatScore()); //ÉXÉRÉAï\é¶
 		--drawTime;
