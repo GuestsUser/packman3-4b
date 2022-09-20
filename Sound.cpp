@@ -24,6 +24,7 @@ Sound::Sound(PowerModeProcess* set, Player* pacman, std::deque<EnemyAra*>* getEn
 
 	isUpdate = false;
 	flg = false;
+	flg = false;
 }
 
 void Sound::Update()
@@ -41,6 +42,25 @@ void Sound::Update()
 			}
 		}
 
+		if (*foodcount == 244) {
+			//クリアしたら、鳴る可能性のある音すべて止める
+			StopSound();
+			StopSoundMem(cringeSE);
+			StopSoundMem(damageSE);
+			return;
+		}
+
+		for (int i = 0; i < enemy->size(); ++i) {
+			EnemyAra::State enemyState = (*enemy)[i]->GetState();
+			//if (enemyState == EnemyAra::State::neutral || enemyState == EnemyAra::State::wait) { (*enemy)[i]->SetState(EnemyAra::State::cringe); } //通常、待機状態の敵にのみイジケ状態を付与する
+			if (enemyState == EnemyAra::State::damage) {
+				ChangeSound2();
+				return;
+			}
+		}
+		StopSoundMem(damageSE);
+		flg2 = false;
+
 		if (powerMode->GetState() == PowerModeProcess::State::run) { ChangeSound(); return; } //パワーエサ有効中なら曲を変える
 
 		//for (int i = 0; i < enemy->size(); ++i) {
@@ -53,6 +73,8 @@ void Sound::Update()
 		//}
 		StopSoundMem(cringeSE);
 		flg = false;
+
+		spurtSound();
 	}
 }
 
@@ -114,13 +136,6 @@ void Sound::spurtSound()
 				count5 = 2;
 			}
 		}
-		else if (*foodcount == 244) {
-			//クリアしたら、鳴る可能性のある音すべて止める
-			
-			StopSound();
-			StopSoundMem(cringeSE);
-			StopSoundMem(damageSE);
-		}
 	}
 }
 
@@ -140,6 +155,24 @@ void Sound::ChangeSound() {
 	count4 = 0;
 	count5 = 0;
 }
+
+void Sound::ChangeSound2() {
+	if (flg2 == false && !PowerModeProcess::GetIsPause()) {
+		PlaySoundMem(damageSE, DX_PLAYTYPE_LOOP);
+		StopSoundMem(cringeSE);
+		flg2 = true;
+		flg = false;
+	}
+
+	StopSound();
+
+	count1 = 0;
+	count2 = 0;
+	count3 = 0;
+	count4 = 0;
+	count5 = 0;
+}
+
 
 void Sound::StopSound() {
 	StopSoundMem(enemyMoveSE);

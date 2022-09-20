@@ -143,7 +143,8 @@ void EnemyAra::Move(int move) {
         if (state == State::cringe) { SetCringeMove(); break; } //イジケ状態の場合も移動先決定なので終わったらbreak
         if (state == State::damage) { //やられ状態の場合ターゲットを巣の指定位置へ指定する処理
             SetWaitModeTarget();
-            if (tileX == targetPos_x && tileY == targetPos_y) { state = State::neutral; } //指定位置に着いた場合、現在は直接neutralを指定しているが、waitからneutralへ移行するプログラムが出来ればwaitに変更予定
+            if (tileX == targetPos_x && tileY == targetPos_y) { 
+                state = State::neutral; } //指定位置に着いた場合、現在は直接neutralを指定しているが、waitからneutralへ移行するプログラムが出来ればwaitに変更予定
         }
         if (state == State::neutral || state == State::ready) { //通常状態の場合動作モードに合わせたターゲット指定
             if (moveMode == MoveMode::attack) { SetAttackModeTarget(); } //ターゲットマスの設定(追いかけモードの時)

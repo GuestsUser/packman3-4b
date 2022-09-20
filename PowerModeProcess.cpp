@@ -67,7 +67,7 @@ void PowerModeProcess::Draw() {
 			player->SetRunUpdate(true);
 			player->SetRunDraw(true);
 			drawTime = 0;
-			sound->SoundSe();
+			//sound->SoundSe();
 			return;
 		}
 		SetFontSize(18);

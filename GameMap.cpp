@@ -92,6 +92,7 @@ public:
 	}
 
 	void Clear() { //ゲームクリアの時の演出
+		caller->sound->isUpdate = false;
 		(*caller->enemy)[0]->SetRunUpdate(false);	/*敵の動きを止める（仮）*/
 		(*caller->enemy)[1]->SetRunUpdate(false);	/*敵の動きを止める（仮）*/
 		(*caller->enemy)[2]->SetRunUpdate(false);	/*敵の動きを止める（仮）*/
@@ -124,6 +125,8 @@ public:
 
 	void Miss() {  //パックマンがミスした時の演出
 		caller->sound->StopSound();
+		//StopSoundMem(caller->sound->cringeSE);
+		StopSoundMem(caller->sound->damageSE);
 		caller->sound->isUpdate = false;
 		StopSoundMem(extendSE);
 		int* life;

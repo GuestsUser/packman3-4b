@@ -30,7 +30,7 @@ void Game::Update() {
 	player.Update();
 	powerMode.Update();
 	sound.Update();
-	sound.spurtSound();
+	//sound.spurtSound();
 	EnemyAra::ModeChange(&enemy);
 	for (int i = 0; i < enemy.size(); ++i) { enemy[i]->Update(); }
 	count++;
