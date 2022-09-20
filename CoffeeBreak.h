@@ -22,6 +22,9 @@ private:
     //“G‰æ‘œŠi”[—p•Ï”
     int monsterImage[20];
     int monstereyesImage[4];
+    int monsterImage2[4];
+    int monsterImage3[2];
+    int monsterImage3_2[2];
     //ƒpƒbƒNƒ}ƒ“‰æ‘œŠi”[—p•Ï”
     int pacmanImage[12];
 
@@ -34,6 +37,9 @@ private:
 
     int animecount;
     int monsteranime;
+    int monsteranime2;
+    int monstereyesanime;
+    int kugi;
     std::array<int, 4 > pacmananime{ 3, 4, 5, 4 };
     std::array<int, 4 > bigpacmananime{ 9, 10, 11, 10 };
 };
