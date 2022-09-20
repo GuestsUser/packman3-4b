@@ -138,15 +138,17 @@ private:
 	EnemyAra* enemyara;
 	Food* food;
 	Player* player;
-	int eatspeed;
 	int safeZone; //マス内座標でsafeZone～TILE-safeZone内でないと新たに曲がる事ができない、その為の変数
 	int speed; //速度、現在は状態によらず一定な仮の物
 	int speedCount; //速度の蓄積状況記録、毎フレームこれにspeedを加算し、speedCount/MOVABLE_SPEEDの値分描写座標を動かす
 	Direction nowDirection; //現在の進行方向
 	Direction lastInput; //最後の入力方向保持
+
+	int oldX, oldY; //旧xyマス座標
+
 	void ChangeSpeed();
 public:
-	Moving(Player* player) :caller(player), safeZone(2), speed(16), speedCount(0), nowDirection(Direction::left), lastInput(nowDirection), x(new XMove(&caller->posX, caller)),y(new YMove(&caller->posY, caller)) {
+	Moving(Player* player) :caller(player), oldX(0), oldY(0), safeZone(2), speed(16), speedCount(0), nowDirection(Direction::left), lastInput(nowDirection), x(new XMove(&caller->posX, caller)),y(new YMove(&caller->posY, caller)) {
 		x->SetState(Movable::State::run);
 		y->SetDirection(Direction::up);
 	}
@@ -212,17 +214,24 @@ public:
 
 void Player::Moving::ChangeSpeed() {
 	DrawFormatString(0, 150, GetColor(255, 0, 0), "%d", speed);
-	PowerModeProcess::State playerstate = PowerModeProcess::GetState();
+
+	int x = caller->ClculatTileX(caller->move->GetDirection());
+	int y = caller->ClculatTileY(caller->move->GetDirection());
+	if (oldX == x && oldY == y) { return; } //マス移動がなかった場合速度変更は無し
+	oldX = x; //新しい物に更新
+	oldY = y;
+
 	Player::State playerState = caller->GetState();
-	std::string sub = std::to_string(caller->ClculatTileX(caller->move->GetDirection())) + "x" + std::to_string(caller->ClculatTileY(caller->move->GetDirection())); //エサ連想配列取得用添え字
+	std::string sub = std::to_string(x) + "x" + std::to_string(y); //エサ連想配列取得用添え字
 	auto itr = caller->food->find(sub); //エサ配列内に指定添え字をキーに持つエサがあるか調べる
+	int eatspeed = 0;
 	if (itr != caller->food->end() && itr->second->GetEnable()) {//指定位置にエサが配置されている且つエサが食べられる状態である場合
 		Food::Type type = itr->second->GetType(); //食べた物の種類
 		if (type == Food::Type::food) { eatspeed = 1; }
 		if (type == Food::Type::big) { eatspeed = 2; }
 
 	}
-	eatspeed = 0;
+	
 	switch (enemyara->ClculatSpeedLevel()) { //レベルに合わせた速度代
 	case 0:
 		if (playerState == Player::State::neutral) {
@@ -237,19 +246,18 @@ void Player::Moving::ChangeSpeed() {
 		}
 		break;
 	case 1:
-		if (playerstate != PowerModeProcess::State::run) {
+		if (playerState == Player::State::neutral) {
 			if (eatspeed == 0) { speed = 18; }//何も食べてない時
 			if (eatspeed == 1) { speed = 17; }//通常エサを食べた時
 			if (eatspeed == 2) { speed = 15; }//パワーエサを食べた時
 		}
-		if (playerstate == PowerModeProcess::State::run) {//逆転してる時
+		if (playerState == Player::State::power) {//逆転してる時
 			if (eatspeed == 0) { speed = 19; }//何も食べてない時
 			if (eatspeed == 1) { speed = 18; }//通常エサを食べた時
 			if (eatspeed == 2) { speed = 16; }//パワーエサを食べた時
 		}
 		break;
 	case 2:
-		speed = 20;
 		if (eatspeed == 0) { speed = 20; }//何も食べてない時
 		if (eatspeed == 1) { speed = 19; }//通常エサを食べた時
 		if (eatspeed == 2) { speed = 17; }//パワーエサを食べた時
