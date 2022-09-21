@@ -84,6 +84,7 @@ public:
 			DrawRotaGraph3(SHIFT_X + 176, SHIFT_Y + 272, 0, 0, X_RATE, Y_RATE, 0, startImage2, TRUE, FALSE);
 		}
 		else {
+			EnemyAra::SetCountUpdate(true);
 			state = State::free; //アニメ状態を終了済みに書き換える
 			Game::SetSceneState(Game::State::run); //演出が終了した時間でゲームシーンの状態をゲーム中に変更する
 			caller->parent->EditPlayer()->SetRunUpdate(true);
@@ -105,7 +106,7 @@ public:
 		(*caller->enemy)[3]->SetRunUpdate(false);	/*敵の動きを止める（仮）*/
 		caller->player->SetRunUpdate(false);	/*Playerの動きを止める*/
 		PowerModeProcess::SetRunUpdate(false); //パワーエサ時間経過の停止
-
+		EnemyAra::SetCountUpdate(false);
 		if (count >= 120) {
 			(*caller->enemy)[0]->SetRunDraw(false);/*敵の描画を消す*/
 			(*caller->enemy)[1]->SetRunDraw(false);/*敵の描画を消す*/

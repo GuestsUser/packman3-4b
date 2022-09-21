@@ -12,10 +12,14 @@
 
 int EnemyAra::nowStage = 0;
 int EnemyAra::timer = 0;
+bool EnemyAra::isCount = false;
+int EnemyAra:: count = 0;
 EnemyAra::MoveMode EnemyAra::moveMode = EnemyAra::MoveMode::standby; //実体定義
 
 //初期化
 EnemyAra::EnemyAra() {
+    isCount = false;
+    count = 0;
     nowStage = *WorldVal::Get<int>("nowStage"); //現在ステージ数の取得
     timer = 0;
     moveMode = MoveMode::standby; //最初は待機状態
@@ -65,9 +69,13 @@ void EnemyAra::SetUp(Type setType, Direction setDirection, int setX, int setY) {
     SetStandbyModeTarget(); //待機状態の目標マスに設定
 }
 
+void EnemyAra::CountUpdate() {
+    if (isCount) { count++; }
+}
+
 void EnemyAra::Update() {
     if (isUpdate) {
-        if (!PowerModeProcess::GetIsPause()) { count++; } //時間経過
+        //if (!PowerModeProcess::GetIsPause()) { count++; } //時間経過
         Move(ChangeSpeed());
     }
 }

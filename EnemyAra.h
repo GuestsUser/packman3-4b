@@ -16,6 +16,7 @@ private:
     bool reversOrder; //trueで次の移動先を強制的に反転方向に設定する
     bool isUpdate; //falseでupdate実行禁止
     bool isDraw; //上記のdraw版
+    static bool isCount;/*falseでCount++禁止*/
 
      //アカベイのポジション変数
     int drawX; //描写用位置
@@ -33,7 +34,7 @@ private:
     int center;
     int renderCenter;
 
-    int count; //時間経過変数
+    static int count; //時間経過変数
     int warp;   //ワープ時スピード切り替え
 
     int* enemyImage; //enemy画像格納用変数
@@ -64,6 +65,7 @@ public:
     EnemyAra();
     void Draw();
     void Update();
+    static void CountUpdate();
     
     //Update、Drawの実行可否取得と設定用関数
     void SetRunUpdate(bool set) { isUpdate = set; }
@@ -109,4 +111,5 @@ public:
     State GetState() { return state; }
     State GetImageState() { return imageState; }
     static MoveMode GetMoveMode() { return moveMode; }
+    static void SetCountUpdate(bool set) { isCount = set; }
 };
