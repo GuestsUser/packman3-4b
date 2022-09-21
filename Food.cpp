@@ -88,7 +88,7 @@ void Food::Draw() { //*8などのマスサイズは何処かに定数で宣言しておきたい
 		num++;
 		SetFontSize(18);
 		if (num <= 120) {
-			DrawFormatString(SHIFT_X + (x * TILE - TILE / 2 - WARP_AREA_X * TILE) * X_RATE, SHIFT_Y + (y * TILE - WARP_AREA_Y * TILE) * Y_RATE, GetColor(255, 187, 255), "%d", GetPoint());
+			DrawFormatString(SHIFT_X + (x * TILE - TILE / 2 - WARP_AREA_X * TILE) * X_RATE + 10, SHIFT_Y + (y * TILE - WARP_AREA_Y * TILE) * Y_RATE, GetColor(255, 187, 255), "%d", GetPoint());
 		}
 		else {
 			fruitEnable = false;
