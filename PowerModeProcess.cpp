@@ -78,7 +78,7 @@ void PowerModeProcess::Draw() {
 			
 		}
 		SetFontSize(18);
-		DrawFormatString(target->GetDrawX(), target->GetDrawY(), GetColor(0, 255, 255), "%d", ClculatScore()); //スコア表示
+		DrawFormatString(SHIFT_X + (player->GetPosX() - 3) * X_RATE, SHIFT_Y + player->GetPosY() * Y_RATE, GetColor(0, 255, 255), "%d", ClculatScore()); //スコア表示
 		--drawTime;
 	}
 }
