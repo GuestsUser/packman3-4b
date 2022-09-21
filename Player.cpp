@@ -213,7 +213,7 @@ public:
 };
 
 void Player::Moving::ChangeSpeed() {
-	DrawFormatString(0, 150, GetColor(255, 0, 0), "%d", speed);
+	//DrawFormatString(0, 150, GetColor(255, 0, 0), "%d", speed);
 
 	int x = caller->ClculatTileX(caller->move->GetDirection());
 	int y = caller->ClculatTileY(caller->move->GetDirection());
@@ -312,7 +312,7 @@ void Player::Update() {
 			}
 		}
 	}
-	DrawFormatString(400, 50, GetColor(255, 255, 255), "エサ%d", *activeFoodCount);
+	//DrawFormatString(400, 50, GetColor(255, 255, 255), "エサ%d", *activeFoodCount);
 }
 
 void Player::Draw() {
@@ -347,7 +347,7 @@ void Player::Draw() {
 
 
 
-		DrawFormatString(0, 10, GetColor(255, 255, 255), "%2d", motionIndex);
+		//DrawFormatString(0, 10, GetColor(255, 255, 255), "%2d", motionIndex);
 		//DrawCircle(SHIFT_X + (posX + ClculatCenterRadX(angle)) * X_RATE, SHIFT_Y + (posY+ ClculatCenterRadY(angle)) * Y_RATE,65 * X_RATE,GetColor(0,255,0),false);
 		if ((*foodCountTotal) != 244) {
 			DrawRotaGraph3(SHIFT_X + (posX - renderCenter + ClculatCenterRadX(angle)) * X_RATE, SHIFT_Y + (posY - renderCenter + ClculatCenterRadY(angle)) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, playerImg[motionIndex], true);
