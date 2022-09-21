@@ -95,6 +95,7 @@ void PowerModeProcess::Hit(EnemyAra* set) {
 	target->SetState(EnemyAra::State::damage); //ターゲット敵をやられ状態に設定
 	++combo; //コンボ値を加算
 	*WorldVal::Get<int>("score") += ClculatScore(); //スコア加算
+	if (*WorldVal::Get<int>("score") >= *WorldVal::Get<int>("highScore")) { *WorldVal::Get<int>("highScore") = *WorldVal::Get<int>("score"); } //ハイスコアより値が大きくなった場合ハイスコアの値を更新する
 
 	//ここにse鳴らしを入れる
 	PlaySoundMem(eatSE3,DX_PLAYTYPE_BACK);

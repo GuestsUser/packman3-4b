@@ -43,6 +43,8 @@ public:
 		extendSE(*WorldVal::Get<int>("extendSE")){}
 
 	void Start() { //ゲーム開始時のREADY!等の演出、レベル1の時は音楽も流す
+		int* life;
+		life = WorldVal::Get<int>("Life");
 		std::deque<EnemyAra*>* enemy = caller->parent->EditEnemy();
 
 		if (state == State::start) {
@@ -63,7 +65,10 @@ public:
 		if (*start >= 1 && count == 0) {
 			count = 121;
 		}
-		if (count == 121) {
+		if(count ==120){ *life -= 1;}
+		if (count == 121)
+		{
+			
 			caller->parent->EditPlayer()->SetRunDraw(true);
 			for (i = 0; i < enemy->size(); ++i) {
 				(*enemy)[i]->SetRunDraw(true);
@@ -72,6 +77,7 @@ public:
 		if (count <= 120) {
 			//Player one表示
 			DrawRotaGraph3(SHIFT_X + 149, SHIFT_Y + 176, 0, 0, X_RATE, Y_RATE, 0, startImage1, TRUE, FALSE);
+			
 		}
 		if (count <= 240) {
 			//Ready!表示
