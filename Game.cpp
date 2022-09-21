@@ -33,6 +33,7 @@ void Game::Update() {
 	sound.Update();
 	//sound.spurtSound();
 	EnemyAra::ModeChange(&enemy);
+	EnemyAra::CountUpdate();
 	int* dieCount;
 	dieCount = WorldVal::Get<int>("dieCount");
 	int* activeFoodCount;
