@@ -21,6 +21,7 @@ private:
     int drawX; //描写用位置
     int drawY;
 
+    bool correct; //trueでやられ等の巣に関わるマスを中心に矯正する事が可能、
     int limitX;
     int limitY;
 
@@ -89,6 +90,8 @@ public:
     Direction GetDirection() { return enemyVec; } //現在の移動方向を取得できる
     int ClculatTileX()const; //現在マスを返してくれる
     int ClculatTileY()const; //上記のy版
+    float ClculatTileDetailX() const; //現在マス、小数点を含む事で比較的詳細な位置が返ってくる
+    float ClculatTileDetailY() const;
     static int ClculatSpeedLevel() { return (nowStage > 0) + (nowStage >= 4) + (nowStage >= 21); } //現在の速度レベルを計算
 
     void TargetSet(int setX, int setY) { //ターゲットマス指定、指定はワープエリア込みで考える
