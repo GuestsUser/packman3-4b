@@ -5,20 +5,20 @@
 //音読み込み
 void SoundLoading() {
 	//読み込み
-	int handle1 = LoadSoundMem("SE_BGM/PAC_2_StartMusic1.wav");
+	int handle1 = LoadSoundMem("SE_BGM/PAC_2_StartMusic.wav");
 	int handle2 = LoadSoundMem("SE_BGM/pac_eat_1.wav");
 	int handle3 = LoadSoundMem("SE_BGM/pac_eat_2.wav");
-	int handle4 = LoadSoundMem("SE_BGM/PAC_10_Fruit1.wav");
-	int handle5 = LoadSoundMem("SE_BGM/PAC_14_Return1.wav");
-	int handle6 = LoadSoundMem("SE_BGM/PAC_5_MonsterDefault1.wav");
+	int handle4 = LoadSoundMem("SE_BGM/PAC_10_Fruit.wav");
+	int handle5 = LoadSoundMem("SE_BGM/PAC_14_Return.wav");
+	int handle6 = LoadSoundMem("SE_BGM/PAC_5_MonsterDefault.wav");
 	int handle7 = LoadSoundMem("SE_BGM/PAC_6_Spurt1.wav");
 	int handle8 = LoadSoundMem("SE_BGM/PAC_7_Spurt2.wav");
 	int handle9 = LoadSoundMem("SE_BGM/PAC_8_Spurt3.wav");
 	int handle10 = LoadSoundMem("SE_BGM/PAC_9_Spurt4.wav");
 	int handle11 = LoadSoundMem("SE_BGM/PAC_4_Extend.wav");
-	int handle12 = LoadSoundMem("SE_BGM/PAC_12_Eat1.wav");
-	int handle13 = LoadSoundMem("SE_BGM/PAC_13_Return1.wav");
-	int handle14 = LoadSoundMem("SE_BGM/PAC_11_MonsterIjike1.wav");
+	int handle12 = LoadSoundMem("SE_BGM/PAC_12_Eat.wav");
+	int handle13 = LoadSoundMem("SE_BGM/PAC_13_Return.wav");
+	int handle14 = LoadSoundMem("SE_BGM/PAC_11_MonsterIjike.wav");
 	//音の調整
 	ChangeVolumeSoundMem(255, handle1);
 	ChangeVolumeSoundMem(255, handle2);
@@ -32,8 +32,8 @@ void SoundLoading() {
 	ChangeVolumeSoundMem(200, handle10);
 	ChangeVolumeSoundMem(255, handle11);
 	ChangeVolumeSoundMem(255, handle12);
-	ChangeVolumeSoundMem(155, handle13);
-	ChangeVolumeSoundMem(155, handle14);
+	ChangeVolumeSoundMem(255, handle13);
+	ChangeVolumeSoundMem(255, handle14);
 
 	WorldVal::Set("startBGM", new int(handle1));//ゲームスタート時BGM
 	WorldVal::Set("eatSE1", new int(handle2));//エサを食べた音

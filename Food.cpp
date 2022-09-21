@@ -3,6 +3,7 @@
 #include "Food.h"
 #include "ConstVal.h"
 #include "Worldval.h"
+#include "PowerModeProcess.h"
 #include <string>
 
 Food::Food(Type set) :type(set), isEnable(true), x(0), y(0), handle(*WorldVal::Get<int[10]>("foodImage")), count(0), foodCount(WorldVal::Get<int>("foodCountTotal")), fruitsCount(WorldVal::Get<int>("fruitsDisplay")), num(0){ if (type != Type::food && type != Type::big) { isEnable = false; fruitEnable = false; } } //setに使用したいタイプを入れる、何も指定しない場合通常エサになる
@@ -17,8 +18,13 @@ int Food::Eat() {
 }
 
 void Food::Update() {
+	++count;
 	if (!(type == Food::Type::food || type == Food::Type::big))
 	{
+		if (PowerModeProcess::GetIsPause()) {
+			--count;
+			return;
+		}
 		if (*fruitsCount == 0)
 		{
 			if (*foodCount == 70) {
@@ -49,24 +55,12 @@ void Food::Update() {
 }
 
 void Food::Draw() { //*8などのマスサイズは何処かに定数で宣言しておきたい
-	count++;
+	//count++;
 	//ゲームスタート前
 	if (Game::GetSceneState() == Game::State::start) {
 		if (isEnable) {
 			DrawRotaGraph3(SHIFT_X + (x * TILE - TILE / 2 - WARP_AREA_X * TILE) * X_RATE, SHIFT_Y + (y * TILE - TILE / 2 - WARP_AREA_Y * TILE) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, handle[(int)type], true);
 		}
-	}
-
-	//ゲームスタート中（画面が切り替わるまで）
-	if (Game::GetSceneState() == Game::State::run) {
-		/*if (isEnable) {
-			if (type != Type::big) {
-				DrawRotaGraph3(SHIFT_X + (x * TILE - TILE / 2 - WARP_AREA_X * TILE) * X_RATE, SHIFT_Y + (y * TILE - TILE / 2 - WARP_AREA_Y * TILE) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, handle[(int)type], true);
-			}
-			else if (type == Type::big && (count / 10) % 2 == 0) {
-				DrawRotaGraph3(SHIFT_X + (x * TILE - TILE / 2 - WARP_AREA_X * TILE) * X_RATE, SHIFT_Y + (y * TILE - TILE / 2 - WARP_AREA_Y * TILE) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, handle[(int)type], true);
-			}
-		}*/
 	}
 
 	//ゲームオーバー中（タイトルに戻るまで）（パワーエサを消す）
@@ -97,6 +91,7 @@ void Food::Draw() { //*8などのマスサイズは何処かに定数で宣言しておきたい
 			fruitEnable = false;
 		}
 	}
+	
 }
 
 void Food::PosSetUp(const std::string& set) { //unordered_map用添え字から座標を取り出す関数
