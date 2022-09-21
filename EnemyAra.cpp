@@ -287,11 +287,11 @@ void EnemyAra::ModeChange(std::deque<EnemyAra*>* enemyList) { //攻撃状態、休憩状
     ++timer; //タイマーカウント
 
     //以下デバッグ表記
-    const char* debugMessage[2] = { "休息中" ,"攻撃中" };
+    /*const char* debugMessage[2] = { "休息中" ,"攻撃中" };
     unsigned int color[2] = { GetColor(0, 255, 255) ,GetColor(255, 255, 0) };
     int sub = (int)moveMode;
     SetFontSize(35);
-    DrawFormatString(0, 50, color[sub], debugMessage[sub]);
+    DrawFormatString(0, 50, color[sub], debugMessage[sub]);*/
 }
 
 void EnemyAra::SetCringeMove() {

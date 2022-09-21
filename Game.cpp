@@ -98,7 +98,7 @@ void Game::Draw() {
 	player.Draw();
 	powerMode.Draw();
 	for (int i = enemy.size() - 1; i >= 0; --i) { enemy[i]->Draw(); } //[0]に入ってるアカベイが優先表示されるよう逆順実行
-	DrawFormatString(50, 50, GetColor(255, 255, 255), "残機：%d", *life);
+	//DrawFormatString(50, 50, GetColor(255, 255, 255), "残機：%d", *life);
 	DrawBox(100, 250, 192, 450, GetColor(0, 0, 0), TRUE);
 	DrawBox(640, 250, 732, 450, GetColor(0, 0, 0), TRUE);
 	ui.UiDraw();
