@@ -73,8 +73,11 @@ void Food::Draw() { //*8などのマスサイズは何処かに定数で宣言しておきたい
 	}
 
 	if (isEnable) {
-		if (type != Type::big) {
+		if (type == Type::food) {
 			DrawRotaGraph3(SHIFT_X + (x * TILE - TILE / 2 - WARP_AREA_X * TILE) * X_RATE, SHIFT_Y + (y * TILE - TILE / 2 - WARP_AREA_Y * TILE) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, handle[(int)type], true);
+		}
+		else if (type != Type::food && type != Type::big) {
+			DrawRotaGraph3(SHIFT_X + (x * TILE - WARP_AREA_X * TILE) * X_RATE, SHIFT_Y + (y * TILE - TILE / 2 - WARP_AREA_Y * TILE) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, handle[(int)type], true);
 		}
 		else if (type == Type::big && (count / 10) % 2 == 0) {
 			DrawRotaGraph3(SHIFT_X + (x * TILE - TILE / 2 - WARP_AREA_X * TILE) * X_RATE, SHIFT_Y + (y * TILE - TILE / 2 - WARP_AREA_Y * TILE) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, handle[(int)type], true);
