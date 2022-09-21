@@ -274,6 +274,8 @@ Player::Player() :isUpdate(false), isDraw(true), renderCenter(3), center(3), rad
 Player::~Player() { delete move; }
 
 void Player::Update() {
+	int* lifeUp;
+	lifeUp = WorldVal::Get<int>("lifeUp");
 	int* activeFoodCount;
 	activeFoodCount = WorldVal::Get<int>("activeFoodCount");
 	if (isUpdate) { //bool変数に停止命令(false)が入れられている場合実行しない
@@ -302,8 +304,8 @@ void Player::Update() {
 			}
 			if (type == Food::Type::big) { PowerModeProcess::PowerModeStart(); } //パワーエサの取得で逆転状態にする
 			if (*score >= *highScore) { *highScore = *score; } //ハイスコアより値が大きくなった場合ハイスコアの値を更新する
-			if (*score - i >= EXTEND_QUOTA && limit < EXTEND_LIMIT) {/*scoreがEXTEND_LIMITより大きいかつ残機アップした回数がEXTEND_LIMITより少なかったら残機アップ*/
-				limit++;
+			if (*score - i >= EXTEND_QUOTA &&  EXTEND_LIMIT > *lifeUp) {/*scoreがEXTEND_LIMITより大きいかつ残機アップした回数がEXTEND_LIMITより少なかったら残機アップ*/
+				*lifeUp += 1;
 				*life += 1;
 				i += 10000;
 				PlaySoundMem(extendSE, DX_PLAYTYPE_BACK);
