@@ -29,6 +29,7 @@ EnemyAra::EnemyAra() {
     center = 3;
     renderCenter = 4;
 
+    correct = true;
     drawX = 0;
     drawY = 0;
     limitX = 0;
@@ -139,7 +140,10 @@ void EnemyAra::Move(int move) {
 
         if (tileX - 1 < 9 && tileX - 1 > 2 && tileY == 14 || tileX + 1 > 26 && tileX + 1 < 33 && tileY == 14) { warp = 1; }   /*ワープの通路に入れば移動速度が8になる*/
         if ((tileX >= 14 && tileX <= 21) && (tileY >= 12 && tileY <= 16)) { warp = 1; } //巣の中にいる時もワープ速にする
-        else if (state == State::ready) { state = imageState; }
+        else if (state == State::ready) { 
+            state = imageState; //readyの間にSetされたStateをstateに代入する
+            correct = true; //位置矯正を再使用可能にする
+        }
 
         if (reversOrder) { SetReversMove(); break; } //反転方向移動は移動先を決定するので以降の移動先決定処理を通る必要がないからbreak
         if (state == State::cringe) { SetCringeMove(); break; } //イジケ状態の場合も移動先決定なので終わったらbreak
@@ -148,6 +152,7 @@ void EnemyAra::Move(int move) {
             if (tileX == targetPos_x && tileY == targetPos_y) { //指定位置に着いた場合
                 state = State::ready; //準備状態にする
                 imageState = State::neutral; //保持する画像状態を通常の物にする
+                correct = true; //位置矯正を再使用可能にする
             }
         }
         if (state == State::neutral || state == State::ready) { //通常状態の場合動作モードに合わせたターゲット指定
@@ -165,20 +170,34 @@ void EnemyAra::Move(int move) {
 
             int x = tileX + ClculatSubX((Direction)i); //ここであるposは現在のマス座標を指す
             int y = tileY + ClculatSubY((Direction)i);
-            int distance = pow(double(targetPos_x) - double(x), 2) + pow(double(targetPos_y) - double(y), 2);
+            double distance = pow(double(targetPos_x) - double(x), 2) + pow(double(targetPos_y) - double(y), 2);
 
             if (minDistance > distance || minDistance < 0) { //目標マスとの最短距離を調べてenemyVecに最短方向のものを格納
                 minDistance = distance;
                 newDirection = i;
             }
         }
+        Direction keepAngle = enemyVec; //今回まで使ってた角度保存
         if ((int)enemyVec % 2 != newDirection % 2) { *edit = limit - (useY ? WARP_AREA_Y : WARP_AREA_X) * TILE - center; } //曲がる場合今までの軸がリミットを超えていた場合リミット内に納める処理
 
         enemyVec = (Direction)newDirection; //新しい方向に設定
         if (!PowerModeProcess::GetIsPause()) { oldVec = enemyVec; } //スコア表示中だった場合旧方向の更新をしない
 
-        limitX = ClculatLimitX(enemyVec);
+        limitX = ClculatLimitX(enemyVec); //新しい判定位置の設定
         limitY = ClculatLimitY(enemyVec);
+
+        if (correct && state == State::damage && (tileX >= (13 + WARP_AREA_X) && tileX <= (14 + WARP_AREA_X)) && tileY == 11) { //やられ状態の巣に入れる際、次の判定位置をゲート中心に持ってくる
+            limitX = (13 + WARP_AREA_X) * TILE + (TILE - 1); //巣の扉中心に次の判定位置を指定
+            enemyVec = keepAngle; //新しい角度を古い物で上書き
+            correct = false; //位置矯正済みを報告
+        }
+        if (correct && state == State::ready && (tileX >= (13 + WARP_AREA_X) && tileX <= (14 + WARP_AREA_X)) && tileY == 14) { //巣から出る動作の際次の判定位置をゲート中心に持ってくる
+            limitX = (13 + WARP_AREA_X) * TILE + (TILE - 1); //巣の扉中心に次の判定位置を指定
+            enemyVec = keepAngle; //新しい角度を古い物で上書き
+            correct = false; //位置矯正済みを報告
+        }
+        
+
         break;
     }
     drawX += move * ClculatSubX(enemyVec); //現在の移動方向に合わせて各軸に移動量を加算、減算してくれる
@@ -299,6 +318,8 @@ int EnemyAra::ClculatLocalX() const { return (drawX + center) % TILE; } //現在マ
 int EnemyAra::ClculatLocalY() const { return (drawY + center) % TILE; }
 int EnemyAra::ClculatTileX() const { return (drawX + center) / TILE + WARP_AREA_X; } //現在マスを返してくれる
 int EnemyAra::ClculatTileY() const { return (drawY + center) / TILE + WARP_AREA_Y; }
+float EnemyAra::ClculatTileDetailX() const { return (drawX + center) / (float)TILE + WARP_AREA_X; } //現在マスを返してくれる、小数点で詳細位置を返す
+float EnemyAra::ClculatTileDetailY() const { return (drawY + center) / (float)TILE + WARP_AREA_Y; }
 int EnemyAra::ClculatLimitX(Direction angle)const { return(ClculatTileX() + ClculatSubX(angle))* TILE + center; } //この位置に着いたら現在マスから移動可能方向を取得し方向転換する位置を返してくれる
 int EnemyAra::ClculatLimitY(Direction angle)const { return (ClculatTileY() + ClculatSubY(angle)) * TILE + center; } //上記のy版
 
