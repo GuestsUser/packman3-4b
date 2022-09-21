@@ -32,6 +32,10 @@ public:
 
 	int GetMoveSub() { return -1 + 2 * (int)((int)direction / 2); } //移動方向に対応した符号返し、上、左はマイナス方向への移動、下、右がプラス方向への移動なので/2を利用した
 	void Moving(int speed) { *posEdit += speed * GetMoveSub(); }
+	void StopAdjust() { //停止処理の際座標が停止位置をオーバーする可能性があるので綺麗に停止位置に止める処理
+		int adjust = ((int)direction % 2 == 0 ? player->ClculatLocalY(direction) : player->ClculatLocalX(direction)) - 3; //中央位置の3からどれだけ離れているかを入れる
+		*posEdit -= adjust;
+	}
 	bool IsMovable(int localPos)const { //現在進行方向にマス内座標中心を越えた時、進行可能かどうか判定する
 		bool minus = localPos >= 0 && localPos <= 3; //判定範囲に入っていた場合true
 		bool plus = localPos >= 3 && localPos < 8;
@@ -45,7 +49,7 @@ public:
 	const int* ReadPos() const { return posEdit; }
 	const Player* const ReadPlayer() { return player; }
 
-
+	//Player* EditPlayer() { return player; }
 	void SetState(State set) { state = set; }
 	void SetDirection(Direction set) { direction = set; }
 
@@ -63,6 +67,7 @@ public:
 			break;
 		case Movable::State::run:
 			if (!IsMovable(ReadPlayer()->ClculatLocalX(GetDirection()))) {
+				StopAdjust();
 				SetState(State::free);
 				break;
 			}
@@ -70,6 +75,7 @@ public:
 			break;
 		case Movable::State::curve:
 			if (!IsCurveInRange(ReadPlayer()->ClculatLocalX(GetDirection()))) { 
+				//StopAdjust();
 				SetState(State::free);
 				break;
 			}
@@ -98,6 +104,7 @@ public:
 			break;
 		case Movable::State::run:
 			if (!IsMovable(ReadPlayer()->ClculatLocalY(GetDirection()))) {
+				StopAdjust();
 				SetState(State::free);
 				break;
 			}
@@ -105,6 +112,7 @@ public:
 			break;
 		case Movable::State::curve:
 			if (!IsCurveInRange(ReadPlayer()->ClculatLocalY(GetDirection()))) {
+				//StopAdjust();
 				SetState(State::free);
 				break;
 			}
@@ -130,15 +138,17 @@ private:
 	EnemyAra* enemyara;
 	Food* food;
 	Player* player;
-	int eatspeed;
 	int safeZone; //マス内座標でsafeZone～TILE-safeZone内でないと新たに曲がる事ができない、その為の変数
 	int speed; //速度、現在は状態によらず一定な仮の物
 	int speedCount; //速度の蓄積状況記録、毎フレームこれにspeedを加算し、speedCount/MOVABLE_SPEEDの値分描写座標を動かす
 	Direction nowDirection; //現在の進行方向
 	Direction lastInput; //最後の入力方向保持
+
+	int oldX, oldY; //旧xyマス座標
+
 	void ChangeSpeed();
 public:
-	Moving(Player* player) :caller(player), safeZone(2), speed(16), speedCount(0), nowDirection(Direction::left), lastInput(nowDirection), x(new XMove(&caller->posX, caller)),y(new YMove(&caller->posY, caller)) {
+	Moving(Player* player) :caller(player), oldX(0), oldY(0), safeZone(2), speed(16), speedCount(0), nowDirection(Direction::left), lastInput(nowDirection), x(new XMove(&caller->posX, caller)),y(new YMove(&caller->posY, caller)) {
 		x->SetState(Movable::State::run);
 		y->SetDirection(Direction::up);
 	}
@@ -204,17 +214,24 @@ public:
 
 void Player::Moving::ChangeSpeed() {
 	DrawFormatString(0, 150, GetColor(255, 0, 0), "%d", speed);
-	PowerModeProcess::State playerstate = PowerModeProcess::GetState();
+
+	int x = caller->ClculatTileX(caller->move->GetDirection());
+	int y = caller->ClculatTileY(caller->move->GetDirection());
+	if (oldX == x && oldY == y) { return; } //マス移動がなかった場合速度変更は無し
+	oldX = x; //新しい物に更新
+	oldY = y;
+
 	Player::State playerState = caller->GetState();
-	std::string sub = std::to_string(caller->ClculatTileX(caller->move->GetDirection())) + "x" + std::to_string(caller->ClculatTileY(caller->move->GetDirection())); //エサ連想配列取得用添え字
+	std::string sub = std::to_string(x) + "x" + std::to_string(y); //エサ連想配列取得用添え字
 	auto itr = caller->food->find(sub); //エサ配列内に指定添え字をキーに持つエサがあるか調べる
+	int eatspeed = 0;
 	if (itr != caller->food->end() && itr->second->GetEnable()) {//指定位置にエサが配置されている且つエサが食べられる状態である場合
 		Food::Type type = itr->second->GetType(); //食べた物の種類
 		if (type == Food::Type::food) { eatspeed = 1; }
 		if (type == Food::Type::big) { eatspeed = 2; }
 
 	}
-	eatspeed = 0;
+	
 	switch (enemyara->ClculatSpeedLevel()) { //レベルに合わせた速度代
 	case 0:
 		if (playerState == Player::State::neutral) {
@@ -229,19 +246,18 @@ void Player::Moving::ChangeSpeed() {
 		}
 		break;
 	case 1:
-		if (playerstate != PowerModeProcess::State::run) {
+		if (playerState == Player::State::neutral) {
 			if (eatspeed == 0) { speed = 18; }//何も食べてない時
 			if (eatspeed == 1) { speed = 17; }//通常エサを食べた時
 			if (eatspeed == 2) { speed = 15; }//パワーエサを食べた時
 		}
-		if (playerstate == PowerModeProcess::State::run) {//逆転してる時
+		if (playerState == Player::State::power) {//逆転してる時
 			if (eatspeed == 0) { speed = 19; }//何も食べてない時
 			if (eatspeed == 1) { speed = 18; }//通常エサを食べた時
 			if (eatspeed == 2) { speed = 16; }//パワーエサを食べた時
 		}
 		break;
 	case 2:
-		speed = 20;
 		if (eatspeed == 0) { speed = 20; }//何も食べてない時
 		if (eatspeed == 1) { speed = 19; }//通常エサを食べた時
 		if (eatspeed == 2) { speed = 17; }//パワーエサを食べた時
@@ -254,13 +270,12 @@ void Player::Moving::ChangeSpeed() {
 	}
 }
 
-Player::Player() :isUpdate(true), isDraw(true), renderCenter(3), center(3), rad(1), posX(13 * TILE + (TILE - 1)), posY(23 * TILE), move(new Moving(this)), state(State::neutral), foodCount(0),start(WorldVal::Get<int>("start")) ,life(WorldVal::Get<int>("Life")) , foodCountTotal(WorldVal::Get<int>("foodCountTotal")), playerImg(*WorldVal::Get<int[12]>("playerImage")), killImg(*WorldVal::Get<int[11]>("killImage")), food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")), tile(WorldVal::Get<Grid*>("map")), score(WorldVal::Get<int>("score")), highScore(WorldVal::Get<int>("highScore")), diecount(0), killnum(0),eatSE1(*WorldVal::Get<int>("eatSE1")), eatSE2(*WorldVal::Get<int>("eatSE2")), dieSE(*WorldVal::Get<int>("dieSE")), fruitSE(*WorldVal::Get<int>("fruitSE")), extendSE(*WorldVal::Get<int>("extendSE")) {}
+Player::Player() :isUpdate(false), isDraw(true), renderCenter(3), center(3), rad(1), posX(13 * TILE + (TILE - 1)), posY(23 * TILE), move(new Moving(this)), state(State::neutral), foodCount(0),start(WorldVal::Get<int>("start")) ,life(WorldVal::Get<int>("Life")) , foodCountTotal(WorldVal::Get<int>("foodCountTotal")), playerImg(*WorldVal::Get<int[12]>("playerImage")), killImg(*WorldVal::Get<int[11]>("killImage")), food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")), tile(WorldVal::Get<Grid*>("map")), score(WorldVal::Get<int>("score")), highScore(WorldVal::Get<int>("highScore")), diecount(0), killnum(0),eatSE1(*WorldVal::Get<int>("eatSE1")), eatSE2(*WorldVal::Get<int>("eatSE2")), dieSE(*WorldVal::Get<int>("dieSE")), fruitSE(*WorldVal::Get<int>("fruitSE")), extendSE(*WorldVal::Get<int>("extendSE")) {}
 Player::~Player() { delete move; }
 
 void Player::Update() {
 	int* activeFoodCount;
 	activeFoodCount = WorldVal::Get<int>("activeFoodCount");
-
 	if (isUpdate) { //bool変数に停止命令(false)が入れられている場合実行しない
 		move->Update();
 		int* life;
@@ -287,8 +302,10 @@ void Player::Update() {
 			}
 			if (type == Food::Type::big) { PowerModeProcess::PowerModeStart(); } //パワーエサの取得で逆転状態にする
 			if (*score >= *highScore) { *highScore = *score; } //ハイスコアより値が大きくなった場合ハイスコアの値を更新する
-			if (*score == EXTEND_QUOTA) {
-				*life += 1; 
+			if (*score - i >= EXTEND_QUOTA && limit < EXTEND_LIMIT) {/*scoreがEXTEND_LIMITより大きいかつ残機アップした回数がEXTEND_LIMITより少なかったら残機アップ*/
+				limit++;
+				*life += 1;
+				i += 10000;
 				PlaySoundMem(extendSE, DX_PLAYTYPE_BACK);
 			}
 		}
