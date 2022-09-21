@@ -8,7 +8,7 @@
 #include <deque>
 
 EnemyRed::EnemyRed(Player* getPlayer, std::deque<EnemyAra*>* getList):player(getPlayer), enemyList(getList), foodCountTotal(WorldVal::Get<int>("foodCountTotal")), foodMax(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")->size() - 1) { //最大数の-1はフルーツターゲットの分
-	SetUp(EnemyAra::Type::red, Direction::left, 13 * TILE + (TILE - 3), 11 * TILE ); //初期化処理、詳しくはEnemyAraを参照
+	SetUp(EnemyAra::Type::red, Direction::left, 13 * TILE + (TILE - 4), 11 * TILE ); //初期化処理、詳しくはEnemyAraを参照
 }
 
 void EnemyRed::SetAttackModeTarget() {  //追いかけモードの時ターゲット指定

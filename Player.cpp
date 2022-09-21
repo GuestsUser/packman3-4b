@@ -270,7 +270,7 @@ void Player::Moving::ChangeSpeed() {
 	}
 }
 
-Player::Player() :isUpdate(false), isDraw(true), renderCenter(3), center(3), rad(1), posX(13 * TILE + (TILE - 1)), posY(23 * TILE), move(new Moving(this)), state(State::neutral), foodCount(0),start(WorldVal::Get<int>("start")) ,life(WorldVal::Get<int>("Life")) , foodCountTotal(WorldVal::Get<int>("foodCountTotal")), playerImg(*WorldVal::Get<int[12]>("playerImage")), killImg(*WorldVal::Get<int[11]>("killImage")), food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")), tile(WorldVal::Get<Grid*>("map")), score(WorldVal::Get<int>("score")), highScore(WorldVal::Get<int>("highScore")), diecount(0), killnum(0),eatSE1(*WorldVal::Get<int>("eatSE1")), eatSE2(*WorldVal::Get<int>("eatSE2")), dieSE(*WorldVal::Get<int>("dieSE")), fruitSE(*WorldVal::Get<int>("fruitSE")), extendSE(*WorldVal::Get<int>("extendSE")) {}
+Player::Player() :isUpdate(false), isDraw(true), renderCenter(3), center(3), rad(1), posX(13 * TILE + (TILE - 3)), posY(23 * TILE), move(new Moving(this)), state(State::neutral), foodCount(0),start(WorldVal::Get<int>("start")) ,life(WorldVal::Get<int>("Life")) , foodCountTotal(WorldVal::Get<int>("foodCountTotal")), playerImg(*WorldVal::Get<int[12]>("playerImage")), killImg(*WorldVal::Get<int[11]>("killImage")), food(WorldVal::Get<std::unordered_map<std::string, Food*>>("food")), tile(WorldVal::Get<Grid*>("map")), score(WorldVal::Get<int>("score")), highScore(WorldVal::Get<int>("highScore")), diecount(0), killnum(0),eatSE1(*WorldVal::Get<int>("eatSE1")), eatSE2(*WorldVal::Get<int>("eatSE2")), dieSE(*WorldVal::Get<int>("dieSE")), fruitSE(*WorldVal::Get<int>("fruitSE")), extendSE(*WorldVal::Get<int>("extendSE")) {}
 Player::~Player() { delete move; }
 
 void Player::Update() {
@@ -323,29 +323,32 @@ void Player::Draw() {
 		Direction angle = move->GetDirection(); //現在の進行方向
 		int moveAnim = (int)move->GetDirection() * 3;
 
-		//パックマンが縦または横に移動している時
-		if (posX - animX != 0 || posY - animY != 0) {
-			//移動アニメ処理
-			if (--actWait <= 0) {
-				actIndex++;
-				actWait = actSpeed;
-				actIndex %= maxMotion;
+		if (isUpdate) {
+			//パックマンが縦または横に移動している時
+			if (posX - animX != 0 || posY - animY != 0) {
+				//移動アニメ処理
+				if (--actWait <= 0) {
+					actIndex++;
+					actWait = actSpeed;
+					actIndex %= maxMotion;
+				}
 			}
-		}
-		else {
-			if (actIndex == 0) {
-				actIndex += 2;
+			else {
+				if (actIndex == 0) {
+					actIndex += 2;
+				}
 			}
+
+			animX = posX;
+			animY = posY;
 		}
 
-		animX = posX;
-		animY = posY;
 		motionIndex = actMotion[actIndex] + moveAnim;
 
 
 
 		DrawFormatString(0, 10, GetColor(255, 255, 255), "%2d", motionIndex);
-		DrawCircle(SHIFT_X + (posX + ClculatCenterRadX(angle)) * X_RATE, SHIFT_Y + (posY+ ClculatCenterRadY(angle)) * Y_RATE,65 * X_RATE,GetColor(0,255,0),false);
+		//DrawCircle(SHIFT_X + (posX + ClculatCenterRadX(angle)) * X_RATE, SHIFT_Y + (posY+ ClculatCenterRadY(angle)) * Y_RATE,65 * X_RATE,GetColor(0,255,0),false);
 		if ((*foodCountTotal) != 244) {
 			DrawRotaGraph3(SHIFT_X + (posX - renderCenter + ClculatCenterRadX(angle)) * X_RATE, SHIFT_Y + (posY - renderCenter + ClculatCenterRadY(angle)) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, playerImg[motionIndex], true);
 		}
@@ -353,7 +356,7 @@ void Player::Draw() {
 			DrawRotaGraph3(SHIFT_X + (posX - renderCenter + ClculatCenterRadX(angle)) * X_RATE, SHIFT_Y + (posY - renderCenter + ClculatCenterRadY(angle)) * Y_RATE, 0, 0, X_RATE, Y_RATE, 0, playerImg[0], true);
 		}
 
-		DrawHitBox(ClculatTileX(angle), ClculatTileY(angle), GetColor(255, 189, 78)); //デバッグ表示
+		//DrawHitBox(ClculatTileX(angle), ClculatTileY(angle), GetColor(255, 189, 78)); //デバッグ表示
 	}
 }
 
