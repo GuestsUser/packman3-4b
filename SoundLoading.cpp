@@ -32,8 +32,8 @@ void SoundLoading() {
 	ChangeVolumeSoundMem(200, handle10);
 	ChangeVolumeSoundMem(255, handle11);
 	ChangeVolumeSoundMem(255, handle12);
-	ChangeVolumeSoundMem(155, handle13);
-	ChangeVolumeSoundMem(155, handle14);
+	ChangeVolumeSoundMem(255, handle13);
+	ChangeVolumeSoundMem(255, handle14);
 
 	WorldVal::Set("startBGM", new int(handle1));//ゲームスタート時BGM
 	WorldVal::Set("eatSE1", new int(handle2));//エサを食べた音
