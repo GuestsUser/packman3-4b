@@ -9,7 +9,7 @@
 
 PowerModeProcess::State PowerModeProcess::state = PowerModeProcess::State::free; //ŽÀ‘Ì’è‹`
 int PowerModeProcess::time = 0;
-int PowerModeProcess::rawDrawTime = 120; //‰¼‚Ì’l
+int PowerModeProcess::rawDrawTime = 60; //‰¼‚Ì’l
 int PowerModeProcess::drawTime = rawDrawTime;
 bool PowerModeProcess::isUpdate = true;
 
@@ -70,7 +70,6 @@ void PowerModeProcess::Draw() {
 			player->SetRunUpdate(true);
 			player->SetRunDraw(true);
 			drawTime = 0;
-			//sound->SoundSe();
 			return;
 		}
 		for (int i = 0; i < enemy->size(); ++i) {

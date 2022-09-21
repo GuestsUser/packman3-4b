@@ -66,7 +66,7 @@ void EnemyAra::SetUp(Type setType, Direction setDirection, int setX, int setY) {
 
 void EnemyAra::Update() {
     if (isUpdate) {
-        count++; //ŽžŠÔŒo‰ß
+        if (!PowerModeProcess::GetIsPause()) { count++; } //ŽžŠÔŒo‰ß
         Move(ChangeSpeed());
     }
 }
