@@ -67,6 +67,7 @@ void PowerModeProcess::Draw() {
 				(*enemy)[i]->SetRunUpdate(true);
 				(*enemy)[i]->SetRunDraw(true);
 			}
+			EnemyAra::SetCountUpdate(true);
 			player->SetRunUpdate(true);
 			player->SetRunDraw(true);
 			drawTime = 0;
@@ -90,6 +91,7 @@ void PowerModeProcess::Hit(EnemyAra* set) {
 		(*enemy)[i]->SetRunUpdate(false); //処理の非実行
 		(*enemy)[i]->SetRunDraw(false); //非表示化
 	}
+	EnemyAra::SetCountUpdate(false);
 	player->SetRunUpdate(false); //処理の非実行
 	player->SetRunDraw(false); //非表示化
 	target->SetState(EnemyAra::State::damage); //ターゲット敵をやられ状態に設定
